@@ -62,16 +62,37 @@ Open the `server` and `client` in separate VSCode workspaces or open the combine
 
 ### Purpose
 
-2-5 sentences describing what the system does
+The system is a meal-planning application that shows users recipes based on their preferences and allows them to add their own recipes. Each recipe has ingredients and users can choose to add ingredients to their shopping list. Users can also save recipes for future reference.
 
 ### Pages
 
-* Home: 1-3 sentences describing what the page displays and what a user can do
-* Shopping cart: ...
+5 tabs on top of the page - Home, Shopping List, My Recipes, Planner, My Profile
+
+- **Home**:
+
+The default page. Here the user has access to a bar with different functions such as Login, Shopping list, Recipes, and Planner. Users can still browse recipes, apply filters, and so on but they cannot save the recipes. If the user has logged in, they will see recipes based on their preferences.
+
+- **User page**
+ ( My profile ):
+
+Can change personal information, preferences
+
+- **Shopping list**:
+
+The ingredients from recipes that the user has chosen to add to the shopping list will appear here. Also, the user can add other items to the list that are not from recipes.
+
+- **My recipes**:
+
+A page for showing recipes that you have saved and created.
+
+- **Planner**:
+
+The Planner page is customized for every user. The Planner will display a 7-day calendar (mon, tues, wed..).
+
 
 ### Entity-Relationship (ER) Diagram
 
-![ER Diagram](./images/er_diagram.png)
+![ER Diagram](./images/Entity-Relationship-Milestone0.drawio.png)
 
 ## Teaser (MS3)
 
