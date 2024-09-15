@@ -8,7 +8,10 @@ const calendarSchema = new Schema({
     },
     user: {
         type: Schema.Types.ObjectId, ref: "User"
-    }
+    },
+    meals: [{
+        type: Schema.Types.ObjectId, ref: "Meal"
+    }]
 });
 
 const Calendar = mongoose.model('Calendar', calendarSchema);
