@@ -12,7 +12,11 @@ const recipeSchema = new Schema({
     meal_category: {
         type: String,
         enums: ["Vegan", "Vegetarian", "Gluten-free", "High-proteine"],
-    }
+    },
+    ingredients: [{
+        type: Schema.Types.ObjectId, ref: "Ingredient",
+        required: true,
+    }]
 });
 
 const Recipe = mongoose.model('Recipe', recipeSchema);

@@ -23,6 +23,7 @@ const User = require('./models/user');
 const Recipe = require('./models/recipe');
 const Calendar = require('./models/calendar');
 const Meal = require('./models/meal');
+const Ingredient = require('./models/ingredient');
 
 // Create Express app
 var app = express();
