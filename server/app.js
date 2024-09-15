@@ -17,6 +17,8 @@ mongoose.connect(mongoURI).catch(function(err) {
 }).then(function() {
     console.log(`Connected to MongoDB with URI: ${mongoURI}`); // mistake when forward porting
 });
+// Importing the models
+const User = require('./models/user');
 
 // Create Express app
 var app = express();
