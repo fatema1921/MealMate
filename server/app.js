@@ -19,6 +19,7 @@ mongoose.connect(mongoURI).catch(function(err) {
 });
 // Importing the models
 const User = require('./models/user');
+const Recipe = requrie('./models/recipe');
 
 // Create Express app
 var app = express();
