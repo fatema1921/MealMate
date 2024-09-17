@@ -122,7 +122,7 @@ exports.deleteMealById = async (req, res) => {
         if (!mongoose.Types.ObjectId.isValid(mealId)) {
             return res.status(400).json({ message: 'Invalid meal ID' });
         }
-        
+
         const deletedMeal = await Meal.findByIdAndDelete(mealId);
         if (!deletedMeal) {
             return res.status(404).json({ message: 'Meal not found' });
