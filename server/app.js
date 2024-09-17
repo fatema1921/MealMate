@@ -29,8 +29,8 @@ const Meal = require('./models/meal');
 const ingredientRouter = require('./controllers/ingredient/ingredientRoutes');
 
 //Importing Routers
-const calendarRouter = require('controllers/calendar/calendarRoutes');
-const mealRouter = require('controllers/meal/mealRoutes');
+const calendarRouter = require('./controllers/calendar/calendarRoutes');
+const mealRouter = require('./controllers/meal/mealRoutes');
 app.use('/api', calendarRouter);
 app.use('/api', mealRouter);
 
