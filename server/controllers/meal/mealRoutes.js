@@ -1,5 +1,5 @@
 const express = require('express');
-const mealController = require('mealController');
+const mealController = require('./mealController');
 const router = express.Router();
 
 // CRUD operations for Meal
