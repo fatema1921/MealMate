@@ -31,8 +31,8 @@ const ingredientRouter = require('./controllers/ingredient/ingredientRoutes');
 //Importing Routers
 const calendarRouter = require('./controllers/calendar/calendarRoutes');
 const mealRouter = require('./controllers/meal/mealRoutes');
-app.use('/api', calendarRouter);
-app.use('/api', mealRouter);
+//app.use('/api', calendarRouter);
+//app.use('/api', mealRouter);
 
 // Create Express app
 var app = express();
