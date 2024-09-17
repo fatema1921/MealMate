@@ -17,7 +17,7 @@ const userSchema = new Schema({
   },
 	meal_category: {
   	type: String,
-    enums: ["Vegan", "Vegetarian", "Gluten-free", "High-proteine"],
+    enums: ["Vegan", "Vegetarian", "Gluten-free", "High-protein"],
   },
   preferences: {
   	type: String,
