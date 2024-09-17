@@ -18,6 +18,13 @@ mongoose.connect(mongoURI).catch(function(err) {
     console.log(`Connected to MongoDB with URI: ${mongoURI}`); // mistake when forward porting
 });
 
+// Importing the models
+const User = require('./models/user');
+const Recipe = require('./models/recipe');
+const Calendar = require('./models/calendar');
+const Meal = require('./models/meal');
+const Ingredient = require('./models/ingredient');
+
 // Create Express app
 var app = express();
 // Parse requests of content-type 'application/json'
