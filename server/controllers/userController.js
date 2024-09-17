@@ -45,14 +45,14 @@ const createUser = async function (req , res, next){
 // Update an already existing user
 const updateUser = async function (req , res, next) {
    try{
-        var updatedUser = {
+        var updateUser = {
             name: req.body.name,
             username: req.body.username, 
             password: req.body.password, 
             meal_category: req.body.meal_category, 
             preferences: req.body.preferences,
         }; 
-        const updatedUser = await User.findByIdAndUpdate(req.params.id);
+        const updatedUser = await User.findByIdAndUpdate(req.params.id, updateUser);
         if (!updatedUser) {
             return res.status(404).json({ message: 'User not found' });
         }
