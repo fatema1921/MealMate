@@ -1,5 +1,6 @@
 const Calendar = require('../../models/calendar');
 const User = require('../../models/user');
+const Meal = require('../../models/meal');
 
 // Create a new calendar (POST /calendars)
 exports.createCalendar = async (req, res) => {
@@ -121,6 +122,38 @@ exports.deleteCalendarById = async (req, res) => {
         if (err.name === 'ValidationError') {
             return res.status(400).json({ message: 'Invalid data. Please check the required fields.' });
         }
+        res.status(500).json({ message: 'Something went wrong. Please try again later.' });
+    }
+};
+
+// Add a meal to the calendar (POST /calendars/:calendarId/meals/:mealId)
+exports.addMealToCalendar = async (req, res) => {
+    try {
+        const { calendarId, mealId } = req.params;
+
+        // Validate if the calendar and meal exist
+        const calendar = await Calendar.findById(calendarId);
+        const meal = await Meal.findById(mealId);
+
+        if (!calendar) {
+            return res.status(404).json({ message: 'Calendar not found' });
+        }
+
+        if (!meal) {
+            return res.status(404).json({ message: 'Meal not found' });
+        }
+
+        // Check if the meal is already associated with the calendar
+        if (calendar.meals.includes(mealId)) {
+            return res.status(400).json({ message: 'Meal already added to the calendar' });
+        }
+
+        // Add the meal to the meals array
+        calendar.meals.push(mealId);
+        await calendar.save();
+
+        res.status(200).json({ message: 'Meal added to calendar', calendar });
+    } catch (err) {
         res.status(500).json({ message: 'Something went wrong. Please try again later.' });
     }
 };
