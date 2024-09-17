@@ -22,4 +22,7 @@ router.patch('/calendars/:id', calendarController.partialUpdateCalendar);
 // DELETE /calendars/:id - Delete a calendar by ID
 router.delete('/calendars/:id', calendarController.deleteCalendarById);
 
+// Route to add a meal to a calendar
+router.post('/calendars/:calendarId/meals/:mealId', calendarController.addMealToCalendar);
+
 module.exports = router;
