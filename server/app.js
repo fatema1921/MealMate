@@ -36,8 +36,7 @@ const mealRouter = require('./controllers/meal/mealRoutes');
 //Importing Routers
 const calendarRouter = require('./controllers/calendar/calendarRoutes');
 const mealRouter = require('./controllers/meal/mealRoutes');
-//app.use('/api', calendarRouter);
-//app.use('/api', mealRouter);
+
 
 // Create Express app
 var app = express();
@@ -61,6 +60,8 @@ app.use('/api/meals', mealRouter);
 app.use(bodyParser.json());  // Parse JSON requests
 //var env = process.env.NODE_ENV || 'development';
 
+app.use('/api', calendarRouter);
+app.use('/api', mealRouter);
 app.use(bodyParser.json());  // Parse JSON requests
 
 // Import routes
