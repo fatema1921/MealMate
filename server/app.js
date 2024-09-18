@@ -29,8 +29,7 @@ const Ingredient = require('./models/ingredient');
 //Importing Routers
 const calendarRouter = require('./controllers/calendar/calendarRoutes');
 const mealRouter = require('./controllers/meal/mealRoutes');
-//app.use('/api', calendarRouter);
-//app.use('/api', mealRouter);
+
 
 // Create Express app
 var app = express();
@@ -43,6 +42,8 @@ app.use(morgan('dev'));
 app.options('*', cors());
 app.use(cors());
 
+app.use('/api', calendarRouter);
+app.use('/api', mealRouter);
 app.use(bodyParser.json());  // Parse JSON requests
 
 // Import routes
