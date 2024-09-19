@@ -45,7 +45,7 @@ app.get('/api', function(req, res) {
 });
 
 // Add user routes to the middleware
-app.use("/",userRoutes); 
+app.use('/api',userRoutes); 
 
 // Catch all non-error handler for api (i.e., 404 Not Found)
 app.use('/api/*', function (req, res) {
