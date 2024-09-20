@@ -49,9 +49,11 @@ app.use('/api', ingredientRouter)
 
 app.use(bodyParser.json());
 
-app.use('/api', calendarRouter);
-app.use('/api', mealRouter);
+
+app.use('/api/calendars', calendarRouter);
+app.use('/api/meals', mealRouter);
 app.use(bodyParser.json());  // Parse JSON requests
+//var env = process.env.NODE_ENV || 'development';
 
 // Import routes
 app.get('/api', function(req, res) {

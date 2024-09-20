@@ -5,24 +5,24 @@ const router = express.Router();
 // CRUD operations for Calendar
 
 // POST /calendars - Create a new calendar
-router.post('/calendars', calendarController.createCalendar);
+router.post('/', calendarController.createCalendar);
 
 // GET /calendars - Retrieve all calendars
-router.get('/calendars', calendarController.getAllCalendars);
+router.get('/', calendarController.getAllCalendars);
 
 // GET /calendars/:id - Retrieve a specific calendar by ID
-router.get('/calendars/:id', calendarController.getCalendarById);
+router.get('/:id', calendarController.getCalendarById);
 
 // PUT /calendars/:id - Update a calendar by ID
-router.put('/calendars/:id', calendarController.updateCalendar);
+router.put('/:id', calendarController.updateCalendar);
 
 // PATCH /calendars/:id - Partially update a calendar by ID
-router.patch('/calendars/:id', calendarController.partialUpdateCalendar);
+router.patch('/:id', calendarController.partialUpdateCalendar);
 
 // DELETE /calendars/:id - Delete a calendar by ID
-router.delete('/calendars/:id', calendarController.deleteCalendarById);
+router.delete('/:id', calendarController.deleteCalendarById);
 
 // Route to add a meal to a calendar
-router.post('/calendars/:calendarId/meals/:mealId', calendarController.addMealToCalendar);
+router.post('/:calendarId/meals/:mealId', calendarController.addMealToCalendar);
 
 module.exports = router;
