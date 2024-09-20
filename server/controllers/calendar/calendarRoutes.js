@@ -26,6 +26,6 @@ router.delete('/:id', calendarController.deleteCalendarById);
 router.post('/:calendarId/meals/:mealId', calendarController.addMealToCalendar);
 
 // Route to add a meal to a calendar
-router.post('/calendars/:calendarId/meals/:mealId', calendarController.addMealToCalendar);
+router.post('/:calendarId/meals/:mealId', calendarController.addMealToCalendar);
 
 module.exports = router;

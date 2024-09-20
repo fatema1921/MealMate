@@ -715,6 +715,181 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Create Calendar (POST)",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "b58d92ec-5214-450c-adb0-28e068aa71b9",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{host}}/api/calendars",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"calendars"
+					]
+				},
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"My Calendar\",\n\t\"userId\": \"{{userId}}\"\n}"
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Calendars (GET)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/calendars",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"calendars"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Calendar By ID (GET)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/calendars/{{calendarId}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"calendars",
+						"{{calendarId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Calendar (PUT)",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{host}}/api/calendars/{{calendarId}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"calendars",
+						"{{calendarId}}"
+					]
+				},
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Updated Calendar\",\n\t\"user\": \"{{userId}}\",\n\t\"meals\": [\"{{mealId}}\"]\n}"
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Partial Update Calendar (PATCH)",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{host}}/api/calendars/{{calendarId}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"calendars",
+						"{{calendarId}}"
+					]
+				},
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Partially Updated Calendar\"\n}"
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Calendar (DELETE)",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/calendars/{{calendarId}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"calendars",
+						"{{calendarId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Meal to Calendar (POST)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/calendars/{{calendarId}}/meals/{{mealId}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"calendars",
+						"{{calendarId}}",
+						"meals",
+						"{{mealId}}"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"event": [
@@ -741,6 +916,24 @@
 		{
 			"key": "host",
 			"value": "http://localhost:3001",
+			"type": "string"
+		},
+		{
+			"id": "userId",
+			"key": "userId",
+			"value": "YOUR_USER_ID_HERE",
+			"type": "string"
+		},
+		{
+			"id": "calendarId",
+			"key": "calendarId",
+			"value": "YOUR_CALENDAR_ID_HERE",
+			"type": "string"
+		},
+		{
+			"id": "mealId",
+			"key": "mealId",
+			"value": "YOUR_MEAL_ID_HERE",
 			"type": "string"
 		},
 		{
