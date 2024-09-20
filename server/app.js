@@ -1,5 +1,6 @@
 var express = require('express');
 var mongoose = require('mongoose');
+var bodyParser = require('body-parser');
 var morgan = require('morgan');
 var path = require('path');
 var cors = require('cors');
@@ -23,10 +24,13 @@ const User = require('./models/user');
 const Recipe = require('./models/recipe');
 const Calendar = require('./models/calendar');
 const Meal = require('./models/meal');
-const Ingredient = require('./models/ingredient');
+
+//Routers
+const ingredientRouter = require('./controllers/ingredient/ingredientRoutes');
 
 // Create Express app
 var app = express();
+
 // Parse requests of content-type 'application/json'
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -35,6 +39,10 @@ app.use(morgan('dev'));
 // Enable cross-origin resource sharing for frontend must be registered before api
 app.options('*', cors());
 app.use(cors());
+// use routes
+app.use('/api', ingredientRouter)
+
+app.use(bodyParser.json());
 
 // Import routes
 app.get('/api', function(req, res) {
