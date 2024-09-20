@@ -27,7 +27,7 @@ exports.createMeal = async (req, res) => {
 // Get all meals (GET /meals)
 exports.getAllMeals = async (req, res) => {
     try {
-        const meals = await Meal.find().populate('recipe');
+        const meals = await Meal.find();
         res.status(200).json({ meals });
     } catch (err) {
         if (err.name === 'ValidationError') {

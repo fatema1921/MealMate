@@ -27,9 +27,10 @@ exports.createCalendar = async (req, res) => {
 // Get all calendars (GET /calendars)
 exports.getAllCalendars = async (req, res) => {
     try {
-        const calendars = await Calendar.find().populate('user meals');
+        const calendars = await Calendar.find({});
         res.status(200).json({ calendars });
     } catch (err) {
+        console.log(err);
         if (err.name === 'ValidationError') {
             return res.status(400).json({ message: 'Invalid data. Please check the required fields.' });
         }
@@ -46,7 +47,7 @@ exports.getCalendarById = async (req, res) => {
         if (!mongoose.Types.ObjectId.isValid(calendarId)) {
             return res.status(400).json({ message: 'Invalid calendar ID' });
         }
-        const calendar = await Calendar.findById(calendarId).populate('user meals');
+        const calendar = await Calendar.findById(calendarId);
         if (!calendar) {
             return res.status(404).json({ message: 'Calendar not found' });
         }
