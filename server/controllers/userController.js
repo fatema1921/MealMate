@@ -5,6 +5,7 @@ exports.getAllUsers = async (req, res) => {
     try{
         const userList = await User.find(); 
         res.json(userList); // Returns all the users as a JSON response
+
     } catch (error){
         next(error);
     }

@@ -27,6 +27,7 @@ const Ingredient = require('./models/ingredient');
 
 // Importing routes 
 const userRoutes = require('./routes/userRoutes'); // Import user routes
+const recipeRoutes = require('./routes/recipeRoutes');
 
 // Create Express app
 var app = express();
@@ -46,6 +47,9 @@ app.get('/api', function(req, res) {
 
 // Add user routes to the middleware
 app.use('/api',userRoutes); 
+app.use('/api',recipeRoutes); 
+
+
 
 // Catch all non-error handler for api (i.e., 404 Not Found)
 app.use('/api/*', function (req, res) {
