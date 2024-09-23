@@ -76,12 +76,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/api/calendars",
+					"raw": "http://localhost:3001/api/calendars",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "3000",
+					"port": "3001",
 					"path": [
 						"api",
 						"calendars"
@@ -419,12 +419,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/api/meals",
+					"raw": "http://localhost:3001/api/meals",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "3000",
+					"port": "3001",
 					"path": [
 						"api",
 						"meals"
@@ -458,12 +458,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/api/meals",
+					"raw": "http://localhost:3001/api/meals",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "3000",
+					"port": "3001",
 					"path": [
 						"api",
 						"meals"
@@ -498,12 +498,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/api/meals/:mealId",
+					"raw": "http://localhost:3001/api/meals/:mealId",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "3000",
+					"port": "3001",
 					"path": [
 						"api",
 						"meals",
@@ -554,12 +554,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/api/meals/:mealId",
+					"raw": "http://localhost:3001/api/meals/:mealId",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "3000",
+					"port": "3001",
 					"path": [
 						"api",
 						"meals",
@@ -610,12 +610,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/api/meals/:mealId",
+					"raw": "http://localhost:3001/api/meals/:mealId",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "3000",
+					"port": "3001",
 					"path": [
 						"api",
 						"meals",
@@ -657,12 +657,12 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/api/meals/:mealId",
+					"raw": "http://localhost:3001/api/meals/:mealId",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "3000",
+					"port": "3001",
 					"path": [
 						"api",
 						"meals",
@@ -702,7 +702,7 @@
 	"variable": [
 		{
 			"key": "host",
-			"value": "http://localhost:3000",
+			"value": "http://localhost:3001",
 			"type": "string"
 		},
 		{
