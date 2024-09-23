@@ -1,11 +1,7 @@
 {
 	"info": {
 		"_postman_id": "f79f5b39-ea42-4be5-86f3-00b1f878bb7b",
-		"_postman_id": "f79f5b39-ea42-4be5-86f3-00b1f878bb7b",
 		"name": "server",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "37514835",
-		"_collection_link": "https://www.postman.com/winter-meteor-564285/workspace/group09/collection/23101038-f79f5b39-ea42-4be5-86f3-00b1f878bb7b?action=share&source=collection_link&creator=37514835"
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "37514835",
 		"_collection_link": "https://www.postman.com/winter-meteor-564285/workspace/group09/collection/23101038-f79f5b39-ea42-4be5-86f3-00b1f878bb7b?action=share&source=collection_link&creator=37514835"
@@ -1354,9 +1350,7 @@
 		{
 			"key": "host",
 			"value": "http://localhost:3001",
-			"value": "http://localhost:3001",
 			"type": "string"
 		}
-	]
 	]
 }
