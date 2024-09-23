@@ -720,11 +720,19 @@
 			"name": "Create Calendar (POST)",
 			"event": [
 				{
-					"listen": "prerequest",
+					"listen": "test",
 					"script": {
-						"id": "b58d92ec-5214-450c-adb0-28e068aa71b9",
 						"exec": [
-							""
+							"pm.test('Status code is 201', function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"const responseJson = pm.response.json();",
+							"pm.test('Calendar creation was successful', function () {",
+							"    pm.expect(responseJson.message).to.eql('Calendar created successfully');",
+							"});",
+							"",
+							"pm.environment.set('calendarId', responseJson.calendar._id);"
 						],
 						"type": "text/javascript"
 					}
@@ -758,6 +766,24 @@
 		},
 		{
 			"name": "Get All Calendars (GET)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 200', function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"const responseJson = pm.response.json();",
+							"pm.test('Response contains calendars', function () {",
+							"    pm.expect(responseJson).to.have.property('calendars');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -776,6 +802,24 @@
 		},
 		{
 			"name": "Get Calendar By ID (GET)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 200', function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"const responseJson = pm.response.json();",
+							"pm.test('Response contains the correct calendar', function () {",
+							"    pm.expect(responseJson).to.have.property('calendar');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -795,6 +839,24 @@
 		},
 		{
 			"name": "Update Calendar (PUT)",
+				"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 200', function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"const responseJson = pm.response.json();",
+							"pm.test('Calendar update was successful', function () {",
+							"    pm.expect(responseJson.message).to.eql('Calendar updated successfully');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "PUT",
 				"header": [
@@ -824,6 +886,24 @@
 		},
 		{
 			"name": "Partial Update Calendar (PATCH)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 200', function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"const responseJson = pm.response.json();",
+							"pm.test('Calendar partial update was successful', function () {",
+							"    pm.expect(responseJson.message).to.eql('Calendar partially updated');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "PATCH",
 				"header": [
@@ -853,6 +933,24 @@
 		},
 		{
 			"name": "Delete Calendar (DELETE)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 200', function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"const responseJson = pm.response.json();",
+							"pm.test('Calendar deletion was successful', function () {",
+							"    pm.expect(responseJson.message).to.eql('Calendar deleted successfully');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "DELETE",
 				"header": [],
@@ -872,6 +970,24 @@
 		},
 		{
 			"name": "Add Meal to Calendar (POST)",
+				"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 200', function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"const responseJson = pm.response.json();",
+							"pm.test('Meal was successfully added to calendar', function () {",
+							"    pm.expect(responseJson.message).to.eql('Meal added to calendar successfully');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [],
