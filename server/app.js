@@ -29,6 +29,8 @@ const Meal = require('./models/meal');
 const ingredientRouter = require('./controllers/ingredient/ingredientRoutes');
 const calendarRouter = require('./controllers/calendar/calendarRoutes');
 const mealRouter = require('./controllers/meal/mealRoutes');
+const userRoutes = require('./controllers/user/userRoutes'); 
+const recipeRoutes = require('./controllers/recipe/recipeRoutes');
 
 // Create Express app
 var app = express();
@@ -47,18 +49,16 @@ app.use('/api', ingredientRouter)
 
 app.use('/api/calendars', calendarRouter);
 app.use('/api/meals', mealRouter);
+
+app.use('/api',userRoutes); 
+app.use('/api',recipeRoutes); 
+
 app.use(bodyParser.json());  // Parse JSON requests
 
 // Import routes
 app.get('/api', function(req, res) {
     res.json({'message': 'Welcome to your DIT342 backend ExpressJS project!'});
 });
-
-// Add user routes to the middleware
-app.use('/api',userRoutes); 
-app.use('/api',recipeRoutes); 
-
-
 
 // Catch all non-error handler for api (i.e., 404 Not Found)
 app.use('/api/*', function (req, res) {
