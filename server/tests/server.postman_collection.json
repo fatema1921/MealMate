@@ -890,6 +890,268 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Create new meal",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 201', function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"const responseJson = pm.response.json();",
+							"",
+							"pm.test('Meal creation was successful', function () {",
+							"    pm.expect(responseJson.message).to.eql('Meal created successfully');",
+							"});",
+							"",
+							"// Save meal ID to environment",
+							"pm.environment.set('mealId', responseJson.meal._id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Lunch Meal\",\n    \"recipeId\": \"{{recipeId}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/meals",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"meals"
+					]
+				}
+			}
+		},
+		{
+			"name": "Get all meals",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 200', function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"const responseJson = pm.response.json();",
+							"",
+							"pm.test('Response contains meals', function () {",
+							"    pm.expect(responseJson).to.have.property('meals');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/meals",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"meals"
+					]
+				}
+			}
+		},
+		{
+			"name": "Get meal by ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 200', function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"const responseJson = pm.response.json();",
+							"",
+							"pm.test('Response contains a meal', function () {",
+							"    pm.expect(responseJson).to.have.property('meal');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/meals/{{mealId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"meals",
+						"{{mealId}}"
+					]
+				}
+			}
+		},
+		{
+			"name": "Update a meal",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 200', function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"const responseJson = pm.response.json();",
+							"",
+							"pm.test('Meal update was successful', function () {",
+							"    pm.expect(responseJson.message).to.eql('Meal updated successfully');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Updated Meal Name\",\n    \"recipe\": \"{{recipeId}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/meals/{{mealId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"meals",
+						"{{mealId}}"
+					]
+				}
+			}
+		},
+		{
+			"name": "Partial update a meal",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 200', function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"const responseJson = pm.response.json();",
+							"",
+							"pm.test('Meal partial update was successful', function () {",
+							"    pm.expect(responseJson.message).to.eql('Meal partially updated');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Partially Updated Meal Name\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/meals/{{mealId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"meals",
+						"{{mealId}}"
+					]
+				}
+			}
+		},
+		{
+			"name": "Delete meal by ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 200', function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"const responseJson = pm.response.json();",
+							"",
+							"pm.test('Meal deletion was successful', function () {",
+							"    pm.expect(responseJson.message).to.eql('Meal deleted successfully');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/meals/{{mealId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"meals",
+						"{{mealId}}"
+					]
+				}
+			}
 		}
 	],
 	"event": [
