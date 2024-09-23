@@ -9,4 +9,7 @@ router.post('/recipes', recipeController.createRecipe); // Create a new recipe
 router.put('/recipes/:id', recipeController.updateRecipe); // Update a recipe by ID
 router.delete('/recipes/:id', recipeController.deleteRecipe); // Delete a recipe by ID
 
+// Fetch recipes from TheMealAPI
+router.get('/search/:recipe', recipeController.searchRecipe);
+
 module.exports = router;

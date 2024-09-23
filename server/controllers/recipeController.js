@@ -1,4 +1,30 @@
 const Recipe = require('../models/recipe');
+const Ingridient = require('../models/ingredient'); 
+
+// Import TheMealAPI 
+const express = require('express');
+const axios = require('axios'); 
+
+// Search recipie in the external database 
+exports.searchRecipe = async (req, res, next) => {
+    const recipe = req.params.recipe; 
+    const mealDB = `https://www.themealdb.com/api/json/v1/1/search.php?s=${recipe}`;
+    
+    try {
+       const response = await axios.get(mealDB);
+       const meals = response.data.meals; 
+
+       if(!meals){
+        return res.status(404).json ({"message": "Recepie not found"}); 
+       }
+       res.json(meals);
+
+    } catch (error){
+        console.error('Error fetching data from TheMealDB:', error);
+        next(error); 
+    }
+
+}; 
 
 // Display all recipes
 exports.getAllRecipes = async (req, res, next) => {
@@ -47,7 +73,7 @@ exports.updateRecipe = async (req, res, next) => {
             name: req.body.name,
             description: req.body.description,
             meal_category: req.body.meal_category,
-            ingredients: req.body.ingredients // Array of ObjectIds
+            ingredients: req.body.ingredients 
         };
 
         const recipe = await Recipe.findByIdAndUpdate(req.params.id, updatedRecipe, { new: true }).populate('ingredients');
@@ -72,5 +98,4 @@ exports.deleteRecipe = async (req, res, next) => {
         next(error);
     }
 };
-
 
