@@ -25,18 +25,10 @@ const Recipe = require('./models/recipe');
 const Calendar = require('./models/calendar');
 const Meal = require('./models/meal');
 
-//Routers
+//Importing Routers
 const ingredientRouter = require('./controllers/ingredient/ingredientRoutes');
-
-//Importing Routers
 const calendarRouter = require('./controllers/calendar/calendarRoutes');
 const mealRouter = require('./controllers/meal/mealRoutes');
-
-
-//Importing Routers
-const calendarRouter = require('./controllers/calendar/calendarRoutes');
-const mealRouter = require('./controllers/meal/mealRoutes');
-
 
 // Create Express app
 var app = express();
@@ -49,22 +41,13 @@ app.use(morgan('dev'));
 // Enable cross-origin resource sharing for frontend must be registered before api
 app.options('*', cors());
 app.use(cors());
+
 // use routes
 app.use('/api', ingredientRouter)
 
-app.use(bodyParser.json());
-
-
 app.use('/api/calendars', calendarRouter);
 app.use('/api/meals', mealRouter);
 app.use(bodyParser.json());  // Parse JSON requests
-//var env = process.env.NODE_ENV || 'development';
-
-
-app.use('/api/calendars', calendarRouter);
-app.use('/api/meals', mealRouter);
-app.use(bodyParser.json());  // Parse JSON requests
-//var env = process.env.NODE_ENV || 'development';
 
 // Import routes
 app.get('/api', function(req, res) {

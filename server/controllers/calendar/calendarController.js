@@ -4,8 +4,17 @@ const Meal = require('../../models/meal');
 
 // Create a new calendar (POST /calendars)
 exports.createCalendar = async (req, res) => {
+    let userId = req.body.user;
+    const calendar = new Calendar({
+        name: req.body.name,
+        user: userId,
+        meals: req.body.meals
+    })
     try {
-        const { name, userId } = req.body;
+        //validate userId
+        if (!mongoose.Types.ObjectId.isValid(userId)) {
+            return res.status(404).json({ message: 'Invalid user' });
+        }
 
         // Verify if user exists
         const user = await User.findById(userId);
@@ -13,14 +22,18 @@ exports.createCalendar = async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        const newCalendar = new Calendar({ name, user: userId });
-        await newCalendar.save();
+        const newCalendar = await calendar.save();
         res.status(201).json({ message: 'Calendar created successfully', calendar: newCalendar });
     } catch (err) {
+        console.error('Error while creating calendar:', err);
+        let errorMessage;
+
         if (err.name === 'ValidationError') {
-            return res.status(400).json({ message: 'Invalid data. Please check the required fields.' });
+            errorMessage = 'Validation failed. Some required fields are missing or incorrectly filled out.';
+        } else {
+            errorMessage = 'An error occurred while creating the calendar.';
         }
-        res.status(500).json({ message: 'Something went wrong. Please try again later.' });
+        res.status(400).json({ message: errorMessage });
     }
 };
 
