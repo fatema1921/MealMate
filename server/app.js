@@ -7,7 +7,7 @@ var cors = require('cors');
 var history = require('connect-history-api-fallback');
 
 // Variables
-var mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/animalDevelopmentDB';
+var mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/mealMateDb';
 var port = process.env.PORT || 3000;
 
 // Connect to MongoDB
@@ -47,8 +47,8 @@ app.use(cors());
 // use routes
 app.use('/api', ingredientRouter)
 
-app.use('/api/calendars', calendarRouter);
-app.use('/api/meals', mealRouter);
+app.use('/api', calendarRouter);
+app.use('/api', mealRouter);
 
 app.use('/api',userRoutes); 
 app.use('/api',recipeRoutes); 
