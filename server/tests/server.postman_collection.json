@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "f7ee95b5-9cb9-442f-a6a9-42de46138872",
+		"_postman_id": "3aa09e48-ecd7-49aa-8010-764d9e647262",
 		"name": "server",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37514835"
 	},
 	"item": [
 		{
@@ -11,7 +12,6 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "b58d92ec-5214-450c-adb0-28e068aa71b9",
 						"exec": [
 							""
 						],
@@ -47,43 +47,45 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test('Status code is 201', function () {",
-							"    pm.response.to.have.status(201);",
-							"});",
-							"",
-							"const responseJson = pm.response.json();",
-							"pm.test('Calendar creation was successful', function () {",
-							"    pm.expect(responseJson.message).to.eql('Calendar created successfully');",
-							"});",
-							"",
-							"pm.environment.set('calendarId', responseJson.calendar._id);"
+							"\"pm.test('Status code is 201', function () {\",",
+							"\t\t\t\t\t\t\t\"    pm.response.to.have.status(201);\",",
+							"\t\t\t\t\t\t\t\"});\",",
+							"\t\t\t\t\t\t\t\"\",",
+							"\t\t\t\t\t\t\t\"const responseJson = pm.response.json();\",",
+							"\t\t\t\t\t\t\t\"pm.test('Calendar creation was successful', function () {\",",
+							"\t\t\t\t\t\t\t\"    pm.expect(responseJson.message).to.eql('Calendar created successfully');\",",
+							"\t\t\t\t\t\t\t\"});\",",
+							"\t\t\t\t\t\t\t\"\",",
+							"\t\t\t\t\t\t\t\"pm.environment.set('calendarId', responseJson.calendar._id);\""
 						],
-						"type": "text/javascript"
+						"type": "text/javascript",
+						"packages": {}
 					}
 				}
 			],
 			"request": {
 				"method": "POST",
-				"header": [
-					{
-						"key": "Accept",
-						"value": "application/json",
-						"type": "text"
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Emma's Calendar\",\n    \"user\": \"66f175c21c4967d4ec407c39\",\n    \"meals\": []\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
 					}
-				],
+				},
 				"url": {
-					"raw": "{{host}}/api/calendars",
+					"raw": "http://localhost:3000/api/calendars",
+					"protocol": "http",
 					"host": [
-						"{{host}}"
+						"localhost"
 					],
+					"port": "3000",
 					"path": [
 						"api",
 						"calendars"
 					]
-				},
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"name\": \"My Calendar\",\n\t\"userId\": \"{{userId}}\"\n}"
 				}
 			},
 			"response": []
@@ -140,7 +142,8 @@
 							"    pm.expect(responseJson).to.have.property('calendar');",
 							"});"
 						],
-						"type": "text/javascript"
+						"type": "text/javascript",
+						"packages": {}
 					}
 				}
 			],
@@ -148,14 +151,20 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/api/calendars/{{calendarId}}",
+					"raw": "{{host}}/api/calendars/:calendarId",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"api",
 						"calendars",
-						"{{calendarId}}"
+						":calendarId"
+					],
+					"variable": [
+						{
+							"key": "calendarId",
+							"value": "66f174751c4967d4ec407c34"
+						}
 					]
 				}
 			},
@@ -163,7 +172,7 @@
 		},
 		{
 			"name": "Update Calendar (PUT)",
-				"event": [
+			"event": [
 				{
 					"listen": "test",
 					"script": {
@@ -177,7 +186,8 @@
 							"    pm.expect(responseJson.message).to.eql('Calendar updated successfully');",
 							"});"
 						],
-						"type": "text/javascript"
+						"type": "text/javascript",
+						"packages": {}
 					}
 				}
 			],
@@ -190,20 +200,26 @@
 						"type": "text"
 					}
 				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Updated Calendar\",\n\t\"user\": \"66f175c21c4967d4ec407c39\",\n\t\"meals\": [\"66f161fce125accb10d09a04\"]\n}"
+				},
 				"url": {
-					"raw": "{{host}}/api/calendars/{{calendarId}}",
+					"raw": "{{host}}/api/calendars/:calendarId",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"api",
 						"calendars",
-						"{{calendarId}}"
+						":calendarId"
+					],
+					"variable": [
+						{
+							"key": "calendarId",
+							"value": "66f174751c4967d4ec407c34"
+						}
 					]
-				},
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"name\": \"Updated Calendar\",\n\t\"user\": \"{{userId}}\",\n\t\"meals\": [\"{{mealId}}\"]\n}"
 				}
 			},
 			"response": []
@@ -224,7 +240,8 @@
 							"    pm.expect(responseJson.message).to.eql('Calendar partially updated');",
 							"});"
 						],
-						"type": "text/javascript"
+						"type": "text/javascript",
+						"packages": {}
 					}
 				}
 			],
@@ -237,20 +254,26 @@
 						"type": "text"
 					}
 				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Partially Updated Calendar\"\n}"
+				},
 				"url": {
-					"raw": "{{host}}/api/calendars/{{calendarId}}",
+					"raw": "{{host}}/api/calendars/:calendarId",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"api",
 						"calendars",
-						"{{calendarId}}"
+						":calendarId"
+					],
+					"variable": [
+						{
+							"key": "calendarId",
+							"value": "66f174751c4967d4ec407c34"
+						}
 					]
-				},
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"name\": \"Partially Updated Calendar\"\n}"
 				}
 			},
 			"response": []
@@ -271,7 +294,8 @@
 							"    pm.expect(responseJson.message).to.eql('Calendar deleted successfully');",
 							"});"
 						],
-						"type": "text/javascript"
+						"type": "text/javascript",
+						"packages": {}
 					}
 				}
 			],
@@ -279,14 +303,20 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/api/calendars/{{calendarId}}",
+					"raw": "{{host}}/api/calendars/:calendarId",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"api",
 						"calendars",
-						"{{calendarId}}"
+						":calendarId"
+					],
+					"variable": [
+						{
+							"key": "calendarId",
+							"value": "66f17d2b1c4967d4ec407c46"
+						}
 					]
 				}
 			},
@@ -294,7 +324,7 @@
 		},
 		{
 			"name": "Add Meal to Calendar (POST)",
-				"event": [
+			"event": [
 				{
 					"listen": "test",
 					"script": {
@@ -308,24 +338,44 @@
 							"    pm.expect(responseJson.message).to.eql('Meal added to calendar successfully');",
 							"});"
 						],
-						"type": "text/javascript"
+						"type": "text/javascript",
+						"packages": {}
 					}
 				}
 			],
 			"request": {
 				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "{{host}}/api/calendars/{{calendarId}}/meals/{{mealId}}",
+					"raw": "{{host}}/api/calendars/:calendarId/meals/:mealId",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"api",
 						"calendars",
-						"{{calendarId}}",
+						":calendarId",
 						"meals",
-						"{{mealId}}"
+						":mealId"
+					],
+					"variable": [
+						{
+							"key": "calendarId",
+							"value": "66f174751c4967d4ec407c34"
+						},
+						{
+							"key": "mealId",
+							"value": "66f17cc41c4967d4ec407c40"
+						}
 					]
 				}
 			},
@@ -351,7 +401,8 @@
 							"// Save meal ID to environment",
 							"pm.environment.set('mealId', responseJson.meal._id);"
 						],
-						"type": "text/javascript"
+						"type": "text/javascript",
+						"packages": {}
 					}
 				}
 			],
@@ -360,7 +411,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"Lunch Meal\",\n    \"recipeId\": \"{{recipeId}}\"\n}",
+					"raw": "{\n    \"name\": \"Chicken Sallad\",\n    \"recipeId\": \"66f160f2e125accb10d099f7\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -379,7 +430,8 @@
 						"meals"
 					]
 				}
-			}
+			},
+			"response": []
 		},
 		{
 			"name": "Get all meals",
@@ -417,7 +469,8 @@
 						"meals"
 					]
 				}
-			}
+			},
+			"response": []
 		},
 		{
 			"name": "Get meal by ID",
@@ -436,7 +489,8 @@
 							"    pm.expect(responseJson).to.have.property('meal');",
 							"});"
 						],
-						"type": "text/javascript"
+						"type": "text/javascript",
+						"packages": {}
 					}
 				}
 			],
@@ -444,7 +498,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/api/meals/{{mealId}}",
+					"raw": "http://localhost:3000/api/meals/:mealId",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -453,10 +507,17 @@
 					"path": [
 						"api",
 						"meals",
-						"{{mealId}}"
+						":mealId"
+					],
+					"variable": [
+						{
+							"key": "mealId",
+							"value": "66f1611de125accb10d099fa"
+						}
 					]
 				}
-			}
+			},
+			"response": []
 		},
 		{
 			"name": "Update a meal",
@@ -475,7 +536,8 @@
 							"    pm.expect(responseJson.message).to.eql('Meal updated successfully');",
 							"});"
 						],
-						"type": "text/javascript"
+						"type": "text/javascript",
+						"packages": {}
 					}
 				}
 			],
@@ -484,7 +546,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"Updated Meal Name\",\n    \"recipe\": \"{{recipeId}}\"\n}",
+					"raw": "{\n    \"name\": \"Dinner Meal\",\n    \"recipe\": \"66f160f2e125accb10d099f7\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -492,7 +554,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/api/meals/{{mealId}}",
+					"raw": "http://localhost:3000/api/meals/:mealId",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -501,10 +563,17 @@
 					"path": [
 						"api",
 						"meals",
-						"{{mealId}}"
+						":mealId"
+					],
+					"variable": [
+						{
+							"key": "mealId",
+							"value": "66f1611de125accb10d099fa"
+						}
 					]
 				}
-			}
+			},
+			"response": []
 		},
 		{
 			"name": "Partial update a meal",
@@ -523,7 +592,8 @@
 							"    pm.expect(responseJson.message).to.eql('Meal partially updated');",
 							"});"
 						],
-						"type": "text/javascript"
+						"type": "text/javascript",
+						"packages": {}
 					}
 				}
 			],
@@ -540,7 +610,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/api/meals/{{mealId}}",
+					"raw": "http://localhost:3000/api/meals/:mealId",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -549,10 +619,17 @@
 					"path": [
 						"api",
 						"meals",
-						"{{mealId}}"
+						":mealId"
+					],
+					"variable": [
+						{
+							"key": "mealId",
+							"value": "66f1611de125accb10d099fa"
+						}
 					]
 				}
-			}
+			},
+			"response": []
 		},
 		{
 			"name": "Delete meal by ID",
@@ -571,7 +648,8 @@
 							"    pm.expect(responseJson.message).to.eql('Meal deleted successfully');",
 							"});"
 						],
-						"type": "text/javascript"
+						"type": "text/javascript",
+						"packages": {}
 					}
 				}
 			],
@@ -579,7 +657,7 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/api/meals/{{mealId}}",
+					"raw": "http://localhost:3000/api/meals/:mealId",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -588,17 +666,23 @@
 					"path": [
 						"api",
 						"meals",
-						"{{mealId}}"
+						":mealId"
+					],
+					"variable": [
+						{
+							"key": "mealId",
+							"value": "66f1611de125accb10d099fa"
+						}
 					]
 				}
-			}
+			},
+			"response": []
 		}
 	],
 	"event": [
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "05864cff-5cba-4070-bac3-a59328954ebf",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -608,7 +692,6 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "e9c319be-3306-4fc5-ba34-fcf64391213a",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -618,29 +701,24 @@
 	],
 	"variable": [
 		{
-			"id": "cd185905-a834-4211-8030-583d17702534",
 			"key": "host",
 			"value": "http://localhost:3000",
 			"type": "string"
 		},
 		{
-			"id": "userId",
 			"key": "userId",
 			"value": "YOUR_USER_ID_HERE",
 			"type": "string"
 		},
 		{
-			"id": "calendarId",
 			"key": "calendarId",
 			"value": "YOUR_CALENDAR_ID_HERE",
 			"type": "string"
 		},
 		{
-			"id": "mealId",
 			"key": "mealId",
 			"value": "YOUR_MEAL_ID_HERE",
 			"type": "string"
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }
