@@ -14,7 +14,8 @@ exports.getAllUsers = async (req, res, next) => {
 // Display information about specific user 
 exports.getUser = async (req, res, next) => {
     try{
-        const user = await User.findById(req.params.id);  
+        const userID = req.params.id;
+        const user = await User.findById(userID); // är detta rätt, kollar vi upp geno id 
         if(!user){
             return res.status (404).json({"message": "User not found"});
         } 
@@ -25,7 +26,7 @@ exports.getUser = async (req, res, next) => {
 }; 
 
 // Create a new user 
-exports.createUser = async (req , res, next ) => {
+exports.createUser = async (req , res, next) => {
     try{
         const newUser = new User ({
             name: req.body.name,
@@ -44,7 +45,7 @@ exports.createUser = async (req , res, next ) => {
 }; 
 
 // Update an already existing user
-exports.updateUser = async (req , res, next ) => {
+exports.updateUser = async (req , res, next) => {
    try{
         var updateUser = {
             name: req.body.name,
