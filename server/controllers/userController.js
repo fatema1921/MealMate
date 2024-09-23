@@ -1,7 +1,7 @@
 const User = require('../models/user');
 
 // Display all users 
-exports.getAllUsers = async (req, res) => {
+exports.getAllUsers = async (req, res, next) => {
     try{
         const userList = await User.find(); 
         res.json(userList); // Returns all the users as a JSON response
@@ -12,9 +12,10 @@ exports.getAllUsers = async (req, res) => {
 }; 
 
 // Display information about specific user 
-exports.getUser = async (req, res) => {
+exports.getUser = async (req, res, next) => {
     try{
-        const user = await User.findById(req.params.id); // är detta rätt, kollar vi upp geno id 
+        const userID = req.params.id;
+        const user = await User.findById(userID); // är detta rätt, kollar vi upp geno id 
         if(!user){
             return res.status (404).json({"message": "User not found"});
         } 
@@ -25,7 +26,7 @@ exports.getUser = async (req, res) => {
 }; 
 
 // Create a new user 
-exports.createUser = async (req , res) => {
+exports.createUser = async (req , res, next) => {
     try{
         const newUser = new User ({
             name: req.body.name,
@@ -44,7 +45,7 @@ exports.createUser = async (req , res) => {
 }; 
 
 // Update an already existing user
-exports.updateUser = async (req , res) => {
+exports.updateUser = async (req , res, next) => {
    try{
         var updateUser = {
             name: req.body.name,
@@ -66,7 +67,7 @@ exports.updateUser = async (req , res) => {
 }; 
 
 // Delete a user
-exports.deleteUser = async (req, res) => {
+exports.deleteUser = async (req, res, next) => {
     try{
         const user = await User.findByIdAndDelete(req.params.id); // Delete user by ID
         if (!user) {
