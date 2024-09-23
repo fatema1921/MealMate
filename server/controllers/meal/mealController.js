@@ -39,15 +39,16 @@ exports.getAllMeals = async (req, res) => {
 
 // Get a specific meal by ID (GET /meals/:id)
 exports.getMealById = async (req, res) => {
-    try {
-        const mealId = req.params.id;
+    const mealId = req.params.id;
 
+    try {
+        const meal = await Meal.findById(mealId);
         // Validate if it's a valid ObjectId
         if (!mongoose.Types.ObjectId.isValid(mealId)) {
             return res.status(400).json({ message: 'Invalid meal ID' });
         }
 
-        const meal = await Meal.findById(mealId).populate('recipe');
+        
         if (!meal) {
             return res.status(404).json({ message: 'Meal not found' });
         }
