@@ -71,7 +71,7 @@ exports.deleteUser = async (req, res, next) => {
     try{
         const user = await User.findByIdAndDelete(req.params.id); // Delete user by ID
         if (!user) {
-          return res.status(404).json({ message: 'User not found' });
+          return res.status(404).json({message: 'User not found' });
         }
         res.status(204).end(); // Responds with no content
     } catch (error){
@@ -79,5 +79,29 @@ exports.deleteUser = async (req, res, next) => {
     }
    
   };
+
+exports.patchUser = async (req, res, next) => {
+    try {
+        // Find user by ID
+        const user = await User.findById(req.params.id);
+        
+        // Check if the user exists
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Update the fields provided in the request body
+        Object.assign(user, req.body);
+
+        await user.save();
+
+        res.json({ message: "User updated", user });
+
+    } catch (error) {
+        console.error('Error updating this user:', error);
+        next(error);
+    }
+};
+
 
 
