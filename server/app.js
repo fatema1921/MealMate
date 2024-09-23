@@ -7,7 +7,7 @@ var cors = require('cors');
 var history = require('connect-history-api-fallback');
 
 // Variables
-var mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/animalDevelopmentDB';
+var mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/mealMateDb';
 var port = process.env.PORT || 3000;
 
 // Connect to MongoDB
@@ -25,12 +25,12 @@ const Recipe = require('./models/recipe');
 const Calendar = require('./models/calendar');
 const Meal = require('./models/meal');
 
-//Routers
+//Importing Routers
 const ingredientRouter = require('./controllers/ingredient/ingredientRoutes');
-
-// Importing routes 
-const userRoutes = require('./routes/userRoutes'); // Import user routes
-const recipeRoutes = require('./routes/recipeRoutes');
+const calendarRouter = require('./controllers/calendar/calendarRoutes');
+const mealRouter = require('./controllers/meal/mealRoutes');
+const userRoutes = require('./controllers/user/userRoutes'); 
+const recipeRoutes = require('./controllers/recipe/recipeRoutes');
 
 // Create Express app
 var app = express();
@@ -43,21 +43,22 @@ app.use(morgan('dev'));
 // Enable cross-origin resource sharing for frontend must be registered before api
 app.options('*', cors());
 app.use(cors());
+
 // use routes
 app.use('/api', ingredientRouter)
 
-app.use(bodyParser.json());
+app.use('/api', calendarRouter);
+app.use('/api', mealRouter);
+
+app.use('/api',userRoutes); 
+app.use('/api',recipeRoutes); 
+
+app.use(bodyParser.json());  // Parse JSON requests
 
 // Import routes
 app.get('/api', function(req, res) {
     res.json({'message': 'Welcome to your DIT342 backend ExpressJS project!'});
 });
-
-// Add user routes to the middleware
-app.use('/api',userRoutes); 
-app.use('/api',recipeRoutes); 
-
-
 
 // Catch all non-error handler for api (i.e., 404 Not Found)
 app.use('/api/*', function (req, res) {
