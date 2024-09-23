@@ -1,7 +1,7 @@
 const Recipe = require('../models/recipe');
 const Ingridient = require('../models/ingredient'); 
 
-// Import TheMealAPI 
+// Import TheMealDB API 
 const express = require('express');
 const axios = require('axios'); 
 
@@ -26,6 +26,7 @@ exports.searchRecipe = async (req, res, next) => {
 
 }; 
 
+
 // Display all recipes
 exports.getAllRecipes = async (req, res, next) => {
     try {
@@ -49,14 +50,34 @@ exports.getRecipe = async (req, res, next) => {
     }
 };
 
+// Get all recipes with a specific ingredient
+exports.getRecipesByIngredient = async (req, res, next) => {
+    try {
+        const ingredientId = req.params.ingredient_id;
+
+        // Find all recipes that include the ingredient
+        const recipes = await Recipe.find({ ingredients: ingredientId }).populate('ingredients');
+
+        if (!recipes || recipes.length === 0) {
+            return res.status(404).json({ message: "No recipes found with this ingredient" });
+        }
+
+        res.json(recipes);
+    } catch (error) {
+        next(error);
+    }
+};
+
+
 // Create a new recipe
 exports.createRecipe = async (req, res, next) => {
+
     try {
         const newRecipe = new Recipe({
             name: req.body.name,
             description: req.body.description,
-            meal_category: req.body.meal_category, // E.g., Vegan, Vegetarian, etc.
-            ingredients: req.body.ingredients // Array of ObjectIds for ingredients
+            meal_category: req.body.meal_category,
+            ingredients: req.body.ingredients 
         });
 
         await newRecipe.save();
@@ -98,4 +119,28 @@ exports.deleteRecipe = async (req, res, next) => {
         next(error);
     }
 };
+
+exports.patchRecipe = async (req, res, next) => {
+    try {
+        // Find the recipe by ID
+        const recipe = await Recipe.findById(req.params.id);
+        
+        // Check if the recipe exists
+        if (!recipe) {
+            return res.status(404).json({ message: "Recipe not found" });
+        }
+
+        // Update the fields provided in the request body
+        Object.assign(recipe, req.body);
+
+        await recipe.save();
+
+        res.json({ message: "Recipe updated", recipe });
+
+    } catch (error) {
+        console.error('Error updating this recipe:', error);
+        next(error);
+    }
+};
+
 
