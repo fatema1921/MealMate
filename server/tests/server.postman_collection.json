@@ -3,282 +3,10 @@
 		"_postman_id": "f79f5b39-ea42-4be5-86f3-00b1f878bb7b",
 		"name": "server",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "37514835",
-		"_collection_link": "https://www.postman.com/winter-meteor-564285/workspace/group09/collection/23101038-f79f5b39-ea42-4be5-86f3-00b1f878bb7b?action=share&source=collection_link&creator=37514835"
+		"_exporter_id": "23101038",
+		"_collection_link": "https://www.postman.com/winter-meteor-564285/workspace/group09/collection/23101038-f79f5b39-ea42-4be5-86f3-00b1f878bb7b?action=share&source=collection_link&creator=23101038"
 	},
 	"item": [
-		{
-			"name": "GET /api",
-			"event": [
-				{
-					"listen": "prerequest",
-					"script": {
-						"exec": [
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Accept",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "{{host}}/api",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"api"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "http://localhost:3001/api/ingredients",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"\"pm.test('Status code is 201', function () {\",",
-							"\t\t\t\t\t\t\t\"    pm.response.to.have.status(201);\",",
-							"\t\t\t\t\t\t\t\"});\",",
-							"\t\t\t\t\t\t\t\"\",",
-							"\t\t\t\t\t\t\t\"const responseJson = pm.response.json();\",",
-							"\t\t\t\t\t\t\t\"pm.test('Calendar creation was successful', function () {\",",
-							"\t\t\t\t\t\t\t\"    pm.expect(responseJson.message).to.eql('Calendar created successfully');\",",
-							"\t\t\t\t\t\t\t\"});\",",
-							"\t\t\t\t\t\t\t\"\",",
-							"\t\t\t\t\t\t\t\"pm.environment.set('calendarId', responseJson.calendar._id);\""
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"name\": \"Emma's Calendar\",\n    \"user\": \"66f175c21c4967d4ec407c39\",\n    \"meals\": []\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:3000/api/calendars",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"api",
-						"calendars"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get All Calendars (GET)",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{host}}/api/calendars",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"api",
-						"calendars"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get Calendar By ID (GET)",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{host}}/api/calendars/{{calendarId}}",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"api",
-						"calendars",
-						"{{calendarId}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Update Calendar (PUT)",
-			"request": {
-				"method": "PUT",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "{{host}}/api/calendars/{{calendarId}}",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"api",
-						"calendars",
-						"{{calendarId}}"
-					]
-				},
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"name\": \"Updated Calendar\",\n\t\"user\": \"{{userId}}\",\n\t\"meals\": [\"{{mealId}}\"]\n}"
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Partial Update Calendar (PATCH)",
-			"request": {
-				"method": "PATCH",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "{{host}}/api/calendars/{{calendarId}}",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"api",
-						"calendars",
-						"{{calendarId}}"
-					]
-				},
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"name\": \"Partially Updated Calendar\"\n}"
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Delete Calendar (DELETE)",
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"url": {
-					"raw": "{{host}}/api/calendars/{{calendarId}}",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"api",
-						"calendars",
-						"{{calendarId}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Add Meal to Calendar (POST)",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"url": {
-					"raw": "{{host}}/api/calendars/{{calendarId}}/meals/{{mealId}}",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"api",
-						"calendars",
-						"{{calendarId}}",
-						"meals",
-						"{{mealId}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Create Ingredient",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 201\", function () {\r",
-							"    pm.response.to.have.status(201);\r",
-							"});\r",
-							"\r",
-							"pm.test(\"Post ingredient\", function () {\r",
-							"    const ingredientData = pm.response.json(); // Capture response data\r",
-							"\r",
-							"    pm.expect(ingredientData).to.have.property(\"name\", \"cumin\");\r",
-							"    pm.expect(ingredientData).to.have.property(\"calories\", 10);\r",
-							"    pm.expect(ingredientData).to.have.property(\"shopping_list\", true);\r",
-							"    \r",
-							"    pm.globals.set(\"ingredient_id\", ingredientData._id);\r",
-							"});"
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"cumin\",\r\n    \"calories\": \"10\",\r\n    \"shopping_list\": \"true\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:3001/api/ingredients",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"api",
-						"ingredients"
-					]
-				}
-			},
-			"response": []
-		},
 		{
 			"name": "Create User",
 			"event": [
@@ -332,23 +60,88 @@
 			"response": []
 		},
 		{
+			"name": "Create Ingredient",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Post ingredient\", function () {\r",
+							"    const ingredientData = pm.response.json();\r",
+							"\r",
+							"    pm.expect(ingredientData).to.have.property(\"name\", \"cumin\");\r",
+							"    pm.expect(ingredientData).to.have.property(\"calories\", 10);\r",
+							"    pm.expect(ingredientData).to.have.property(\"shopping_list\", true);\r",
+							"    \r",
+							"    pm.globals.set(\"ingredient_id\", ingredientData._id);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"cumin\",\r\n    \"calories\": \"10\",\r\n    \"shopping_list\": \"true\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3001/api/ingredients",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"api",
+						"ingredients"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Create Calendar (POST)",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
 							"pm.test(\"Post calendar\", function () {",
-							"    const calendarData = pm.response.json(); // Capture response data",
+							"    const responseData = pm.response.json(); // get the entire response as JSON",
+							"    const calendarData = responseData.calendar; // access the calendar data from the response",
 							"",
 							"    pm.expect(calendarData).to.have.property(\"name\", \"Emma's Calendar\");",
 							"    var userId = pm.globals.get(\"user_id\");",
 							"    pm.expect(calendarData).to.have.property(\"user\", userId);",
-							"    ",
-							"    pm.expect(calendarData).to.have.property(\"meals\").that.is.an('array');",
-							"    ",
+							"    pm.expect(calendarData).to.have.property(\"meals\").that.is.an('array').that.is.empty;",
 							"    pm.globals.set(\"calendar_id\", calendarData._id);",
-							"});",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
 							""
 						],
 						"type": "text/javascript",
@@ -384,24 +177,74 @@
 			"response": []
 		},
 		{
+			"name": "Create Recipe",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Create Recipe\", function () {\r",
+							"    const responseData = pm.response.json(); // Get the entire response as JSON\r",
+							"   \r",
+							"    const recipeData = responseData.newRecipe;\r",
+							"    pm.expect(recipeData).to.have.property(\"name\", \"Delicious Vegan Pasta\");\r",
+							"    pm.globals.set(\"recipe_id\", recipeData._id);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Delicious Vegan Pasta\",\r\n    \"description\": \"A healthy and tasty vegan pasta dish.\",\r\n    \"meal_category\": \"Vegan\",\r\n    \"ingredients\": [\"66f62dfd5c2ade4cdea5b269\"]\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/api/recipes",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"recipes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Create Meal",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Post meal\", function () {",
-							"    const mealData = pm.response.json(); // Capture response data",
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
 							"",
-							"    pm.expect(mealData).to.have.property(\"name\", \"Chicken Sallad\");",
-							"    var recipeId = pm.globals.get(\"recipe_id\");",
+							"pm.test(\"Create Meal\", function () {",
+							"    const responseData = pm.response.json();",
+							"    pm.expect(responseData).to.have.property(\"message\", \"Meal created successfully\");",
 							"    ",
-							"    // Check if \"recipeId\" is being returned and its value matches",
-							"    pm.expect(mealData).to.have.property(\"recipeId\", recipeId);",
+							"    const mealData = responseData.meal; ",
+							"    pm.expect(mealData).to.have.property(\"name\", \"Chicken Sallad\");",
 							"    ",
 							"    pm.globals.set(\"meal_id\", mealData._id);",
-							"});",
-							""
+							"});"
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -443,15 +286,8 @@
 					"script": {
 						"exec": [
 							"pm.test('Status code is 200', function () {",
-							"    pm.response.to.have.status(200); // Adjust the status code if needed",
-							"});",
-							"",
-							"const responseJson = pm.response.json();",
-							"pm.test('Meal was successfully added to calendar', function () {",
-							"    // Ensure that the message matches the actual response message",
-							"    pm.expect(responseJson.message).to.eql('Meal added to calendar successfully');",
-							"});",
-							""
+							"    pm.response.to.have.status(200);",
+							"});"
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -473,9 +309,8 @@
 				"url": {
 					"raw": "{{host}}/api/calendars/{{calendar_id}}/meals/{{meal_id}}",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "3001",
 					"path": [
 						"api",
 						"calendars",
@@ -511,15 +346,6 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"name\": \"Chicken Sallad\",\n    \"recipeId\": \"{{recipe_id}}\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
 				"url": {
 					"raw": "http://localhost:3001/api/ingredients",
 					"protocol": "http",
@@ -627,6 +453,71 @@
 			"response": []
 		},
 		{
+			"name": "Get all Recipes",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/recipes",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"recipes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Recipe by ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/recipes/{{recipe_id}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"recipes",
+						"{{recipe_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Get User By ID",
 			"event": [
 				{
@@ -673,16 +564,12 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test('Status code is 200', function () {",
+							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
-							"});",
-							"",
-							"const responseJson = pm.response.json();",
-							"pm.test('Response contains calendars', function () {",
-							"    pm.expect(responseJson).to.have.property('calendars');",
 							"});"
 						],
-						"type": "text/javascript"
+						"type": "text/javascript",
+						"packages": {}
 					}
 				}
 			],
@@ -711,11 +598,6 @@
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
-							"});",
-							"",
-							"pm.test(\"Get specific calendar\", function () {",
-							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData).to.have.property(\"name\");",
 							"});"
 						],
 						"type": "text/javascript",
@@ -723,9 +605,6 @@
 					}
 				}
 			],
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -752,15 +631,10 @@
 						"exec": [
 							"pm.test('Status code is 200', function () {",
 							"    pm.response.to.have.status(200);",
-							"});",
-							"",
-							"const responseJson = pm.response.json();",
-							"",
-							"pm.test('Response contains meals', function () {",
-							"    pm.expect(responseJson).to.have.property('meals');",
 							"});"
 						],
-						"type": "text/javascript"
+						"type": "text/javascript",
+						"packages": {}
 					}
 				}
 			],
@@ -791,11 +665,6 @@
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
-							"});",
-							"",
-							"pm.test(\"Get specific meal\", function () {",
-							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData).to.have.property(\"name\");",
 							"});"
 						],
 						"type": "text/javascript",
@@ -929,11 +798,6 @@
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
-							"});",
-							"",
-							"pm.test(\"Put calendar\", function () {",
-							"    const jsonData = pm.response.json();",
-							"    pm.expect(jsonData.name).to.eql(\"Updated Calendar\");",
 							"});"
 						],
 						"type": "text/javascript",
@@ -952,7 +816,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"name\": \"Updated Calendar\",\n\t\"user\": \"66f175c21c4967d4ec407c39\",\n\t\"meals\": [\"66f161fce125accb10d09a04\"]\n}"
+					"raw": "{\n\t\"name\": \"Updated Calendar\",\n\t\"user\": \"{{user_id}}\",\n\t\"meals\": []\n}"
 				},
 				"url": {
 					"raw": "{{host}}/api/calendars/{{calendar_id}}",
@@ -969,6 +833,48 @@
 			"response": []
 		},
 		{
+			"name": "Update recipe",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Updated Recipe Name\",\r\n    \"description\": \"Updated Description for the recipe.\",\r\n    \"meal_category\": \"Vegan\",\r\n    \"ingredients\": [\r\n        \"66f62dfd5c2ade4cdea5b269\"\r\n    ]\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/api/recipes/{{recipe_id}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"recipes",
+						"{{recipe_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Update Meal",
 			"event": [
 				{
@@ -977,11 +883,6 @@
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
-							"});",
-							"",
-							"pm.test(\"Put meal\", function () {",
-							"    const jsonData = pm.response.json();",
-							"    pm.expect(jsonData.name).to.eql(\"Updated Meal\");",
 							"});"
 						],
 						"type": "text/javascript",
@@ -1075,11 +976,6 @@
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
-							"});",
-							"",
-							"pm.test(\"Patch calendar\", function () {",
-							"    const jsonData = pm.response.json();",
-							"    pm.expect(jsonData.name).to.eql(\"Partially Updated Calendar\");",
 							"});"
 						],
 						"type": "text/javascript",
@@ -1123,11 +1019,6 @@
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
-							"});",
-							"",
-							"pm.test(\"Patch meal\", function () {",
-							"    const jsonData = pm.response.json();",
-							"    pm.expect(jsonData.name).to.eql(\"Partially Updated Meal Name\");",
 							"});"
 						],
 						"type": "text/javascript",
@@ -1172,11 +1063,6 @@
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
-							"});",
-							"",
-							"pm.test(\"Delete meal\", function () {",
-							"    const jsonData = pm.response.json();",
-							"    pm.expect(jsonData.message).to.eql(\"Meal deleted.\");",
 							"});"
 						],
 						"type": "text/javascript",
@@ -1252,11 +1138,6 @@
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
-							"});",
-							"",
-							"pm.test(\"Delete calendar\", function () {",
-							"    const jsonData = pm.response.json();",
-							"    pm.expect(jsonData.message).to.eql(\"Calendar deleted.\");",
 							"});"
 						],
 						"type": "text/javascript",
@@ -1320,6 +1201,39 @@
 						"api",
 						"users",
 						"{{user_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete recipe",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/recipes/{{recipe_id}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"recipes",
+						"{{recipe_id}}"
 					]
 				}
 			},

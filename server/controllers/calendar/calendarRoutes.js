@@ -17,7 +17,7 @@ router.get('/calendars/:id', calendarController.getCalendarById);
 router.put('/calendars/:id', calendarController.updateCalendar);
 
 // PATCH /calendars/:id - Partially update a calendar by ID
-router.patch('calendars/:id', calendarController.partialUpdateCalendar);
+router.patch('/calendars/:id', calendarController.partialUpdateCalendar);
 
 // DELETE /calendars/:id - Delete a calendar by ID
 router.delete('/calendars/:id', calendarController.deleteCalendarById);
