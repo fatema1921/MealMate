@@ -13,7 +13,8 @@ exports.getAllRecipes = async (req, res, next) => {
 // Display information about a specific recipe
 exports.getRecipe = async (req, res, next) => {
     try {
-        const recipe = await Recipe.findById(req.params.id).populate('ingredients'); // Populate ingredients details
+        const recipeID = req.params.id;
+        const recipe = await Recipe.findById(recipeID).populate('ingredients'); // Populate ingredients details
         if (!recipe) {
             return res.status(404).json({ message: "Recipe not found" });
         }
