@@ -4,22 +4,22 @@ const router = express.Router();
 
 // CRUD operations for Meal
 
-// POST /meals - Create a new meal
-router.post('/meals', mealController.createMeal);
+// POST / - Create a new meal
+router.post('/', mealController.createMeal);
 
-// GET /meals - Retrieve all meals
-router.get('/meals', mealController.getAllMeals);
+// GET / - Retrieve all 
+router.get('/', mealController.getAll);
 
-// GET /meals/:id - Retrieve a specific meal by ID
-router.get('/meals/:id', mealController.getMealById);
+// GET //:id - Retrieve a specific meal by ID
+router.get('/:id', mealController.getMealById);
 
-// PUT /meals/:id - Update a meal by ID
-router.put('/meals/:id', mealController.updateMeal);
+// PUT //:id - Update a meal by ID
+router.put('/:id', mealController.updateMeal);
 
-// PATCH /meals/:id - Partially update a meal by ID
-router.patch('/meals/:id', mealController.partialUpdateMeal);
+// PATCH //:id - Partially update a meal by ID
+router.patch('/:id', mealController.partialUpdateMeal);
 
-// DELETE /meals/:id - Delete a meal by ID
-router.delete('/meals/:id', mealController.deleteMealById);
+// DELETE //:id - Delete a meal by ID
+router.delete('/:id', mealController.deleteMealById);
 
 module.exports = router;
