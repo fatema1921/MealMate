@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const recipeController = require('../controllers/recipeController'); // Import the recipe controller
-const ingredientController = require('../ingredient/ingredientController'); 
+
+const recipeController = require('./recipeController'); // Import the recipe controller
+
 // Define recipe routes
 router.get('/recipes', recipeController.getAllRecipes); // Get all recipes
 router.get('/recipes/:id', recipeController.getRecipe); // Get a single recipe by ID
@@ -14,8 +15,8 @@ router.patch('/recipes/:id', recipeController.patchRecipe); //  Update some fiel
 // Fetch recipes from TheMealAPI
 router.get('/search/:recipe', recipeController.searchRecipe);
 
-router.get('/recipes/:recipeId/ingredients/:ingredientId', recipeController.getIngredientById);
+//router.get('/recipes/:recipeId/ingredients/:ingredientId', recipeController.getIngredientById);
 
-router.delete('/recipes/:recipeId/ingredients/:ingredientId', recipeController.deleteIngredientById);
+//router.delete('/recipes/:recipeId/ingredients/:ingredientId', recipeController.deleteIngredientById);
 
 module.exports = router;
