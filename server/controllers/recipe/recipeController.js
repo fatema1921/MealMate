@@ -53,12 +53,14 @@ exports.getRecipe = async (req, res, next) => {
 // Get all recipes with a specific ingredient
 exports.getRecipesByIngredient = async (req, res, next) => {
     try {
-        const ingredientId = req.params.ingredient_id;
+        const ingredientId = req.params.ingredient_id.trim(); // Trim to avoid castError in the ingredient id
 
         // Find all recipes that include the ingredient
         const recipes = await Recipe.find({ ingredients: ingredientId }).populate('ingredients');
 
         if (!recipes || recipes.length === 0) {
+            console.log(recipes);
+            console.log(ingredientId);
             return res.status(404).json({ message: "No recipes found with this ingredient" });
         }
 
