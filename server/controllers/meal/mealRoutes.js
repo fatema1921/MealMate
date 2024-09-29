@@ -8,7 +8,7 @@ const router = express.Router();
 router.post('/', mealController.createMeal);
 
 // GET / - Retrieve all 
-router.get('/', mealController.getAll);
+router.get('/', mealController.getAllMeals);
 
 // GET //:id - Retrieve a specific meal by ID
 router.get('/:id', mealController.getMealById);

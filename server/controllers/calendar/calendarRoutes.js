@@ -8,7 +8,7 @@ const router = express.Router();
 router.post('/', calendarController.createCalendar);
 
 // GET / - Retrieve all 
-router.get('/', calendarController.getAll);
+router.get('/', calendarController.getAllCalendars);
 
 // GET //:id - Retrieve a specific calendar by ID
 router.get('/:id', calendarController.getCalendarById);

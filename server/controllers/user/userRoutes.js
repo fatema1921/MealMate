@@ -3,7 +3,7 @@ const router = express.Router();
 const userController = require('./userController'); // Import the user controller
 
 // Define user routes
-router.get('/', userController.getAll); // Get all 
+router.get('/', userController.getAllUsers); // Get all 
 router.get('/:id', userController.getUser); // Get a single user by ID
 router.post('/', userController.createUser); // Create a new user
 router.put('/:id', userController.updateUser); // Update a user

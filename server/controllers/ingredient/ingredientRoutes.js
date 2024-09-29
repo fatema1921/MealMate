@@ -6,7 +6,7 @@ const router = express.Router();
 router.post('/', ingredientController.createIngredient);
 
 // GET all 
-router.get('/', ingredientController.getAll);
+router.get('/', ingredientController.getAllIngredients);
 
 // GET specific ingredient
 router.get('/:id', ingredientController.getIngredientById);
