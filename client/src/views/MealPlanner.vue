@@ -1,14 +1,14 @@
 <template>
   <div>
     <b-container>
-      <h1>My Recipes</h1>
-      <p>Your saved recipes will appear here.</p>
+      <h1>Meal Planner</h1>
+      <p>Plan your meals here.</p>
     </b-container>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'recipes'
+  name: 'meal-planner'
 }
 </script>

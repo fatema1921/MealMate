@@ -1,3 +1,14 @@
 <template>
-    <h1>This is the shoppinglist</h1>
+  <div>
+    <b-container>
+      <h1>Shopping List</h1>
+      <p>Here is your shopping list.</p>
+    </b-container>
+  </div>
 </template>
+
+<script>
+export default {
+  name: 'shopping-list'
+}
+</script>

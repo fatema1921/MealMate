@@ -10,14 +10,14 @@
       </b-nav>
     </b-container>
   </template>
-  
-  <script>
-  export default {
-    name: 'tabsBar',
-  }
-  </script>
-  <style scoped>
-  .tabs-bar {
-    text-align: center;
-  }
-  </style>
+
+<script>
+export default {
+  name: 'tabsBar'
+}
+</script>
+<style scoped>
+.tabs-bar {
+  text-align: center;
+}
+</style>
