@@ -11,12 +11,17 @@
 </template>
 
 <script>
+import { Api } from '@/Api'
+
 export default {
   name: 'searchbox',
   data() {
     return {
       searchQuery: ''
     }
+  },
+  methods: {
+    
   }
 }
 </script>

@@ -5,8 +5,7 @@
         <h1 class="display-5 fw-bold">Meal Mate</h1>
         <p class="fs-4">Welcome to Meal Mate, your favorite meal planner</p> 
       </header>
-      <tabsbar />    
-    <searchbox /> 
+     
 
     </b-container>
   </div>
