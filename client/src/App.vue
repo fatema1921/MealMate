@@ -41,7 +41,7 @@ export default {
 :root {
   --navbar-bg-color: #d69468; /* Pumpkin orange */
   --navbar-text-color: #FDFEFE; /* Light ivory */
-  --navbar-active-text-color: #a63721; /* Warm yellow */
+  --navbar-active-text-color: #8f230d; /* Warm yellow */
   --button-color: #E74C3C; /* Crimson red */
   --button-hover-color: #C0392B; /* Darker red */
   --background-color: #f4e2c6; /* Light beige */
