@@ -1,42 +1,38 @@
 <template>
   <div>
     <b-container fluid>
-      <h1 class="display-5 fw-bold">DIT342 Frontend</h1>
-      <p class="fs-4">Welcome to your DIT342 Frontend Vue.js App</p>
-      <b-button class="btn_message" variant="primary" v-on:click="getMessage()" >Get Message from Server</b-button>
-      <p class="col-xl-9">Message from the server:<br/>
-      {{ message }}</p>
+      <header class = "header"> 
+        <h1 class="display-5 fw-bold">Meal Mate</h1>
+        <p class="fs-4">Welcome to Meal Mate, your favorite meal planner</p> 
+      </header>
+      <tabsbar />    
+    <searchbox /> 
+
     </b-container>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import { Api } from '@/Api'
+import tabsbar from '@/components/tabsBar.vue'; 
+import searchbox from '@/components/searchbox.vue';
 
 export default {
   name: 'home',
+  components: { 
+    searchbox,  
+    tabsbar 
+  },
   data() {
     return {
       message: 'none'
     }
   },
-  methods: {
-    getMessage() {
-      Api.get('/')
-        .then(response => {
-          this.message = response.data.message
-        })
-        .catch(error => {
-          this.message = error
-        })
-    }
-  }
 }
 </script>
 
 <style>
-.btn_message {
-  margin-bottom: 1em;
-}
+
+
+
 </style>
