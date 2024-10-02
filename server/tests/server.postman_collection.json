@@ -692,6 +692,43 @@
 			"response": []
 		},
 		{
+			"name": "Get specific ingredient in recipe",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3001/api/recipes/{{recipe_id}}/ingredients/{{ingredient_id}}\n",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"api",
+						"recipes",
+						"{{recipe_id}}",
+						"ingredients",
+						"{{ingredient_id}}\n"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Update Ingredient",
 			"event": [
 				{
@@ -1011,6 +1048,48 @@
 			"response": []
 		},
 		{
+			"name": "Partial update recipe",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Partially Updated Recipe Name\",\r\n    \"description\": \"Partially updated description.\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/api/recipes/{{recipe_id}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"recipes",
+						"{{recipe_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Partial update a meal",
 			"event": [
 				{
@@ -1234,6 +1313,43 @@
 						"api",
 						"recipes",
 						"{{recipe_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete specific ingredient in recipe",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204\", function () {\r",
+							"    pm.response.to.have.status(204); // Check for No Content status\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3001/api/recipes/{{recipe_id}}/ingredients/{{ingredient_id}}\n",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"api",
+						"recipes",
+						"{{recipe_id}}",
+						"ingredients",
+						"{{ingredient_id}}\n"
 					]
 				}
 			},
