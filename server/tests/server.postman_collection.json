@@ -711,7 +711,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3001/api/recipes/{{recipe_id}}/ingredients/{{ingredient_id}}\n",
+					"raw": "http://localhost:3001/api/recipes/ingredients/{{ingredient_id}}\n",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -720,7 +720,6 @@
 					"path": [
 						"api",
 						"recipes",
-						"{{recipe_id}}",
 						"ingredients",
 						"{{ingredient_id}}\n"
 					]

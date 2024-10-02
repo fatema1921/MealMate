@@ -1,4 +1,31 @@
 const Recipe = require('../../models/recipe');
+const Ingridient = require('../../models/ingredient'); 
+
+// Import TheMealDB API 
+const express = require('express');
+const axios = require('axios'); 
+
+// Search recipie in the external database 
+exports.searchRecipe = async (req, res, next) => {
+    const recipe = req.params.recipe; 
+    const mealDB = `https://www.themealdb.com/api/json/v1/1/search.php?s=${recipe}`;
+    
+    try {
+       const response = await axios.get(mealDB);
+       const meals = response.data.meals; 
+
+       if(!meals){
+        return res.status(404).json ({"message": "Recepie not found"}); 
+       }
+       res.json(meals);
+
+    } catch (error){
+        console.error('Error fetching data from TheMealDB:', error);
+        next(error); 
+    }
+
+}; 
+
 
 // Display all recipes
 exports.getAllRecipes = async (req, res, next) => {
@@ -13,8 +40,7 @@ exports.getAllRecipes = async (req, res, next) => {
 // Display information about a specific recipe
 exports.getRecipe = async (req, res, next) => {
     try {
-        const recipeID = req.params.id;
-        const recipe = await Recipe.findById(recipeID).populate('ingredients'); // Populate ingredients details
+        const recipe = await Recipe.findById(req.params.id).populate('ingredients'); // Populate ingredients details
         if (!recipe) {
             return res.status(404).json({ message: "Recipe not found" });
         }
@@ -24,14 +50,36 @@ exports.getRecipe = async (req, res, next) => {
     }
 };
 
+// Get all recipes with a specific ingredient
+exports.getRecipesByIngredient = async (req, res, next) => {
+    try {
+        const ingredientId = req.params.ingredient_id.trim(); // Trim to avoid castError in the ingredient id
+
+        // Find all recipes that include the ingredient
+        const recipes = await Recipe.find({ ingredients: ingredientId }).populate('ingredients');
+
+        if (!recipes || recipes.length === 0) {
+            console.log(recipes);
+            console.log(ingredientId);
+            return res.status(404).json({ message: "No recipes found with this ingredient" });
+        }
+
+        res.json(recipes);
+    } catch (error) {
+        next(error);
+    }
+};
+
+
 // Create a new recipe
 exports.createRecipe = async (req, res, next) => {
+
     try {
         const newRecipe = new Recipe({
             name: req.body.name,
             description: req.body.description,
-            meal_category: req.body.meal_category, // E.g., Vegan, Vegetarian, etc.
-            ingredients: req.body.ingredients // Array of ObjectIds for ingredients
+            meal_category: req.body.meal_category,
+            ingredients: req.body.ingredients 
         });
 
         await newRecipe.save();
@@ -48,7 +96,7 @@ exports.updateRecipe = async (req, res, next) => {
             name: req.body.name,
             description: req.body.description,
             meal_category: req.body.meal_category,
-            ingredients: req.body.ingredients // Array of ObjectIds
+            ingredients: req.body.ingredients 
         };
 
         const recipe = await Recipe.findByIdAndUpdate(req.params.id, updatedRecipe, { new: true }).populate('ingredients');
@@ -74,55 +122,26 @@ exports.deleteRecipe = async (req, res, next) => {
     }
 };
 
-// Add an ingredient to a recipe
-exports.addIngredientToRecipe = async (req, res) => {
+exports.patchRecipe = async (req, res, next) => {
     try {
-        const recipeId = req.params.id;
-        const { name, quantity, unit } = req.body;
-
-        // Validate if recipe exists
-        const recipe = await Recipe.findById(recipeId);
+        // Find the recipe by ID
+        const recipe = await Recipe.findById(req.params.id);
+        
+        // Check if the recipe exists
         if (!recipe) {
-            return res.status(404).json({ message: 'Recipe not found' });
+            return res.status(404).json({ message: "Recipe not found" });
         }
 
-        // Create new ingredient object
-        const newIngredient = {
-            _id: new mongoose.Types.ObjectId(),
-            name,
-            quantity,
-            unit
-        };
+        // Update the fields provided in the request body
+        Object.assign(recipe, req.body);
 
-        // Add ingredient to the recipe's ingredients array
-        recipe.ingredients.push(newIngredient);
         await recipe.save();
 
-        res.status(201).json({
-            message: 'Ingredient added successfully',
-            ingredient: newIngredient
-        });
-    } catch (err) {
-        res.status(500).json({ message: 'Something went wrong. Please try again later.' });
-    }
-};
+        res.json({ message: "Recipe updated", recipe });
 
-// Get all ingredients of a recipe
-exports.getIngredientsOfRecipe = async (req, res) => {
-    try {
-        const recipeId = req.params.id;
-
-        // Validate if recipe exists
-        const recipe = await Recipe.findById(recipeId);
-        if (!recipe) {
-            return res.status(404).json({ message: 'Recipe not found' });
-        }
-
-        res.status(200).json({
-            ingredients: recipe.ingredients
-        });
-    } catch (err) {
-        res.status(500).json({ message: 'Something went wrong. Please try again later.' });
+    } catch (error) {
+        console.error('Error updating this recipe:', error);
+        next(error);
     }
 };
 

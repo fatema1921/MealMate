@@ -1,24 +1,22 @@
 const express = require('express');
 const router = express.Router();
+
 const recipeController = require('./recipeController'); // Import the recipe controller
 
 // Define recipe routes
-router.get('/recipes', recipeController.getAllRecipes); // Get all recipes
-router.get('/recipes/:id', recipeController.getRecipe); // Get a single recipe by ID
-router.post('/recipes', recipeController.createRecipe); // Create a new recipe
-router.put('/recipes/:id', recipeController.updateRecipe); // Update a recipe by ID
-router.delete('/recipes/:id', recipeController.deleteRecipe); // Delete a recipe by ID
+router.get('/', recipeController.getAllRecipes); // Get all 
+router.get('/:id', recipeController.getRecipe); // Get a single recipe by ID
+router.post('/', recipeController.createRecipe); // Create a new recipe
+router.put('/:id', recipeController.updateRecipe); // Update a recipe by ID
+router.delete('/:id', recipeController.deleteRecipe); // Delete a recipe by ID
+router.get('/ingredients/:ingredient_id/', recipeController.getRecipesByIngredient);// Retrieve  by using an ingridient 
+router.patch('/:id', recipeController.patchRecipe); //  Update some fields for a specific recipe
+router.post('/ingredients/:ingredient_id'); // Create post function.
+// Fetch  from TheMealAPI
+router.get('/search/:recipe', recipeController.searchRecipe);
 
-// Add an ingredient to a recipe
-router.post('/recipes/:id/ingredients', recipeController.addIngredientToRecipe);
+router.get('/:recipeId/ingredients/:ingredientId', recipeController.getIngredientById);
 
-// Get all ingredients of a recipe
-router.get('/recipes/:id/ingredients', recipeController.getIngredientsOfRecipe);
-
-// Get a specific ingredient of a recipe by ingredientId
-router.get('/recipes/:recipeId/ingredients/:ingredientId', recipeController.getIngredientById);
-
-// Delete a specific ingredient from a recipe by ingredientId
-router.delete('/recipes/:recipeId/ingredients/:ingredientId', recipeController.deleteIngredientById);
+router.delete('/:recipeId/ingredients/:ingredientId', recipeController.deleteIngredientById);
 
 module.exports = router;
