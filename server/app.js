@@ -50,8 +50,8 @@ app.use('/api/ingredients', ingredientRouter)
 app.use('/api/calendars', calendarRouter);
 app.use('/api/meals', mealRouter);
 
-app.use('/api/users',userRoutes); 
-app.use('/api/recipes',recipeRoutes); 
+app.use('/api/users', userRoutes); 
+app.use('/api/recipes', recipeRoutes); 
 
 app.use(bodyParser.json());  // Parse JSON requests
 

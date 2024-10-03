@@ -205,7 +205,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"Delicious Vegan Pasta\",\r\n    \"description\": \"A healthy and tasty vegan pasta dish.\",\r\n    \"meal_category\": \"Vegan\",\r\n    \"ingredients\": [\"66f62dfd5c2ade4cdea5b269\"]\r\n}\r\n",
+					"raw": "{\r\n    \"name\": \"Delicious Vegan Pasta\",\r\n    \"description\": \"A healthy and tasty vegan pasta dish.\",\r\n    \"meal_category\": \"Vegan\",\r\n    \"ingredients\": []\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -292,6 +292,16 @@
 						"type": "text/javascript",
 						"packages": {}
 					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
 				}
 			],
 			"request": {
@@ -317,6 +327,136 @@
 						"{{calendar_id}}",
 						"meals",
 						"{{meal_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add ingredient to recipe",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3001/api/recipes/{{recipe_id}}/ingredients/{{ingredient_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"api",
+						"recipes",
+						"{{recipe_id}}",
+						"ingredients",
+						"{{ingredient_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get specific ingredient in recipe",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3001/api/recipes/ingredients/{{ingredient_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"api",
+						"recipes",
+						"ingredients",
+						"{{ingredient_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete specific ingredient in recipe",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3001/api/recipes/{{recipe_id}}/ingredients/{{ingredient_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"api",
+						"recipes",
+						"{{recipe_id}}",
+						"ingredients",
+						"{{ingredient_id}}"
 					]
 				}
 			},
@@ -686,42 +826,6 @@
 						"api",
 						"meals",
 						"{{meal_id}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get specific ingredient in recipe",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {\r",
-							"    pm.response.to.have.status(200);\r",
-							"});"
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:3001/api/recipes/ingredients/{{ingredient_id}}\n",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3001",
-					"path": [
-						"api",
-						"recipes",
-						"ingredients",
-						"{{ingredient_id}}\n"
 					]
 				}
 			},
@@ -1168,6 +1272,39 @@
 			"response": []
 		},
 		{
+			"name": "Delete Calendar (DELETE)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/calendars/{{calendar_id}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"calendars",
+						"{{calendar_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Delete Ingredient By ID",
 			"event": [
 				{
@@ -1202,39 +1339,6 @@
 						"api",
 						"ingredients",
 						"{{ingredient_id}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Delete Calendar (DELETE)",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});"
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"url": {
-					"raw": "{{host}}/api/calendars/{{calendar_id}}",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"api",
-						"calendars",
-						"{{calendar_id}}"
 					]
 				}
 			},
@@ -1312,43 +1416,6 @@
 						"api",
 						"recipes",
 						"{{recipe_id}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Delete specific ingredient in recipe",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 204\", function () {\r",
-							"    pm.response.to.have.status(204); // Check for No Content status\r",
-							"});"
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:3001/api/recipes/{{recipe_id}}/ingredients/{{ingredient_id}}\n",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3001",
-					"path": [
-						"api",
-						"recipes",
-						"{{recipe_id}}",
-						"ingredients",
-						"{{ingredient_id}}\n"
 					]
 				}
 			},

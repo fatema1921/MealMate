@@ -9,9 +9,10 @@ router.get('/:id', recipeController.getRecipe); // Get a single recipe by ID
 router.post('/', recipeController.createRecipe); // Create a new recipe
 router.put('/:id', recipeController.updateRecipe); // Update a recipe by ID
 router.delete('/:id', recipeController.deleteRecipe); // Delete a recipe by ID
-router.get('/ingredients/:ingredient_id/', recipeController.getRecipesByIngredient);// Retrieve  by using an ingridient 
+router.get('/ingredients/:ingredientId', recipeController.getRecipesByIngredient); // Get by using an ingredient 
 router.patch('/:id', recipeController.patchRecipe); //  Update some fields for a specific recipe
-router.post('/ingredients/:ingredient_id'); // Create post function.
+router.post('/:recipeId/ingredients/:ingredientId', recipeController.addIngredientToRecipe); // Create post function.
+
 // Fetch  from TheMealAPI
 router.get('/search/:recipe', recipeController.searchRecipe);
 
