@@ -67,17 +67,17 @@ export default {
       alert('Login button clicked!')
     },
     goToMealPlanner() {
-      this.$router.push('/meal-planner'); // Navigate to meal planner
+      this.$router.push('/meal-planner') // Navigate to meal planner
     },
     async fetchRecipes() {
       try {
         const response = await axios.get('http://localhost:3000/api/recipes', {
           params: {
-            search: this.searchQuery, // Pass search query from Searchbox
-            category: this.selectedCategory // Pass selected category
+            search: this.searchQuery, // User search input
+            category: this.selectedCategory // Selected category from dropdown
           }
         })
-        this.recipes = response.data
+        this.recipes = response.data // Store the fetched recipes in your Vue component state
       } catch (error) {
         console.error('Error fetching recipes:', error)
       }
