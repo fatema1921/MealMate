@@ -72,20 +72,19 @@ The system is a meal-planning application that shows users recipes based on thei
 
 The default page. Here the user has access to a bar with different functions such as Login, Shopping list, Recipes, and Planner. Users can still browse recipes, apply filters, and so on but they cannot save the recipes. If the user has logged in, they will see recipes based on their preferences.
 
-- **User page**
- ( My profile ):
+- **My profile**
 
 Can change personal information, preferences
 
 - **Shopping list**:
 
-The ingredients from recipes that the user has chosen to add to the shopping list will appear here. Also, the user can add other items to the list that are not from recipes.
+The ingredients from recipes that the user has chosen to add to the shopping list will appear here.
 
 - **My recipes**:
 
-A page for showing recipes that you have saved and created.
+A page for showing recipes that you have created.
 
-- **Planner**:
+- **Meal Planner**:
 
 The Planner page is customized for every user. The Planner will display a 7-day calendar (mon, tues, wed..).
 

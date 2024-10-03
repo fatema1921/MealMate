@@ -1,42 +1,53 @@
 <template>
   <div>
     <b-container fluid>
-      <h1 class="display-5 fw-bold">DIT342 Frontend</h1>
-      <p class="fs-4">Welcome to your DIT342 Frontend Vue.js App</p>
-      <b-button class="btn_message" variant="primary" v-on:click="getMessage()" >Get Message from Server</b-button>
-      <p class="col-xl-9">Message from the server:<br/>
-      {{ message }}</p>
+        <h1 class="display-5 fw-bold">Meal Mate</h1>
+        <p class="fs-4">Welcome to Meal Mate, your personalized meal planning assistant!</p>
+        <RouterLink to ="/login">
+        <b-button variant="primary" @click="login">Login</b-button>
+      </RouterLink>
     </b-container>
+    <Searchbox />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import { Api } from '@/Api'
+import Searchbox from '../components/searchbox.vue'
 
 export default {
   name: 'home',
+  methods: {
+  },
+  components: {
+    Searchbox
+  },
   data() {
     return {
       message: 'none'
-    }
-  },
-  methods: {
-    getMessage() {
-      Api.get('/')
-        .then(response => {
-          this.message = response.data.message
-        })
-        .catch(error => {
-          this.message = error
-        })
     }
   }
 }
 </script>
 
-<style>
-.btn_message {
-  margin-bottom: 1em;
+<style scoped>
+b-container {
+  text-align: center;
+  margin-top: 100px;
+}
+/* Background and Button Colors */
+body {
+  background-color: var(--background-color);
+  color: #2C3E50;
+}
+
+.btn_message, .btn-primary {
+  background-color: var(--button-color);
+  border-color: var(--button-color);
+}
+
+.btn_message:hover, .btn-primary:hover {
+  background-color: var(--button-hover-color);
+  border-color: var(--button-hover-color);
 }
 </style>
