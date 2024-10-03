@@ -13,7 +13,6 @@ const userSchema = new Schema({
   }, 
   name: {
   	type: String,
-  	required: true,
   },
 	meal_category: {
   	type: String,

@@ -44,6 +44,27 @@ exports.createUser = async (req , res, next) => {
     } 
 }; 
 
+// Login user
+exports.loginUser = async (req, res, next) => {
+    try {
+        const { username, password } = req.body; 
+
+        const user = await User.findOne({ username });
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        if (password === user.password) {
+            return res.status(200).json({ message: "Login successful", user });
+        } else {
+            return res.status(401).json({ message: "Invalid password" });
+        }
+
+    } catch (error) {
+        next(error);
+    }
+};
+
 // Update an already existing user
 exports.updateUser = async (req , res, next) => {
    try{

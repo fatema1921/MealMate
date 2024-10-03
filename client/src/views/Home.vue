@@ -3,7 +3,9 @@
     <b-container fluid>
         <h1 class="display-5 fw-bold">Meal Mate</h1>
         <p class="fs-4">Welcome to Meal Mate, your personalized meal planning assistant!</p>
+        <RouterLink to ="/login">
         <b-button variant="primary" @click="login">Login</b-button>
+      </RouterLink>
     </b-container>
     <Searchbox />
   </div>
@@ -11,15 +13,11 @@
 
 <script>
 // @ is an alias to /src
-import Searchbox from '../components/Searchbox.vue'
+import Searchbox from '../components/searchbox.vue'
 
 export default {
   name: 'home',
   methods: {
-    login() {
-      // Placeholder for login functionality
-      alert('Login button clicked!')
-    }
   },
   components: {
     Searchbox
