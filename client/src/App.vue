@@ -119,7 +119,7 @@ body {
 .footer {
   background-color: var(--footer-bg-color);
   color: var(--footer-text-color);
-  padding: 1.5em 0;
+  padding: 0.3em 0; /* Reduce the padding to decrease height */
   text-align: center;
   width: 100%;
 }
@@ -128,6 +128,11 @@ body {
   color: var(--footer-text-color);
   margin: 0 10px;
   font-size: 1.5em;
+}
+
+/* Adjust icon spacing */
+.footer-icon {
+  margin: 0 10px;
 }
 
 .footer a:hover {
