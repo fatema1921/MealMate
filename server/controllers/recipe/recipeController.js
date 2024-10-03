@@ -4,10 +4,10 @@ const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 
 // Import TheMealDB API 
-const express = require('express');
-const axios = require('axios'); 
+const express = require('express'); 
+const axios = require('axios');
 
-// Search recipie in the external database 
+// Search recipie in the external database
 exports.searchRecipe = async (req, res, next) => {
     const recipe = req.params.recipe; 
     const mealDB = `https://www.themealdb.com/api/json/v1/1/search.php?s=${recipe}`;
@@ -29,12 +29,32 @@ exports.searchRecipe = async (req, res, next) => {
 }; 
 
 
-// Display all recipes
+// Display all recipes with optional search and filtering
 exports.getAllRecipes = async (req, res, next) => {
     try {
-        const recipeList = await Recipe.find().populate('ingredients'); // Populate ingredients details
-        res.json(recipeList); // Returns all the recipes as a JSON response
+        const { search, category } = req.query; // Get query parameters from the request
+        let query = {};
+
+        // If a search query is provided, find recipes with matching names (case-insensitive)
+        if (search) {
+            query.name = { $regex: search, $options: 'i' };
+        }
+
+        // If a category is provided, filter recipes by the selected category
+        if (category) {
+            query.meal_category = category;
+        }
+
+        // Fetch the recipes based on the constructed query
+        const recipeList = await Recipe.find(query).populate('ingredients');
+
+        if (!recipeList || recipeList.length === 0) {
+            return res.status(404).json({ message: "No recipes found" });
+        }
+
+        res.json(recipeList); // Return the filtered or searched recipes as a JSON response
     } catch (error) {
+        console.error('Error fetching recipes:', error);
         next(error);
     }
 };

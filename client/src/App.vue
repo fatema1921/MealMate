@@ -119,7 +119,7 @@ body {
 .footer {
   background-color: var(--footer-bg-color);
   color: var(--footer-text-color);
-  padding: 0.3em 0; /* Reduce the padding to decrease height */
+  padding: 0.2em 0; /* Reduce the padding to decrease height */
   text-align: center;
   width: 100%;
 }
@@ -127,7 +127,7 @@ body {
 .footer a {
   color: var(--footer-text-color);
   margin: 0 10px;
-  font-size: 1.5em;
+  font-size: 1.0em;
 }
 
 /* Adjust icon spacing */
