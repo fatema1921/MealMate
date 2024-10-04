@@ -6,9 +6,18 @@ var path = require('path');
 var cors = require('cors');
 var history = require('connect-history-api-fallback');
 
+// require('dotenv').config();
+
 // Variables
 var mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/mealMateDb';
 var port = process.env.PORT || 3000;
+
+// const recipeController = require('./controllers/recipe/recipeController');
+
+// Automatically fetch recipes on server start
+//async function initFetchRecipes() {
+//    await recipeController.fetchAndSaveRecipes(); 
+//}
 
 // Connect to MongoDB
 mongoose.connect(mongoURI).catch(function(err) {
@@ -17,6 +26,7 @@ mongoose.connect(mongoURI).catch(function(err) {
     process.exit(1);
 }).then(function() {
     console.log(`Connected to MongoDB with URI: ${mongoURI}`); // mistake when forward porting
+    //initFetchRecipes(); // Fetch recipes once on server start
 });
 
 // Importing the models

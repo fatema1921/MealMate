@@ -7,13 +7,13 @@ const ObjectId = mongoose.Types.ObjectId;
 const express = require('express'); 
 const axios = require('axios');
 
-const apiKey = process.env.API_KEY
-
 // Fetch and save recipes from FatSecret API
 exports.fetchAndSaveRecipes = async (req, res, next) => {
     try {
-        const query = req.query.search || 'chicken';  // Use a search term or default to "chicken"
-        const fatSecretApiKey = process.env.FATSECRET_API_KEY;
+        console.log("Fetching recipes from FatSecret...");
+
+        const query = req.query.search || '';
+        const fatSecretApiKey = process.env.FATSECRET_API_KEY || '7dcfaddbe5614590a197a4512b7a87bd';
         
         // FatSecret API Endpoint for searching recipes
         const fatSecretUrl = `https://platform.fatsecret.com/rest/server.api?method=recipe.search&search_expression=${query}&format=json&oauth_consumer_key=${fatSecretApiKey}`;
