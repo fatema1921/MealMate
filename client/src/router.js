@@ -6,6 +6,8 @@ import ShoppingList from './views/shoppingList.vue'
 import MealPlanner from './views/MealPlanner.vue'
 import Profile from './views/MyProfile.vue'
 import Login from './views/Login.vue'
+import About from './views/About.vue'
+
 
 const routes = [
   { path: '/', name: 'home', component: Home },
@@ -13,7 +15,8 @@ const routes = [
   { path: '/shopping-list', name: 'shopping-list', component: ShoppingList },
   { path: '/meal-planner', name: 'meal-planner', component: MealPlanner },
   { path: '/profile', name: 'profile', component: Profile },
-  { path: '/login', name: 'login', component: Login }
+  { path: '/login', name: 'login', component: Login },
+  { path: '/about', name: 'about', component: About },
 ]
 
 const router = createRouter({

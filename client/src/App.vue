@@ -11,6 +11,8 @@
           <b-nav-item :class="isActive('/shopping-list') ? 'active-tab' : ''" to="/shopping-list">Shopping List</b-nav-item>
           <b-nav-item :class="isActive('/meal-planner') ? 'active-tab' : ''" to="/meal-planner">Meal Planner</b-nav-item>
           <b-nav-item :class="isActive('/profile') ? 'active-tab' : ''" to="/profile">My Profile</b-nav-item>
+          <b-nav-item :class="isActive('/about') ? 'active-tab' : ''" to="/about">About</b-nav-item>
+
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
