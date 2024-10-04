@@ -8,13 +8,14 @@ router.get('/fetch-and-save', recipeController.fetchAndSaveRecipes);
 
 
 // Define recipe routes
-router.get('/recipes', recipeController.getAllRecipes); // Get all recipes
-router.get('/recipes/:id', recipeController.getRecipe); // Get a single recipe by ID
-router.post('/recipes', recipeController.createRecipe); // Create a new recipe
-router.put('/recipes/:id', recipeController.updateRecipe); // Update a recipe by ID
-router.delete('/recipes/:id', recipeController.deleteRecipe); // Delete a recipe by ID
-router.get('/ingredients/:ingredient_id/recipes', recipeController.getRecipesByIngredient);// Retrieve recipes by using an ingridient 
-router.patch('/recipes/:id', recipeController.patchRecipe); //  Update some fields for a specific recipe
+router.get('/', recipeController.getAllRecipes); // Get all recipes
+router.get('/:id', recipeController.getRecipe); // Get a single recipe by ID
+router.post('/', recipeController.createRecipe); // Create a new recipe
+router.put('/:id', recipeController.updateRecipe); // Update a recipe by ID
+router.delete('/:id', recipeController.deleteRecipe); // Delete a recipe by ID
+router.post('/:recipeId/ingredients/:ingredientId', recipeController.addIngredientToRecipe); // Create post function.
+router.get('/ingredients/:ingredientId', recipeController.getRecipesByIngredient); // Get by using an ingredient 
+router.patch('/:id', recipeController.patchRecipe); //  Update some fields for a specific recipe
 
 
 router.get('/:recipeId/ingredients/:ingredientId', recipeController.getIngredientById);
