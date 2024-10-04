@@ -32,7 +32,7 @@ export default {
 <style scoped>
 .footer-icon {
   margin: 0 10px;
-  font-size: 1.5em;
+  font-size: 1.0em;
   color: white;
   cursor: pointer;
   text-decoration: none;
