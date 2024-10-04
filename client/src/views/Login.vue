@@ -44,6 +44,7 @@ export default {
   },
   methods: {
     login() {
+      this.isAuthenticated = true
     }
   }
 }
