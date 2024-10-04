@@ -1,5 +1,7 @@
 const Recipe = require('../../models/recipe');
-const Ingridient = require('../../models/ingredient'); 
+const Ingredient = require('../../models/ingredient'); 
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
 
 // Import TheMealDB API 
 const express = require('express'); 
@@ -106,12 +108,14 @@ exports.getRecipe = async (req, res, next) => {
 // Get all recipes with a specific ingredient
 exports.getRecipesByIngredient = async (req, res, next) => {
     try {
-        const ingredientId = req.params.ingredient_id;
+        const ingredientId = req.params.ingredientId.trim(); // Trim to avoid castError in the ingredient id
 
         // Find all recipes that include the ingredient
         const recipes = await Recipe.find({ ingredients: ingredientId }).populate('ingredients');
 
         if (!recipes || recipes.length === 0) {
+            console.log(recipes);
+            console.log(ingredientId);
             return res.status(404).json({ message: "No recipes found with this ingredient" });
         }
 
@@ -167,7 +171,7 @@ exports.deleteRecipe = async (req, res, next) => {
         if (!recipe) {
             return res.status(404).json({ message: "Recipe not found" });
         }
-        res.status(204).end(); // Respond with no content
+        res.status(204).end();
     } catch (error) {
         next(error);
     }
@@ -221,28 +225,60 @@ exports.getIngredientById = async (req, res) => {
     }
 };
 
-// Delete a specific ingredient from a recipe
-exports.deleteIngredientById = async (req, res) => {
-    try {
-        const { recipeId, ingredientId } = req.params;
+exports.addIngredientToRecipe = async (req, res) => {
 
-        // Validate if recipe exists
+    const { recipeId, ingredientId } = req.params;
+
+    try {
+        // Find the recipe by ID
         const recipe = await Recipe.findById(recipeId);
         if (!recipe) {
-            return res.status(404).json({ message: 'Recipe not found' });
+            return res.status(404).json({ error: 'Recipe not found' });
         }
 
-        // Find the ingredient and remove it from the ingredients array
-        const ingredient = recipe.ingredients.id(ingredientId);
+        // Check if the ingredient exists
+        const ingredient = await Ingredient.findById(ingredientId);
         if (!ingredient) {
-            return res.status(404).json({ message: 'Ingredient not found' });
+            return res.status(404).json({ error: 'Ingredient not found' });
         }
 
-        ingredient.remove();
+        // Check if the ingredient is already in the recipe
+        if (recipe.ingredients.includes(ingredientId)) {
+            return res.status(400).json({ error: 'Ingredient already added' });
+        }
+
+        // Add the ingredient to the recipe
+        recipe.ingredients.push(ingredientId);
         await recipe.save();
 
-        res.status(200).json({ message: 'Ingredient deleted successfully' });
-    } catch (err) {
-        res.status(500).json({ message: 'Something went wrong. Please try again later.' });
+        return res.status(200).json(recipe);
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
+}
+
+
+exports.deleteIngredientById = async (req, res) => {
+    const { recipeId, ingredientId } = req.params;
+
+    try {
+        // Find the recipe by ID
+        const recipe = await Recipe.findById(recipeId);
+        if (!recipe) {
+            return res.status(404).json({ error: 'Recipe not found' });
+        }
+
+        // Check if the ingredient exists in the recipe
+        if (!recipe.ingredients.includes(ingredientId)) {
+            return res.status(404).json({ error: 'Ingredient not found in this recipe' });
+        }
+
+        // Remove the ingredient from the recipe
+        recipe.ingredients.pull(ingredientId);
+        await recipe.save();
+
+        res.status(200).json({ message: 'Ingredient deleted.' });
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
     }
 };

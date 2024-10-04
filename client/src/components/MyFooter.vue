@@ -1,9 +1,16 @@
 <template>
   <b-container fluid class="footer">
     <b-row>
+    <b-row>
       <b-col>
         <p class="text-white">&copy; 2024 MealMate</p>
       </b-col>
+    </b-row>
+    <b-row class="justify-content-center">
+      <b-col cols="auto">
+        <a href="mailto:contact@mealmate.com" target="_blank" class="footer-icon">
+          <i class="fas fa-envelope"></i> Email
+        </a>
     </b-row>
     <b-row class="justify-content-center">
       <b-col cols="auto">
@@ -32,7 +39,7 @@ export default {
 <style scoped>
 .footer-icon {
   margin: 0 10px;
-  font-size: 1.0em;
+  font-size: 1.5em;
   color: white;
   cursor: pointer;
   text-decoration: none;

@@ -45,13 +45,13 @@ app.options('*', cors());
 app.use(cors());
 
 // use routes
-app.use('/api', ingredientRouter)
+app.use('/api/ingredients', ingredientRouter)
 
-app.use('/api', calendarRouter);
-app.use('/api', mealRouter);
+app.use('/api/calendars', calendarRouter);
+app.use('/api/meals', mealRouter);
 
-app.use('/api',userRoutes); 
-app.use('/api',recipeRoutes); 
+app.use('/api/users', userRoutes); 
+app.use('/api/recipes', recipeRoutes); 
 
 app.use(bodyParser.json());  // Parse JSON requests
 

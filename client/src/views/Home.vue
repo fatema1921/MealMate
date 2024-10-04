@@ -7,7 +7,9 @@
     <b-container fluid>
         <h1 class="display-5 fw-bold">Meal Mate</h1>
         <p class="fs-4">Welcome to Meal Mate, your personalized meal planning assistant!</p>
+        <RouterLink to ="/login">
         <b-button variant="primary" @click="login">Login</b-button>
+      </RouterLink>
     </b-container>
     <Searchbox />
   </div>
@@ -16,7 +18,7 @@
 <script>
 // Import your auth utility to check if the user is logged in
 // import auth from '../auth';
-import Searchbox from '../components/Searchbox.vue'
+import Searchbox from '../components/searchbox.vue'
 // const axios = require('axios')
 
 export default {
