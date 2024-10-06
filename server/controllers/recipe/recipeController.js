@@ -2,30 +2,82 @@ const Recipe = require('../../models/recipe');
 const Ingredient = require('../../models/ingredient'); 
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
+const OAuth = require('oauth-1.0a');
+const crypto = require('crypto');
 
 // Import TheMealDB API 
 const express = require('express'); 
 const axios = require('axios');
+
+// Helper function to generate an OAuth signature
+const getOAuthHeader = () => {
+    const oauth = OAuth({
+        consumer: {
+          key: process.env.FATSECRET_CONSUMER_KEY || '13f3e50d2cc9427190e45ca3dfb7c96f', // Your FatSecret API consumer key
+          secret: process.env.FATSECRET_CONSUMER_SECRET || '3792fdede4aa4ee4ad68e91476e80a3c' // Your FatSecret API consumer secret
+        },
+        signature_method: 'HMAC-SHA1',  // Ensure the signature method is HMAC-SHA1
+        hash_function(base_string, key) {
+          return crypto
+            .createHmac('sha1', key)
+            .update(base_string)
+            .digest('base64');
+        }
+      });
+      
+      const requestData = {
+        url: 'https://platform.fatsecret.com/rest/server.api',
+        method: 'GET',
+        data: {
+          method: 'recipes.search',
+          format: 'json',
+          search_expression: 'chicken',  // Example search term
+        }
+      };
+      
+      const authHeader = oauth.toHeader(oauth.authorize(requestData));
+      
+      axios({
+        url: requestData.url,
+        method: requestData.method,
+        params: requestData.data,
+        headers: {
+          Authorization: authHeader.Authorization
+        }
+      })
+        .then(response => {
+          console.log('FatSecret API Response:', response.data);
+        })
+        .catch(error => {
+          console.error('Error fetching data from FatSecret:', error);
+        });
+
+    return oauth.toHeader(oauth.authorize(request_data));
+};
 
 // Fetch and save recipes from FatSecret API
 exports.fetchAndSaveRecipes = async (req, res, next) => {
     try {
         console.log("Fetching recipes from FatSecret...");
 
-        const query = req.query.search || '';
-        const fatSecretApiKey = process.env.FATSECRET_API_KEY || '7dcfaddbe5614590a197a4512b7a87bd';
+        const oauthHeader = getOAuthHeader();
+
+        const response = await axios.get('https://platform.fatsecret.com/rest/server.api', {
+            headers: oauthHeader,
+            params: {
+                method: 'recipes.search',
+                format: 'json',
+                search_expression: req.query.search || 'chicken',
+            },
+        });
+        const fetchedRecipes = response.data;
+        console.log('FatSecret API Response:', fetchedRecipes);
         
-        // FatSecret API Endpoint for searching recipes
-        const fatSecretUrl = `https://platform.fatsecret.com/rest/server.api?method=recipe.search&search_expression=${query}&format=json&oauth_consumer_key=${fatSecretApiKey}`;
-
-        const response = await axios.get(fatSecretUrl);
-        const recipes = response.data.recipes.recipe;
-
-        if (!recipes || recipes.length === 0) {
+        if (!fetchedRecipes || fetchedRecipes.length === 0) {
             return res.status(404).json({ message: "No recipes found" });
         }
 
-        for (const recipeData of recipes) {
+        for (const recipeData of fetchedRecipes) {
             const recipeIngredients = [];
 
             // Fetch ingredient details using FatSecret API
@@ -34,7 +86,7 @@ exports.fetchAndSaveRecipes = async (req, res, next) => {
                 if (!savedIngredient) {
                     savedIngredient = new Ingredient({
                         name: ingredient.food_name,
-                        quantity: ingredient.food_description,
+                        shopping_list: false,
                         calories: ingredient.food_calories || 0 // Save calories if available
                     });
                     await savedIngredient.save();

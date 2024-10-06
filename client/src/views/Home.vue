@@ -76,9 +76,6 @@ export default {
       } catch (error) {
         console.error('Error fetching recipes:', error)
       }
-    },
-    saveRecipe(recipeId) {
-      alert(`Saving recipe ${recipeId} (Save functionality not implemented)`)
     }
   },
   created() {
@@ -100,7 +97,6 @@ export default {
         { value: 'Gluten-free', text: 'Gluten-free' },
         { value: 'High-proteine', text: 'High-protein' },
       ],
-      recipes: [],
       isAuthenticated: true
     }
   }
