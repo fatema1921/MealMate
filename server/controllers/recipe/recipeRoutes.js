@@ -18,7 +18,7 @@ router.patch('/:id', recipeController.patchRecipe); //  Update some fields for a
 router.post('/:recipeId/ingredients/:ingredientId', recipeController.addIngredientToRecipe); // Create post function.
 
 // Fetch  from TheMealAPI
-router.get('/search/:recipe', recipeController.searchRecipe);
+//router.get('/search/:recipe', recipeController.searchRecipe);
 
 router.get('/:recipeId/ingredients/:ingredientId', recipeController.getIngredientById);
 
