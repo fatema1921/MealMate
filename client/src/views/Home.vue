@@ -12,12 +12,14 @@
 
       <!-- Meal Category Filter -->
       <b-container fluid class="mt-4">
-        <b-row>
-          <b-col md="4" class="ml-auto">
+        <b-row class="d-flex justify-content-center">
+          <b-col md="4">
             <b-form-select v-model="selectedCategory" :options="mealCategories"></b-form-select>
           </b-col>
-          <b-col md="4" class="mr-auto">
-            <b-button variant="primary" @click="fetchRecipes">Search</b-button>
+        </b-row>
+        <b-row class="d-flex justify-content-center mt-3">
+          <b-col md="4">
+            <b-button variant="primary" @click="fetchRecipes" block>Search</b-button>
           </b-col>
         </b-row>
       </b-container>
@@ -40,13 +42,15 @@
       <b-container fluid>
           <h1 class="display-5 fw-bold">Meal Mate</h1>
           <p class="fs-4">Welcome to your personalized meal planning assistant!</p>
-          <RouterLink to ="/login">
+          <RouterLink to="/login">
           <b-button variant="primary" @click="login">Login</b-button>
         </RouterLink>
       </b-container>
     </div>
   </div>
 </template>
+
+
 
 <script>
 // Import your auth utility to check if the user is logged in
