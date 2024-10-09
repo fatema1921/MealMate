@@ -3,8 +3,8 @@ const router = express.Router();
 
 const recipeController = require('./recipeController'); // Import the recipe controller
 
-// Fetch recipes from FatSecret API
-router.get('/fetch-and-save', recipeController.fetchAndSaveRecipes);
+// Fetch recipes from External API
+//router.get('/fetch-and-save', recipeController.fetchAndSaveRecipes);
 
 // Define recipe routes
 router.get('/', recipeController.getAllRecipes); // Get all recipes

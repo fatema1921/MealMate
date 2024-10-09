@@ -8,7 +8,6 @@
         <b-button variant="primary" @click="goToMealPlanner">Go to Meal Planner</b-button>
       </b-container>
 
-      <Searchbox /><!-- Search Box Component -->
       <Searchbox v-model="searchQuery" />
 
       <!-- Meal Category Filter -->
@@ -58,14 +57,16 @@ import axios from 'axios'
 export default {
   name: 'home',
   methods: {
-    login() {
-      // Placeholder for login functionality
+    saveRecipe() {
+
     },
     goToMealPlanner() {
       this.$router.push('/meal-planner') // Navigate to meal planner
     },
     async fetchRecipes() {
       try {
+        console.log('Search query before sending:', this.searchQuery)
+        console.log('Selected category before sending:', this.selectedCategory)
         const response = await axios.get('http://localhost:3000/api/recipes', {
           params: {
             search: this.searchQuery, // Pass search query from Searchbox
@@ -76,6 +77,11 @@ export default {
       } catch (error) {
         console.error('Error fetching recipes:', error)
       }
+    }
+  },
+  watch: {
+    searchQuery(newQuery) {
+      console.log('Search query updated:', newQuery)
     }
   },
   created() {
@@ -95,9 +101,10 @@ export default {
         { value: 'Vegan', text: 'Vegan' },
         { value: 'Vegetarian', text: 'Vegetarian' },
         { value: 'Gluten-free', text: 'Gluten-free' },
-        { value: 'High-proteine', text: 'High-protein' },
+        { value: 'High-protein', text: 'High-protein' }
       ],
-      isAuthenticated: true
+      isAuthenticated: true,
+      recipes: []
     }
   }
 }

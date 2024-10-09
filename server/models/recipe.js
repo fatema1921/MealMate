@@ -11,14 +11,17 @@ const recipeSchema = new Schema({
     }, 
     meal_category: {
         type: String,
-        enums: ["Vegan", "Vegetarian", "Gluten-free", "High-proteine"],
+        enums: ["Vegan", "Vegetarian", "Gluten-free", "High-proteinS"],
     },
     ingredients: [{
         type: Schema.Types.ObjectId, ref: "Ingredient",
         required: true,
     }],
     userMade: {
-        type: String
+        type: Boolean
+    },
+    saved: {
+        type: Boolean
     }
 });
 

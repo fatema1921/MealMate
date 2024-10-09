@@ -9,111 +9,6 @@ const crypto = require('crypto');
 const express = require('express'); 
 const axios = require('axios');
 
-// Helper function to generate an OAuth signature
-const getOAuthHeader = () => {
-    const oauth = OAuth({
-        consumer: {
-          key: process.env.FATSECRET_CONSUMER_KEY || '13f3e50d2cc9427190e45ca3dfb7c96f', // Your FatSecret API consumer key
-          secret: process.env.FATSECRET_CONSUMER_SECRET || '3792fdede4aa4ee4ad68e91476e80a3c' // Your FatSecret API consumer secret
-        },
-        signature_method: 'HMAC-SHA1',  // Ensure the signature method is HMAC-SHA1
-        hash_function(base_string, key) {
-          return crypto
-            .createHmac('sha1', key)
-            .update(base_string)
-            .digest('base64');
-        }
-      });
-      
-      const requestData = {
-        url: 'https://platform.fatsecret.com/rest/server.api',
-        method: 'GET',
-        data: {
-          method: 'recipes.search',
-          format: 'json',
-          search_expression: 'chicken',  // Example search term
-        }
-      };
-      
-      const authHeader = oauth.toHeader(oauth.authorize(requestData));
-      
-      axios({
-        url: requestData.url,
-        method: requestData.method,
-        params: requestData.data,
-        headers: {
-          Authorization: authHeader.Authorization
-        }
-      })
-        .then(response => {
-          console.log('FatSecret API Response:', response.data);
-        })
-        .catch(error => {
-          console.error('Error fetching data from FatSecret:', error);
-        });
-
-    return oauth.toHeader(oauth.authorize(request_data));
-};
-
-// Fetch and save recipes from FatSecret API
-exports.fetchAndSaveRecipes = async (req, res, next) => {
-    try {
-        console.log("Fetching recipes from FatSecret...");
-
-        const oauthHeader = getOAuthHeader();
-
-        const response = await axios.get('https://platform.fatsecret.com/rest/server.api', {
-            headers: oauthHeader,
-            params: {
-                method: 'recipes.search',
-                format: 'json',
-                search_expression: req.query.search || 'chicken',
-            },
-        });
-        const fetchedRecipes = response.data;
-        console.log('FatSecret API Response:', fetchedRecipes);
-        
-        if (!fetchedRecipes || fetchedRecipes.length === 0) {
-            return res.status(404).json({ message: "No recipes found" });
-        }
-
-        for (const recipeData of fetchedRecipes) {
-            const recipeIngredients = [];
-
-            // Fetch ingredient details using FatSecret API
-            for (const ingredient of recipeData.ingredients) {
-                let savedIngredient = await Ingredient.findOne({ name: ingredient.food_name });
-                if (!savedIngredient) {
-                    savedIngredient = new Ingredient({
-                        name: ingredient.food_name,
-                        shopping_list: false,
-                        calories: ingredient.food_calories || 0 // Save calories if available
-                    });
-                    await savedIngredient.save();
-                }
-                recipeIngredients.push(savedIngredient._id);
-            }
-
-            // Map FatSecret recipe to your schema
-            const newRecipe = new Recipe({
-                name: recipeData.recipe_name,
-                description: recipeData.recipe_description,
-                meal_category: recipeData.recipe_type || 'Other', // Choose an appropriate category if available
-                ingredients: recipeIngredients,
-                userMade: false  // External API recipes
-            });
-
-            await newRecipe.save();
-        }
-
-        res.status(200).json({ message: 'Recipes fetched and saved successfully' });
-    } catch (error) {
-        console.error('Error fetching data from FatSecret:', error);
-        res.status(500).json({ message: 'Error fetching recipes', error });
-    }
-};
-
-
 // Display all recipes with optional search and filtering
 exports.getAllRecipes = async (req, res, next) => {
     try {
@@ -127,7 +22,7 @@ exports.getAllRecipes = async (req, res, next) => {
 
         // Filter by meal category if provided
         if (category) {
-            query.meal_category = category; // Filter by category
+            query.meal_category = {$regex: category, $options: 'i' }; // Filter by category
         }
 
         // Fetch the recipes from the MongoDB

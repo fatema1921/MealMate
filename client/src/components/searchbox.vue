@@ -1,26 +1,36 @@
 <template>
-  <div class="search-box">
-    <b-form-group label="Search for Recipes:" label-for="search-input">
-      <b-form-input
-        id="search-input"
-        v-model="searchQuery"
-        placeholder="Type to search for a recipe..."
-      ></b-form-input>
-    </b-form-group>
-  </div>
+  <b-form-input
+    class="search-box"
+    v-model="internalValue"
+    @input="updateQuery"
+    placeholder="Type to search for a recipe..."
+  ></b-form-input>
 </template>
 
 <script>
-import { Api } from '@/Api'
-
 export default {
-  name: 'searchbox',
+  name: 'Searchbox',
+  props: {
+    value: {
+      type: String,
+      default: ''
+    }
+  },
   data() {
     return {
-      searchQuery: ''
+      internalValue: this.value
+    }
+  },
+  watch: {
+    value(newValue) {
+      this.internalValue = newValue
     }
   },
   methods: {
+    updateQuery() {
+      console.log('Emitting input:', this.internalValue) // Log emitted value
+      this.$emit('input', this.internalValue)
+    }
   }
 }
 </script>
@@ -28,7 +38,7 @@ export default {
 <style scoped>
 .search-box {
   margin-top: 1em;
-  max-width: 500px;
+  max-width: 400px; /* Adjust width as needed */
   margin-left: auto;
   margin-right: auto;
 }
