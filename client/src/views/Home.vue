@@ -27,22 +27,52 @@
       <!-- Recipe Results -->
       <b-container fluid class="mt-4" v-if="recipes.length">
         <h3>Search Results:</h3>
-        <b-row>
-          <b-col v-for="recipe in recipes" :key="recipe._id" md="4" class="mb-3">
-            <b-card :title="recipe.name" class="text-center">
-              <b-card-text>{{ recipe.description }}</b-card-text>
-              <b-button variant="primary" @click="saveRecipe(recipe._id)">Save Recipe</b-button>
-            </b-card>
+
+        <!-- Toggle between Grid and List view -->
+        <b-row class="d-flex justify-content-center mb-3">
+          <b-col md="4">
+            <b-button-group class="view-toggle" block>
+              <b-button
+                :class="['toggle-btn', { active: viewMode === 'grid' }]"
+                @click="viewMode = 'grid'"
+              >Grid</b-button>
+              <b-button
+                :class="['toggle-btn', { active: viewMode === 'list' }]"
+                @click="viewMode = 'list'"
+              >List</b-button>
+            </b-button-group>
           </b-col>
         </b-row>
+
+        <div v-if="viewMode === 'grid'">
+          <b-row>
+            <b-col v-for="recipe in recipes" :key="recipe._id" md="4" class="mb-3">
+              <b-card :title="recipe.name" class="text-center">
+                <b-card-text>{{ recipe.description }}</b-card-text>
+                <b-button variant="primary" @click="saveRecipe(recipe._id)">Save Recipe</b-button>
+              </b-card>
+            </b-col>
+          </b-row>
+        </div>
+        <div v-else-if="viewMode === 'list'">
+          <b-list-group>
+            <b-list-group-item v-for="recipe in recipes" :key="recipe._id" class="d-flex justify-content-between align-items-center">
+              <div>
+                <h5>{{ recipe.name }}</h5>
+                <p>{{ recipe.description }}</p>
+              </div>
+              <b-button variant="primary" @click="saveRecipe(recipe._id)">Save Recipe</b-button>
+            </b-list-group-item>
+          </b-list-group>
+        </div>
       </b-container>
     </div>
     <div v-else>
       <!-- If the user is not logged in, show generic home page -->
       <b-container fluid>
-          <h1 class="display-5 fw-bold">Meal Mate</h1>
-          <p class="fs-4">Welcome to your personalized meal planning assistant!</p>
-          <RouterLink to="/login">
+        <h1 class="display-5 fw-bold">Meal Mate</h1>
+        <p class="fs-4">Welcome to your personalized meal planning assistant!</p>
+        <RouterLink to="/login">
           <b-button variant="primary" @click="login">Login</b-button>
         </RouterLink>
       </b-container>
@@ -51,10 +81,7 @@
 </template>
 
 
-
 <script>
-// Import your auth utility to check if the user is logged in
-// import auth from '../auth';
 import Searchbox from '../components/Searchbox.vue'
 import axios from 'axios'
 
@@ -62,7 +89,7 @@ export default {
   name: 'home',
   methods: {
     saveRecipe() {
-
+      // Your recipe saving logic
     },
     goToMealPlanner() {
       this.$router.push('/meal-planner') // Navigate to meal planner
@@ -73,8 +100,8 @@ export default {
         console.log('Selected category before sending:', this.selectedCategory)
         const response = await axios.get('http://localhost:3000/api/recipes', {
           params: {
-            search: this.searchQuery, // Pass search query from Searchbox
-            category: this.selectedCategory // Pass selected category
+            search: this.searchQuery,
+            category: this.selectedCategory
           }
         })
         this.recipes = response.data
@@ -89,9 +116,7 @@ export default {
     }
   },
   created() {
-    // Check if the user is logged in when the component is created
-    // this.isAuthenticated = auth.isLoggedIn();
-    this.isAuthenticated = true
+    this.isAuthenticated = true // Temporary for testing purposes
   },
   components: {
     Searchbox
@@ -108,7 +133,8 @@ export default {
         { value: 'High-protein', text: 'High-protein' }
       ],
       isAuthenticated: true,
-      recipes: []
+      recipes: [],
+      viewMode: 'grid' // Default to 'grid' view
     }
   }
 }
@@ -119,6 +145,7 @@ b-container {
   text-align: center;
   margin-top: 100px;
 }
+
 /* Background and Button Colors */
 body {
   background-color: var(--background-color);
@@ -133,5 +160,30 @@ body {
 .btn_message:hover, .btn-primary:hover {
   background-color: var(--button-hover-color);
   border-color: var(--button-hover-color);
+}
+
+/* Toggle Button Group */
+.view-toggle {
+  width: 100%;
+}
+
+.toggle-btn {
+  background-color: var(--background-color);
+  border-color: var(--footer-bg-color);
+  width: 100%;
+  transition: background-color 0.2s ease;
+  color: #161515;
+}
+
+.toggle-btn.active {
+  background-color: var(--footer-bg-color);
+  border-color: var(--footer-bg-color);
+  color: #161515;
+}
+
+.toggle-btn:hover {
+  background-color: var(--button-color);
+  border-color: var(--button-color);
+  color: #161515;
 }
 </style>
