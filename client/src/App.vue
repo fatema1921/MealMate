@@ -1,23 +1,25 @@
 <template>
   <div id="app" class="d-flex flex-column min-vh-100">
-     <!-- Navbar -->
+    <!-- Navbar -->
     <b-navbar toggleable="lg" class="navbar-custom justify-content-end">
-      <b-navbar-brand href="#">MealMate</b-navbar-brand>
+      <b-navbar-brand to="/" exact>MealMate</b-navbar-brand>      
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav class="ml-auto">
-          <b-nav-item to="/" exact :active-class="'active-tab'" :exact-active-class="'exact-active-tab'">Home</b-nav-item>
-          <b-nav-item to="/recipes" :active-class="'active-tab'">My Recipes</b-nav-item>
-          <b-nav-item to="/shopping-list" :active-class="'active-tab'">Shopping List</b-nav-item>
-          <b-nav-item to="/meal-planner" :active-class="'active-tab'">Meal Planner</b-nav-item>
-          <b-nav-item to="/profile" :active-class="'active-tab'">My Profile</b-nav-item>
+          <b-nav-item @click="handleAuthAction">
+            {{ loggedIn ? 'Sign Out' : 'Login' }} <!-- Display login or signout depending on if user is logged in -->
+          </b-nav-item>
+          <b-nav-item to="/" exact :active-class="active-tab" :exact-active-class="'exact-active-tab'">Home</b-nav-item>
+          <b-nav-item to="/recipes" :active-class="active-tab">My Recipes</b-nav-item>
+          <b-nav-item to="/shopping-list" :active-class="active-tab">Shopping List</b-nav-item>
+          <b-nav-item to="/meal-planner" :active-class="active-tab">Meal Planner</b-nav-item>
+          <b-nav-item to="/profile" :active-class="active-tab">My Profile</b-nav-item>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
 
     <!-- Main content -->
     <div class="flex-grow-1">
-      <!-- Render the content of the current page view -->
       <router-view/>
     </div>
 
@@ -27,12 +29,48 @@
 </template>
 
 <script>
-import MyFooter from './components/MyFooter.vue'
+import MyFooter from './components/MyFooter.vue';
 
 export default {
   name: 'App',
   components: {
     MyFooter
+  },
+  data() {
+    return {
+      loggedIn: false // Initialize from localStorage
+    };
+  },
+  // Console logging for debugging
+  methods: {
+    isLoggedIn() {
+      const loggedIn = !!localStorage.getItem('username');
+      console.log('Is user logged in? ', loggedIn);
+      return loggedIn;
+    },
+    handleAuthAction() {
+      if (this.isLoggedIn()) {
+        console.log('Signing out');
+        localStorage.removeItem('username');
+        alert('You have been signed out!');
+        this.loggedIn = false; // Update loggedIn status
+        this.$router.push('/');
+      } else {
+        console.log('Redirecting to login');
+        this.$router.push('/login');
+      }
+    },
+    updateLoggedInState() {
+      this.loggedIn = this.isLoggedIn(); // Update loggedIn state when auth changes
+      console.log('Updated login state: ', this.loggedIn);
+    }
+  },
+  mounted() {
+    this.loggedIn = this.isLoggedIn(); // Set initial login state
+    window.addEventListener('authChange', this.updateLoggedInState);
+  },
+  beforeDestroy() {
+    window.removeEventListener('authChange', this.updateLoggedInState);
   }
 }
 </script>
@@ -61,6 +99,7 @@ export default {
   flex-direction: column;
   background-color: var(--background-color);
 }
+
 .app-container {
   background-color: var(--background-color);
 }
@@ -99,7 +138,8 @@ export default {
   color: var(--navbar-text-color) !important;
 }
 
-.navbar-custom a:hover, .router-link-exact-active {
+.navbar-custom a:hover,
+.router-link-exact-active {
   color: var(--navbar-active-text-color) !important;
 }
 
@@ -109,12 +149,14 @@ body {
   color: #2C3E50;
 }
 
-.btn_message, .btn-primary {
+.btn_message,
+.btn-primary {
   background-color: var(--button-color);
   border-color: var(--button-color);
 }
 
-.btn_message:hover, .btn-primary:hover {
+.btn_message:hover,
+.btn-primary:hover {
   background-color: var(--button-hover-color);
   border-color: var(--button-hover-color);
 }
