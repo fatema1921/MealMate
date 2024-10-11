@@ -44,14 +44,14 @@ export default {
   // Console logging for debugging
   methods: {
     isLoggedIn() {
-      const loggedIn = !!localStorage.getItem('username');
+      const loggedIn = !!localStorage.getItem('userId'); // Converts the value into a boolean
       console.log('Is user logged in? ', loggedIn);
       return loggedIn;
     },
     handleAuthAction() {
       if (this.isLoggedIn()) {
         console.log('Signing out');
-        localStorage.removeItem('username');
+        localStorage.removeItem('userId'); // removes the localStorage key & value
         alert('You have been signed out!');
         this.loggedIn = false; // Update loggedIn status
         this.$router.push('/');
