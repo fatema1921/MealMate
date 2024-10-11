@@ -75,7 +75,7 @@ export default {
       },
       message: '',
       editMode: false,
-      username: "veg_baker" // hardcoded user, fix later using localstorage?
+      username: "Fatma123" // hardcoded user, fix later using localstorage?
     };
   },
   methods: {

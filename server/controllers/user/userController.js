@@ -76,7 +76,7 @@ exports.updateUser = async (req , res, next) => {
             preferences: req.body.preferences,
         }; 
 
-        const updatedUser = await User.findOneAndUpdate(req.params.username, updateUser);
+        const updatedUser = await User.findOneAndUpdate({username:req.params.username}, updateUser);
         if (!updatedUser) {
             return res.status(404).json({ message: 'User not found' });
         }
@@ -90,7 +90,7 @@ exports.updateUser = async (req , res, next) => {
 // Delete a user
 exports.deleteUser = async (req, res, next) => {
     try{
-        const user = await User.findOneAndDelete(req.params.username); // Delete user by ID
+        const user = await User.findOneAndDelete({username : req.params.username}); // Delete user by username
         if (!user) {
           return res.status(404).json({message: 'User not found' });
         }
