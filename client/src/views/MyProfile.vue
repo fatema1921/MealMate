@@ -68,14 +68,12 @@ export default {
       user: {
         name: '',
         username: '',
-        avatar: '',
-        location: '',
         meal_category: '',
         preferences: '',
       },
       message: '',
       editMode: false,
-      username: "Fatma123" // hardcoded user, fix later using localstorage?
+      username: "Fatma1234" // hardcoded user, fix later using localstorage?
     };
   },
   methods: {
