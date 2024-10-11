@@ -44,27 +44,78 @@
           </b-col>
         </b-row>
 
+        <!-- Display Recipes in Selected View -->
         <div v-if="viewMode === 'grid'">
           <b-row>
             <b-col v-for="recipe in recipes" :key="recipe._id" md="4" class="mb-3">
-              <b-card :title="recipe.name" class="text-center">
-                <b-card-text>{{ recipe.description }}</b-card-text>
-                <b-button variant="primary" @click="saveRecipe(recipe._id)">Save Recipe</b-button>
+              <b-card
+                :title="recipe.name"
+                class="text-center"
+                @click="showRecipeDetails(recipe)"
+              >
               </b-card>
             </b-col>
           </b-row>
         </div>
         <div v-else-if="viewMode === 'list'">
           <b-list-group>
-            <b-list-group-item v-for="recipe in recipes" :key="recipe._id" class="d-flex justify-content-between align-items-center">
-              <div>
-                <h5>{{ recipe.name }}</h5>
-                <p>{{ recipe.description }}</p>
-              </div>
-              <b-button variant="primary" @click="saveRecipe(recipe._id)">Save Recipe</b-button>
+            <b-list-group-item
+              v-for="recipe in recipes"
+              :key="recipe._id"
+              class="d-flex justify-content-between align-items-center"
+              @click="showRecipeDetails(recipe)"
+            >
+              <h5 class="mb-0">{{ recipe.name }}</h5>
             </b-list-group-item>
           </b-list-group>
         </div>
+
+        <!-- Recipe Details Modal -->
+        <b-modal
+          v-model="showModal"
+          title="Recipe Details"
+          hide-footer
+          @hide="closeModal"
+          size="lg"
+        >
+          <div v-if="selectedRecipe">
+            <h4>{{ selectedRecipe.name }}</h4>
+
+            <!-- Note for User -->
+            <p class="text-muted mb-3">
+              Note: Checking the box next to each ingredient adds it to your shopping list.
+            </p>
+
+            <!-- Ingredients Section -->
+            <h5>Ingredients</h5>
+            <div class="ingredients-list">
+              <b-row
+                v-for="(ingredient, index) in selectedRecipe.ingredients"
+                :key="ingredient._id"
+                class="align-items-center mb-2"
+              >
+                <b-col cols="1">
+                  <b-form-checkbox
+                    v-model="ingredient.shoppingList"
+                    @change="updateShoppingList(ingredient)"
+                    :class="{ 'checked': ingredient.shoppingList }"
+                  ></b-form-checkbox>
+                </b-col>
+                <b-col>
+                  {{ ingredient.name }} - {{ ingredient.calories }} kcal
+                </b-col>
+              </b-row>
+            </div>
+
+            <!-- Description Section -->
+            <h5 class="mt-4">Description</h5>
+            <p>{{ selectedRecipe.description }}</p>
+            <b-button variant="primary" @click="saveRecipe(selectedRecipe._id)">
+              Save Recipe
+            </b-button>
+          </div>
+        </b-modal>
+
       </b-container>
     </div>
     <div v-else>
@@ -80,7 +131,6 @@
   </div>
 </template>
 
-
 <script>
 import Searchbox from '../components/Searchbox.vue'
 import axios from 'axios'
@@ -88,16 +138,14 @@ import axios from 'axios'
 export default {
   name: 'home',
   methods: {
-    saveRecipe() {
-      // Your recipe saving logic
+    saveRecipe(recipeId) {
+
     },
     goToMealPlanner() {
       this.$router.push('/meal-planner') // Navigate to meal planner
     },
     async fetchRecipes() {
       try {
-        console.log('Search query before sending:', this.searchQuery)
-        console.log('Selected category before sending:', this.selectedCategory)
         const response = await axios.get('http://localhost:3000/api/recipes', {
           params: {
             search: this.searchQuery,
@@ -108,18 +156,36 @@ export default {
       } catch (error) {
         console.error('Error fetching recipes:', error)
       }
+    },
+    showRecipeDetails(recipe) {
+      // Initialize ingredients' shoppingList field to false if not defined
+      recipe.ingredients = recipe.ingredients.map(ingredient => ({
+        ...ingredient,
+        shoppingList: ingredient.shoppingList || false
+      }))
+      this.selectedRecipe = recipe
+      this.showModal = true
+    },
+    closeModal() {
+      this.selectedRecipe = null
+    },
+    async updateShoppingList(ingredient) {
+      try {
+        console.log(`Updating shoppingList for ${ingredient.name}. New value: ${ingredient.shoppingList}`)
+
+        // Make the PATCH request to update the shoppingList status for the specific ingredient
+        const response = await axios.patch(`http://localhost:3000/api/ingredients/${ingredient._id}`, {
+          shopping_list: ingredient.shoppingList
+        })
+
+        console.log(`Successfully updated shoppingList for ${ingredient.name} to: ${ingredient.shoppingList}`)
+
+        console.log(`${ingredient.name} shopping list status updated to: ${ingredient.shoppingList}`)
+        console.log('Response from server:', response.data)
+      } catch (error) {
+        console.error('Error updating shopping list status:', error.response ? error.response.data : error.message)
+      }
     }
-  },
-  watch: {
-    searchQuery(newQuery) {
-      console.log('Search query updated:', newQuery)
-    }
-  },
-  created() {
-    this.isAuthenticated = true // Temporary for testing purposes
-  },
-  components: {
-    Searchbox
   },
   data() {
     return {
@@ -134,13 +200,33 @@ export default {
       ],
       isAuthenticated: true,
       recipes: [],
-      viewMode: 'grid' // Default to 'grid' view
+      showModal: false,
+      selectedRecipe: null,
+      viewMode: 'grid'
     }
+  },
+  components: {
+    Searchbox
   }
 }
 </script>
 
 <style scoped>
+.ingredients-list {
+  max-height: 300px;
+  overflow-y: auto;
+  margin-bottom: 1rem;
+}
+
+.checked .custom-control-input:checked {
+  background-color: green !important;
+  border-color: green !important;
+}
+
+.checked b-form-checkbox {
+  background-color: green;
+}
+
 b-container {
   text-align: center;
   margin-top: 100px;

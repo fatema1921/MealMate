@@ -22,6 +22,12 @@ const recipeSchema = new Schema({
     },
     saved: {
         type: Boolean
+    },
+    prepTime: {
+        type: Number
+    },
+    calories: {
+        type: Number
     }
 });
 

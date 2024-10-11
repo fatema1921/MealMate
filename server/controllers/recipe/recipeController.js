@@ -124,6 +124,7 @@ exports.deleteRecipe = async (req, res, next) => {
     }
 };
 
+// Partial update of a recipe
 exports.patchRecipe = async (req, res, next) => {
     try {
         // Find the recipe by ID
@@ -172,6 +173,7 @@ exports.getIngredientById = async (req, res) => {
     }
 };
 
+// Add a specific ingredient to a specific recipe
 exports.addIngredientToRecipe = async (req, res) => {
 
     const { recipeId, ingredientId } = req.params;
