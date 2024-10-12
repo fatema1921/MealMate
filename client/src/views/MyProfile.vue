@@ -73,7 +73,7 @@ export default {
       },
       message: '',
       editMode: false,
-      username: "Fatma1234" // hardcoded user, fix later using localstorage?
+      username: "Fatma123" // hardcoded user, fix later using localstorage?
     };
   },
   methods: {
