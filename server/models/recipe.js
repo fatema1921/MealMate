@@ -20,9 +20,6 @@ const recipeSchema = new Schema({
     userMade: {
         type: Boolean
     },
-    isSaved: {
-        type: Boolean
-    },
     prepTime: {
         type: Number
     },

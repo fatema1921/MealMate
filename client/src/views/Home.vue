@@ -29,6 +29,33 @@
         <p class="text-danger text-center">{{ errorMessage }}</p>
       </b-container>
 
+      <!-- Suggested Recipes for User -->
+      <b-container fluid class="mt-4" v-if="suggestedRecipes.length && !recipes.length && !searchQuery && !errorMessage">
+        <h3>Suggested recipes for you:</h3>
+
+        <!-- Display Suggested Recipes -->
+        <div v-if="viewMode === 'grid'">
+          <b-row>
+            <b-col v-for="recipe in suggestedRecipes" :key="recipe._id" md="4" class="mb-3">
+              <b-card :title="recipe.name" class="text-center" @click="showRecipeDetails(recipe)">
+              </b-card>
+            </b-col>
+          </b-row>
+        </div>
+        <div v-else-if="viewMode === 'list'">
+          <b-list-group>
+            <b-list-group-item
+              v-for="recipe in suggestedRecipes"
+              :key="recipe._id"
+              class="d-flex justify-content-between align-items-center"
+              @click="showRecipeDetails(recipe)"
+            >
+              <h5 class="mb-0">{{ recipe.name }}</h5>
+            </b-list-group-item>
+          </b-list-group>
+        </div>
+      </b-container>
+
       <!-- Recipe Results -->
       <b-container fluid class="mt-4" v-if="recipes.length && !errorMessage">
         <h3>Search Results:</h3>
@@ -127,6 +154,16 @@
               class="mt-3"
             >
               {{ successMessage }}
+            </b-alert>
+            <!-- Already Saved Alert -->
+            <b-alert
+              v-model="showAlreadySavedAlert"
+              variant="warning"
+              dismissible
+              fade
+              class="mt-3"
+            >
+              {{ alreadySavedMessage }}
             </b-alert>
           </div>
         </b-modal>
@@ -298,6 +335,12 @@ export default {
         // Check if the recipe is already saved
         if (user.recipes.includes(recipeId)) {
           console.log('Recipe is already saved.')
+          this.alreadySavedMessage = 'This recipe is already saved.'
+          this.showAlreadySavedAlert = true
+          // Automatically hide the alert after 3 seconds
+          setTimeout(() => {
+            this.showAlreadySavedAlert = false
+          }, 3000)
           return
         }
 
@@ -323,6 +366,36 @@ export default {
     },
     goToMealPlanner() {
       this.$router.push('/meal-planner') // Navigate to meal planner
+    },
+    async fetchSuggestedRecipes() {
+      try {
+        // const userId = localStorage.getItem('userId')
+        const userId = '66f18ee5dc8b72b161275216'
+        if (!userId) {
+          console.error('User ID not found in localStorage.')
+          return
+        }
+
+        // Fetch the user's meal category
+        const userResponse = await axios.get(`http://localhost:3000/api/users/${userId}`)
+        const user = userResponse.data
+        const userMealCategory = user.meal_category
+
+        if (userMealCategory) {
+          // Fetch recipes based on the user's meal category
+          const response = await axios.get('http://localhost:3000/api/recipes', {
+            params: { category: userMealCategory }
+          })
+
+          if (response.data && response.data.length) {
+            this.suggestedRecipes = response.data // Store suggested recipes
+          } else {
+            console.log('No suggested recipes found.')
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching suggested recipes:', error.response ? error.response.data : error.message)
+      }
     },
     async fetchRecipes() {
       try {
@@ -385,6 +458,11 @@ export default {
       }
     }
   },
+  async created() {
+    if (this.isLoggedIn) {
+      await this.fetchSuggestedRecipes()
+    }
+  },
   data() {
     return {
       searchQuery: '',
@@ -398,13 +476,16 @@ export default {
       ],
       isLoggedIn: true,
       recipes: [],
+      suggestedRecipes: [],
       showModal: false,
       showLoginPrompt: false,
       selectedRecipe: null,
       viewMode: 'grid',
       errorMessage: '',
       successMessage: '',
-      showSuccessAlert: false
+      showSuccessAlert: false,
+      alreadySavedMessage: null,
+      showAlreadySavedAlert: false
     }
   },
   components: {
