@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="isAuthenticated">
+    <div v-if="isLoggedIn">
       <!-- If the user is logged in, show personalized home page -->
       <b-container fluid>
         <h1 class="display-5 fw-bold">Welcome Back!</h1>
@@ -131,6 +131,134 @@
           <b-button variant="primary" @click="login">Login</b-button>
         </RouterLink>
       </b-container>
+
+      <Searchbox v-model="searchQuery" />
+
+      <!-- Meal Category Filter -->
+      <b-container fluid class="mt-4">
+        <b-row class="d-flex justify-content-center">
+          <b-col md="4">
+            <b-form-select v-model="selectedCategory" :options="mealCategories"></b-form-select>
+          </b-col>
+        </b-row>
+        <b-row class="d-flex justify-content-center mt-3">
+          <b-col md="4">
+            <b-button variant="primary" @click="fetchRecipes" block>Search</b-button>
+          </b-col>
+        </b-row>
+      </b-container>
+
+      <!-- Show message if errorMessage is set -->
+      <b-container fluid class="mt-4" v-if="errorMessage">
+        <p class="text-danger text-center">{{ errorMessage }}</p>
+      </b-container>
+
+      <!-- Recipe Results -->
+      <b-container fluid class="mt-4" v-if="recipes.length && !errorMessage">
+        <h3>Search Results:</h3>
+
+        <!-- Toggle between Grid and List view -->
+        <b-row class="d-flex justify-content-center mb-3">
+          <b-col md="4">
+            <b-button-group class="view-toggle" block>
+              <b-button
+                :class="['toggle-btn', { active: viewMode === 'grid' }]"
+                @click="viewMode = 'grid'"
+              >Grid</b-button>
+              <b-button
+                :class="['toggle-btn', { active: viewMode === 'list' }]"
+                @click="viewMode = 'list'"
+              >List</b-button>
+            </b-button-group>
+          </b-col>
+        </b-row>
+
+        <!-- Display Recipes in Selected View -->
+        <div v-if="viewMode === 'grid'">
+          <b-row>
+            <b-col v-for="recipe in recipes" :key="recipe._id" md="4" class="mb-3">
+              <b-card
+                :title="recipe.name"
+                class="text-center"
+                @click="showRecipeDetails(recipe)"
+              >
+              </b-card>
+            </b-col>
+          </b-row>
+        </div>
+        <div v-else-if="viewMode === 'list'">
+          <b-list-group>
+            <b-list-group-item
+              v-for="recipe in recipes"
+              :key="recipe._id"
+              class="d-flex justify-content-between align-items-center"
+              @click="showRecipeDetails(recipe)"
+            >
+              <h5 class="mb-0">{{ recipe.name }}</h5>
+            </b-list-group-item>
+          </b-list-group>
+        </div>
+
+        <!-- Recipe Details Modal -->
+        <b-modal
+          v-model="showModal"
+          title="Recipe Details"
+          hide-footer
+          @hide="closeModal"
+          size="lg"
+        >
+          <div v-if="selectedRecipe">
+            <h4>{{ selectedRecipe.name }}</h4>
+
+            <!-- Note for User -->
+            <p class="text-muted mb-3">
+              Note: Checking the box next to each ingredient adds it to your shopping list.
+            </p>
+
+            <!-- Ingredients Section -->
+            <h5>Ingredients</h5>
+            <div class="ingredients-list">
+              <b-row
+                v-for="(ingredient, index) in selectedRecipe.ingredients"
+                :key="ingredient._id"
+                class="align-items-center mb-2"
+              >
+                <b-col cols="1">
+                  <b-form-checkbox
+                    v-model="ingredient.shoppingList"
+                    @change="updateShoppingList(ingredient)"
+                    :class="{ 'checked': ingredient.shoppingList }"
+                  ></b-form-checkbox>
+                </b-col>
+                <b-col>
+                  {{ ingredient.name }} - {{ ingredient.calories }} kcal
+                </b-col>
+              </b-row>
+            </div>
+
+            <!-- Description Section -->
+            <h5 class="mt-4">Description</h5>
+            <p>{{ selectedRecipe.description }}</p>
+
+            <!-- Message and Login Button for Non-Logged-In Users -->
+            <b-button variant="primary" @click="showLoginPrompt = true">
+              Save Recipe
+            </b-button>
+          </div>
+        </b-modal>
+
+        <!-- Login Prompt Modal -->
+        <b-modal v-model="showLoginPrompt" hide-footer backdrop="static" @hide="showLoginPrompt = false">
+          <div class="text-center">
+            <h4 class="mb-3">You need to log in to save a recipe</h4>
+            <RouterLink to="/login">
+              <b-button variant="primary">Login</b-button>
+            </RouterLink>
+            <b-button variant="secondary" @click="showLoginPrompt = false">Close</b-button>
+          </div>
+        </b-modal>
+
+      </b-container>
     </div>
   </div>
 </template>
@@ -189,6 +317,7 @@ export default {
     },
     closeModal() {
       this.selectedRecipe = null
+      this.showModal = false
     },
     async updateShoppingList(ingredient) {
       try {
@@ -219,9 +348,10 @@ export default {
         { value: 'Gluten-free', text: 'Gluten-free' },
         { value: 'High-protein', text: 'High-protein' }
       ],
-      isAuthenticated: true,
+      isLoggedIn: false,
       recipes: [],
       showModal: false,
+      showLoginPrompt: false,
       selectedRecipe: null,
       viewMode: 'grid',
       errorMessage: ''
