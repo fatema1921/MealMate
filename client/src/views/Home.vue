@@ -24,8 +24,13 @@
         </b-row>
       </b-container>
 
+      <!-- Show message if errorMessage is set -->
+      <b-container fluid class="mt-4" v-if="errorMessage">
+        <p class="text-danger text-center">{{ errorMessage }}</p>
+      </b-container>
+
       <!-- Recipe Results -->
-      <b-container fluid class="mt-4" v-if="recipes.length">
+      <b-container fluid class="mt-4" v-if="recipes.length && !errorMessage">
         <h3>Search Results:</h3>
 
         <!-- Toggle between Grid and List view -->
@@ -115,7 +120,6 @@
             </b-button>
           </div>
         </b-modal>
-
       </b-container>
     </div>
     <div v-else>
@@ -146,15 +150,32 @@ export default {
     },
     async fetchRecipes() {
       try {
+        this.errorMessage = ''
         const response = await axios.get('http://localhost:3000/api/recipes', {
           params: {
             search: this.searchQuery,
             category: this.selectedCategory
           }
         })
-        this.recipes = response.data
+        if (response.data && response.data.length) {
+          this.recipes = response.data
+        } else {
+          // If no recipes were found, set the error message
+          console.log('No recipes found')
+          this.errorMessage = 'No recipes found for this search. Try other keywords or categories.'
+          this.recipes = []
+          console.log('Error message set to:', this.errorMessage)
+        }
       } catch (error) {
-        console.error('Error fetching recipes:', error)
+        console.log('Error occurred:', error.response)
+        // If an error occurs, display a friendly error message
+        if (error.response && error.response.status === 404) {
+          this.errorMessage = 'No recipes found for this search. Try other keywords or categories.'
+        } else {
+          this.errorMessage = 'An error occurred while fetching recipes. Please try again later.'
+        }
+        this.recipes = []
+        console.log('Error message set to:', this.errorMessage)
       }
     },
     showRecipeDetails(recipe) {
@@ -202,7 +223,8 @@ export default {
       recipes: [],
       showModal: false,
       selectedRecipe: null,
-      viewMode: 'grid'
+      viewMode: 'grid',
+      errorMessage: ''
     }
   },
   components: {
@@ -212,6 +234,7 @@ export default {
 </script>
 
 <style scoped>
+
 .ingredients-list {
   max-height: 300px;
   overflow-y: auto;
