@@ -14,8 +14,8 @@ exports.getAllUsers = async (req, res, next) => {
 // Display information about specific user 
 exports.getUser = async (req, res, next) => {
     try{
-        const username = req.params.username;
-        const user = await User.findOne({username}); 
+        const userID = req.params.id;
+        const user = await User.findById(userID); 
         if(!user){
             return res.status (404).json({"message": "User not found"});
         } 
@@ -76,7 +76,7 @@ exports.updateUser = async (req , res, next) => {
             preferences: req.body.preferences,
         }; 
 
-        const updatedUser = await User.findOneAndUpdate({username:req.params.username}, updateUser);
+        const updatedUser = await User.findByIdAndUpdate(req.params.id, updateUser);
         if (!updatedUser) {
             return res.status(404).json({ message: 'User not found' });
         }
@@ -90,7 +90,7 @@ exports.updateUser = async (req , res, next) => {
 // Delete a user
 exports.deleteUser = async (req, res, next) => {
     try{
-        const user = await User.findOneAndDelete({username : req.params.username}); // Delete user by username
+        const user = await User.findByIdAndDelete(req.params.id); // Delete user by userID
         if (!user) {
           return res.status(404).json({message: 'User not found' });
         }
@@ -104,7 +104,7 @@ exports.deleteUser = async (req, res, next) => {
 exports.patchUser = async (req, res, next) => {
     try {
         // Find user by ID
-        const user = await User.findOne(req.params.username);
+        const user = await User.findById(req.params.id);
         
         // Check if the user exists
         if (!user) {

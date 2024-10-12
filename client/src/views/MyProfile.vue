@@ -73,14 +73,14 @@ export default {
       },
       message: '',
       editMode: false,
-      username: "Fatma123" // hardcoded user, fix later using localstorage?
+      userID: "6706a78575a90700aa36e831" // hardcoded user, fix later using localstorage?
     };
   },
   methods: {
     // Fetch user profile information
     async fetchUserProfile() {
       try {
-        const response = await axios.get(`http://localhost:3000/api/users/${this.username}`);
+        const response = await axios.get(`http://localhost:3000/api/users/${this.userID}`);
         this.user = response.data;
       } catch (error) {
         this.message = 'Error fetching profile';
@@ -102,10 +102,10 @@ export default {
     async saveChanges() {
       try {
         if (!this.user.password) {
-          await axios.patch(`http://localhost:3000/api/users/${this.username}`, this.user);
+          await axios.patch(`http://localhost:3000/api/users/${this.userID}`, this.user);
           this.message = 'Profile updated successfully (PATCH)!';
         } else {
-          await axios.put(`http://localhost:3000/api/users/${this.username}`, this.user);
+          await axios.put(`http://localhost:3000/api/users/${this.userID}`, this.user);
           this.message = 'Profile updated successfully (PUT)!';
         }
 
@@ -121,7 +121,7 @@ export default {
     async deleteProfile() {
       if (confirm('Are you sure you want to delete your profile? This action cannot be undone.')) {
         try {
-          await axios.delete(`http://localhost:3000/api/users/${this.username}`);
+          await axios.delete(`http://localhost:3000/api/users/${this.userID}`);
           this.message = 'Profile deleted successfully';
           // Redirect to a login after deletion
           this.$router.push('/login');
