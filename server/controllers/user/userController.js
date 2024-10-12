@@ -99,8 +99,9 @@ exports.deleteUser = async (req, res, next) => {
         next(error);
     }
    
-  };
+};
 
+// Partial Update
 exports.patchUser = async (req, res, next) => {
     try {
         // Find user by ID

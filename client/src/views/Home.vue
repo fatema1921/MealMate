@@ -118,6 +118,16 @@
             <b-button variant="primary" @click="saveRecipe(selectedRecipe._id)">
               Save Recipe
             </b-button>
+            <!-- Success Alert -->
+            <b-alert
+              v-model="showSuccessAlert"
+              variant="success"
+              dismissible
+              fade
+              class="mt-3"
+            >
+              {{ successMessage }}
+            </b-alert>
           </div>
         </b-modal>
       </b-container>
@@ -270,8 +280,46 @@ import axios from 'axios'
 export default {
   name: 'home',
   methods: {
-    saveRecipe(recipeId) {
+    async saveRecipe(recipeId) {
+      try {
+        // Get user ID from localStorage
+        // const userId = localStorage.getItem('userId')
+        /*
+        if (!userId) {
+          console.error('User ID not found in localStorage.')
+          return
+        }
+        */
+        const userId = '66f18ee5dc8b72b161275216'
+        // First, get the user's existing saved recipes
+        const userResponse = await axios.get(`http://localhost:3000/api/users/${userId}`)
+        const user = userResponse.data
 
+        // Check if the recipe is already saved
+        if (user.recipes.includes(recipeId)) {
+          console.log('Recipe is already saved.')
+          return
+        }
+
+        // Add the new recipe to the user's list of saved recipes
+        const updatedRecipes = [...user.recipes, recipeId]
+
+        // Make a PATCH request to update the user's saved recipes
+        const response = await axios.patch(`http://localhost:3000/api/users/${userId}`, {
+          recipes: updatedRecipes // Send the updated list of recipes
+        })
+
+        this.successMessage = 'Recipe was saved successfully.'
+        this.showSuccessAlert = true
+        // Hide after 3 seconds
+        setTimeout(() => {
+          this.showSuccessAlert = false
+        }, 3000)
+        console.log(`Recipe with ID ${recipeId} saved successfully.`)
+        console.log('Updated user data:', response.data)
+      } catch (error) {
+        console.error('Error saving the recipe:', error.response ? error.response.data : error.message)
+      }
     },
     goToMealPlanner() {
       this.$router.push('/meal-planner') // Navigate to meal planner
@@ -348,13 +396,15 @@ export default {
         { value: 'Gluten-free', text: 'Gluten-free' },
         { value: 'High-protein', text: 'High-protein' }
       ],
-      isLoggedIn: false,
+      isLoggedIn: true,
       recipes: [],
       showModal: false,
       showLoginPrompt: false,
       selectedRecipe: null,
       viewMode: 'grid',
-      errorMessage: ''
+      errorMessage: '',
+      successMessage: '',
+      showSuccessAlert: false
     }
   },
   components: {
