@@ -1,12 +1,11 @@
 <template>
   <div class="image-container">
     <!-- Left image -->
-    <img class="side-image" src="https://images.pexels.com/photos/1435904/pexels-photo-1435904.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Left image">
-
+    <img class="side-image" src="https://images.pexels.com/photos/1435904/pexels-photo-1435904.jpeg" alt="Left image">
     <!-- Card in the middle -->
     <div class="center">
       <h1 class="welcome-message">Welcome to our login page.</h1>
-      <p class="welcome-description">Here you can login with your username and password <br> or register an new account.</p>
+      <p class="welcome-description">Here you can login with your username and password <br> or register a new account.</p>
       <div class="card">
         <img class="card-img-top" src="https://www.instacart.com/company/wp-content/uploads/2021/10/meal-plan-paper-1050x525.jpg" alt="Card image cap">
         <div class="card-body">
@@ -14,10 +13,10 @@
         </div>
         <ul class="list-group list-group-flush">
           <li class="list-group-item">
-            <input id="inputUsername" v-model='username' placeholder="Username">
+            <input id="inputUsername" v-model="username" placeholder="Username">
           </li>
           <li class="list-group-item">
-            <input id="inputPassword" v-model='password' placeholder="Password">
+            <input id="inputPassword" v-model="password" placeholder="Password" type="password">
           </li>
         </ul>
         <div class="card-body">
@@ -25,6 +24,8 @@
           <router-link to="/register" id="buttonRegister" class="btn btn-warning btn-lg">Register</router-link>
         </div>
       </div>
+      <!-- Display error message if login fails -->
+      <div v-if="unsuccessful" class="error-message">{{ unsuccessful }}</div>
     </div>
 
     <!-- Right image -->
@@ -33,6 +34,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: 'Login',
   data() {
@@ -43,14 +46,35 @@ export default {
     }
   },
   methods: {
-    login() {
+    async login() {
+  try {
+    const response = await axios.post('http://localhost:3000/api/users/login', {
+      username: this.username,
+      password: this.password
+    });
+
+    if (response.status === 200) {
+      const user = response.data.user; // extracts the user object from the response data
+      localStorage.setItem('userId', user._id); // Store the userId in localstorage
+      alert('Login successful!');
+      window.dispatchEvent(new Event('authChange')); // Send event for button to switch on navbar
+      this.$router.push('/'); // Redirect to homepage
+    }
+  } catch (error) {
+    if (error.response && error.response.status === 401) {
+      this.unsuccessful = 'Invalid password';
+    } else if (error.response && error.response.status === 404) {
+      this.unsuccessful = 'User not found';
+    } else {
+      this.unsuccessful = 'An error occurred during login';
+    }
+  }
     }
   }
 }
 </script>
 
 <style scoped>
-
 .image-container {
   display: flex;
   justify-content: space-between;
