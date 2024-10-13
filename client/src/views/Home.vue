@@ -444,13 +444,23 @@ export default {
       try {
         console.log(`Updating shoppingList for ${ingredient.name}. New value: ${ingredient.shoppingList}`)
 
-        // Make the PATCH request to update the shoppingList status for the specific ingredient
-        const response = await axios.patch(`http://localhost:3000/api/ingredients/${ingredient._id}`, {
-          shopping_list: ingredient.shoppingList
-        })
+        // const userId = localStorage.getItem('userId')
+        const userId = '66f18ee5dc8b72b161275216'
 
+        // Get the current shopping_list of the user
+        const response = await axios.patch(`http://localhost:3000/api/users/${userId}`)
+        const currentShoppingList = response.data.shopping_list
+        const updatedShoppingList = currentShoppingList.push(ingredient)
+
+        // Add the ingredient to the shopping list of the user
+        try {
+          await axios.patch(`http://localhost:3000/api/users/${userId}`, {
+            shopping_list: updatedShoppingList
+          })
+        } catch (error) {
+          console.error('Error adding ingredient to shopping list:', error)
+        }
         console.log(`Successfully updated shoppingList for ${ingredient.name} to: ${ingredient.shoppingList}`)
-
         console.log(`${ingredient.name} shopping list status updated to: ${ingredient.shoppingList}`)
         console.log('Response from server:', response.data)
       } catch (error) {

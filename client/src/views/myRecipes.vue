@@ -9,6 +9,13 @@
 
     <!-- If user is logged in, show the recipes interface -->
     <div v-else>
+      <!-- Create a New Recipe Button -->
+      <b-container fluid>
+        <b-button variant="primary" @click="showCreateRecipeModal = true">
+          Create a New Recipe
+        </b-button>
+      </b-container>
+
       <!-- Radio buttons for filtering recipes -->
       <b-row class="d-flex justify-content-center mt-3">
         <b-col md="6">
@@ -32,18 +39,8 @@
       <b-row class="d-flex justify-content-center mb-3">
         <b-col md="4">
           <b-button-group class="view-toggle" block>
-            <b-button
-              :class="['toggle-btn', { active: viewMode === 'grid' }]"
-              @click="viewMode = 'grid'"
-            >
-              Grid
-            </b-button>
-            <b-button
-              :class="['toggle-btn', { active: viewMode === 'list' }]"
-              @click="viewMode = 'list'"
-            >
-              List
-            </b-button>
+            <b-button :class="['toggle-btn', { active: viewMode === 'grid' }]" @click="viewMode = 'grid'">Grid</b-button>
+            <b-button :class="['toggle-btn', { active: viewMode === 'list' }]" @click="viewMode = 'list'">List</b-button>
           </b-button-group>
         </b-col>
       </b-row>
@@ -59,11 +56,7 @@
         <div v-if="viewMode === 'grid' && filteredRecipes.length">
           <b-row>
             <b-col v-for="recipe in filteredRecipes" :key="recipe._id" md="4" class="mb-3">
-              <b-card
-                :title="recipe.name"
-                class="text-center"
-                @click="showRecipeDetails(recipe)"
-              >
+              <b-card :title="recipe.name" class="text-center" @click="showRecipeDetails(recipe)">
               </b-card>
             </b-col>
           </b-row>
@@ -72,51 +65,27 @@
         <!-- List View -->
         <div v-else-if="viewMode === 'list' && filteredRecipes.length">
           <b-list-group>
-            <b-list-group-item
-              v-for="recipe in filteredRecipes"
-              :key="recipe._id"
-              class="d-flex justify-content-between align-items-center"
-              @click="showRecipeDetails(recipe)"
-            >
+            <b-list-group-item v-for="recipe in filteredRecipes" :key="recipe._id" class="d-flex justify-content-between align-items-center">
               <h5 class="mb-0">{{ recipe.name }}</h5>
+              <p class="mb-0">{{ recipe.description }}</p>
             </b-list-group-item>
           </b-list-group>
         </div>
 
         <!-- Recipe Details Modal -->
-        <b-modal
-          v-model="showModal"
-          title="Recipe Details"
-          hide-footer
-          @hide="closeModal"
-          size="lg"
-        >
+        <b-modal v-model="showModal" title="Recipe Details" hide-footer @hide="closeModal" size="lg">
           <div v-if="selectedRecipe">
             <h4>{{ selectedRecipe.name }}</h4>
-
-            <!-- Note for User -->
-            <p class="text-muted mb-3">
-              Note: Checking the box next to each ingredient adds it to your shopping list.
-            </p>
+            <p class="text-muted mb-3">Note: Checking the box next to each ingredient adds it to your shopping list.</p>
 
             <!-- Ingredients Section -->
             <h5>Ingredients</h5>
             <div class="ingredients-list">
-              <b-row
-                v-for="(ingredient, index) in selectedRecipe.ingredients"
-                :key="ingredient._id"
-                class="align-items-center mb-2"
-              >
+              <b-row v-for="(ingredient, index) in selectedRecipe.ingredients" :key="ingredient._id" class="align-items-center mb-2">
                 <b-col cols="1">
-                  <b-form-checkbox
-                    v-model="ingredient.shoppingList"
-                    @change="updateShoppingList(ingredient)"
-                    :class="{ 'checked': ingredient.shoppingList }"
-                  ></b-form-checkbox>
+                  <b-form-checkbox v-model="ingredient.shoppingList" @change="updateShoppingList(ingredient)" :class="{ 'checked': ingredient.shoppingList }"></b-form-checkbox>
                 </b-col>
-                <b-col>
-                  {{ ingredient.name }} - {{ ingredient.calories }} kcal
-                </b-col>
+                <b-col>{{ ingredient.name }} - {{ ingredient.calories }} kcal</b-col>
               </b-row>
             </div>
 
@@ -126,6 +95,65 @@
           </div>
         </b-modal>
 
+        <!-- Create Recipe Modal -->
+        <b-modal v-model="showCreateRecipeModal" title="Create New Recipe" size="lg" hide-footer>
+          <b-form @submit.prevent="addRecipe">
+            <b-form-group label="Recipe Name" label-for="recipe-name">
+              <span v-if="!newRecipe.name" class="text-danger">* Required</span>
+              <b-form-input id="recipe-name" v-model="newRecipe.name" required></b-form-input>
+            </b-form-group>
+
+            <p> </p>
+            <p> </p>
+            <p> </p>
+
+            <b-form-group label="Meal Category">
+              <span v-if="!newRecipe.meal_category" class="text-danger">* Required</span>
+              <b-form-select v-model="newRecipe.meal_category" :options="mealCategories"></b-form-select>
+            </b-form-group>
+
+            <p> </p>
+            <p> </p>
+            <p> </p>
+
+            <b-form-group label="Preparation Time (in minutes)">
+              <b-form-input type="number" v-model="newRecipe.prepTime"></b-form-input>
+            </b-form-group>
+
+            <p> </p>
+            <p> </p>
+            <p> </p>
+
+            <b-form-group label="Ingredients">
+              <span v-if="!newRecipe.ingredients" class="text-danger">* Required</span>
+              <b-form-textarea v-model="newRecipe.ingredients" placeholder="List ingredients separated by commas" required></b-form-textarea>
+            </b-form-group>
+
+            <p> </p>
+            <p> </p>
+            <p> </p>
+
+            <b-form-group label="Description">
+              <b-form-textarea v-model="newRecipe.description"></b-form-textarea>
+            </b-form-group>
+
+            <p> </p>
+            <p> </p>
+            <p> </p>
+
+            <b-button variant="primary" type="submit">Add the recipe</b-button>
+            <b-button variant="secondary" @click="showDiscardConfirmation = true">Discard changes</b-button>
+          </b-form>
+        </b-modal>
+
+        <!-- Discard Confirmation Modal -->
+        <b-modal v-model="showDiscardConfirmation" hide-footer>
+          <div class="text-center">
+            <p>Are you sure you want to discard the recipe?</p>
+            <b-button variant="danger" @click="discardRecipe">Yes</b-button>
+            <b-button variant="secondary" @click="showDiscardConfirmation = false">No</b-button>
+          </div>
+        </b-modal>
       </b-container>
     </div>
   </div>
@@ -137,15 +165,31 @@ import axios from 'axios'
 export default {
   data() {
     return {
-      // isLoggedIn: !!localStorage.getItem('userId'),
       isLoggedIn: true,
       userRecipes: [],
       filteredRecipes: [],
-      selectedFilter: 'all', // Default filter is 'all'
-      viewMode: 'grid', // Default view mode is 'grid'
+      selectedFilter: 'all',
+      viewMode: 'grid',
       noRecipesMessage: '',
       showModal: false,
-      selectedRecipe: null
+      selectedRecipe: null,
+      showCreateRecipeModal: false,
+      showDiscardConfirmation: false,
+      newRecipe: {
+        name: '',
+        meal_category: '',
+        prepTime: null,
+        calories: null,
+        description: '',
+        ingredients: ''
+      },
+      mealCategories: [
+        { value: '', text: 'None' },
+        { value: 'Vegan', text: 'Vegan' },
+        { value: 'Vegetarian', text: 'Vegetarian' },
+        { value: 'Gluten-free', text: 'Gluten-free' },
+        { value: 'High-protein', text: 'High-protein' }
+      ]
     }
   },
   methods: {
@@ -156,24 +200,64 @@ export default {
       try {
         const response = await axios.get(`http://localhost:3000/api/users/${userId}`)
         const recipeIds = response.data.recipes
-        console.log('Fetched user recipes:', response.data.recipes) // for debugging purposes
 
         for (const recipeId of recipeIds) {
           try {
             const recipeResponse = await axios.get(`http://localhost:3000/api/recipes/${recipeId}`)
-            this.userRecipes.push(recipeResponse.data) // Push the recipe details into the array
+            this.userRecipes.push(recipeResponse.data)
           } catch (error) {
-            console.error(`Error fetching recipe ${recipeId}:`, error) // Handle errors for individual recipe fetch
+            console.error(`Error fetching recipe ${recipeId}:`, error)
           }
         }
-        this.filterRecipes() // Apply the filter initially
+        this.filterRecipes()
       } catch (error) {
         console.error('Error fetching user recipes:', error)
       }
     },
-    // Filter the recipes based on the selected filter
+    // Add new recipe
+    async addRecipe() {
+      // const userId = localStorage.getItem('userId')
+      const userId = '66f18ee5dc8b72b161275216'
+      if (!this.newRecipe.name || !this.newRecipe.ingredients || !this.newRecipe.meal_category) {
+        alert('Please fill in all required fields.')
+        return
+      }
+      try {
+        // Create the recipe
+        const response = await axios.post('http://localhost:3000/api/recipes', {
+          ...this.newRecipe,
+          userMade: true // Set userMade to true for user-created recipes
+        })
+
+        // Add the created recipe ID to the user's list of recipes
+        const recipeId = response.data._id
+        await axios.patch(`http://localhost:3000/api/users/${userId}`, {
+          recipes: [...this.userRecipes.map(r => r._id), recipeId]
+        })
+
+        // Close the modal and clear the form
+        this.showCreateRecipeModal = false
+        this.newRecipe = {
+          name: '',
+          meal_category: '',
+          prepTime: null,
+          calories: null,
+          description: '',
+          ingredients: ''
+        }
+
+        // Fetch the updated list of user recipes
+        this.fetchUserRecipes()
+      } catch (error) {
+        console.error('Error adding recipe:', error)
+      }
+    },
+    discardRecipe() {
+      this.showCreateRecipeModal = false
+      this.showDiscardConfirmation = false
+    },
+    // Filter recipes based on the selected filter
     filterRecipes() {
-      console.log('Current filter:', this.selectedFilter) // for debugging purposes
       if (this.selectedFilter === 'all') {
         this.filteredRecipes = this.userRecipes
         this.noRecipesMessage = 'You have no saved/created recipes yet.'
@@ -184,10 +268,8 @@ export default {
         this.filteredRecipes = this.userRecipes.filter(recipe => recipe.userMade)
         this.noRecipesMessage = 'You have not created a recipe yet.'
       }
-      console.log('Filtered recipes:', this.filteredRecipes) // for debugging purposes
     },
     showRecipeDetails(recipe) {
-      // Initialize ingredients' shoppingList field to false if not defined
       recipe.ingredients = recipe.ingredients.map(ingredient => ({
         ...ingredient,
         shoppingList: ingredient.shoppingList || false
@@ -198,46 +280,22 @@ export default {
     closeModal() {
       this.selectedRecipe = null
       this.showModal = false
-    },
-    async updateShoppingList(ingredient) {
-      try {
-        console.log(`Updating shoppingList for ${ingredient.name}. New value: ${ingredient.shoppingList}`)
-
-        // Make the PATCH request to update the shoppingList status for the specific ingredient
-        const response = await axios.patch(`http://localhost:3000/api/ingredients/${ingredient._id}`, {
-          shopping_list: ingredient.shoppingList
-        })
-
-        console.log(`Successfully updated shoppingList for ${ingredient.name} to: ${ingredient.shoppingList}`)
-
-        console.log(`${ingredient.name} shopping list status updated to: ${ingredient.shoppingList}`)
-        console.log('Response from server:', response.data)
-      } catch (error) {
-        console.error('Error updating shopping list status:', error.response ? error.response.data : error.message)
-      }
     }
   },
   watch: {
-    // Re-apply filter when user changes the selected filter
     selectedFilter() {
       this.filterRecipes()
     }
   },
   created() {
     if (this.isLoggedIn) {
-      this.fetchUserRecipes() // Fetch recipes when the component is created if user is logged in
+      this.fetchUserRecipes()
     }
   }
 }
 </script>
 
 <style scoped>
-/* Background and Button Colors */
-body {
-  background-color: var(--background-color);
-  color: #2C3E50;
-}
-
 .custom-radio {
   background-color: var(--background-color);
   border-color: var(--button-color);
@@ -252,7 +310,6 @@ body {
   color: white;
 }
 
-/* Toggle Button Group */
 .view-toggle {
   width: 100%;
 }
