@@ -22,11 +22,21 @@ export default {
   data() {
     return {
       selectedDate: new Date(),  // The currently selected date on the calendar
-      calendarEvents: []  // Array to hold calendar events (meals)
+      calendarEvents: [],  // Array to hold calendar events (meals)
     };
   },
   methods: {
-    async getCalendar() {  // Get calendar events (meals) from the API, new endpoint needed??
+    async getCalendar() {  // not complete
+    }
+  },
+    async addMeal() {
+      const calendarId = ''; // not complete
+      const mealId = ''; // not complete
+      try {
+      await axios.post(`http://localhost:3000/api/calendars/${calendarId}/meals/${mealId}`);
+      this.getCalendar(); // Refresh the calendar
+    } catch (error) {
+      console.error('Error adding meal:', error);
     }
   },
   mounted() {
