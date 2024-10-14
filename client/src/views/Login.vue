@@ -56,7 +56,6 @@ export default {
     if (response.status === 200) {
       const user = response.data.user; // extracts the user object from the response data
       localStorage.setItem('userId', user._id); // Store the userId in localstorage
-      alert('Login successful!');
       window.dispatchEvent(new Event('authChange')); // Send event for button to switch on navbar
       this.$router.push('/'); // Redirect to homepage
     }

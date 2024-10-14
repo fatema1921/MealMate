@@ -72,7 +72,6 @@ export default {
           preferences: this.preferences
         });
         console.log('Registration successful:', response);
-        alert('Registration successful! You can now log in.');
         this.$router.push('/login');
       } catch (error) {
         console.error('Registration error:', error);

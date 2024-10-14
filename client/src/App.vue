@@ -52,7 +52,6 @@ export default {
       if (this.isLoggedIn()) {
         console.log('Signing out');
         localStorage.removeItem('userId'); // removes the localStorage key & value
-        alert('You have been signed out!');
         this.loggedIn = false; // Update loggedIn status
         this.$router.push('/');
       } else {
