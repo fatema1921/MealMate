@@ -15,7 +15,7 @@
 <script>
 // Import your auth utility to check if the user is logged in
 // import auth from '../auth';
-import Searchbox from '../components/Searchbox.vue'
+import Searchbox from '../components/searchbox.vue'
 // const axios = require('axios')
 
 export default {

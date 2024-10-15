@@ -88,6 +88,10 @@ A page for showing recipes that you have created.
 
 The Planner page is customized for every user. The Planner will display a 7-day calendar (mon, tues, wed..).
 
+- **About**: 
+
+A page for the user to read more about meal mate and some of the features we offer. 
+
 
 ### Entity-Relationship (ER) Diagram
 

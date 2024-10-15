@@ -39,7 +39,7 @@
 
 <script>
 // Import the Searchbox component and API handling logic
-import Searchbox from '../components/Searchbox.vue'
+import Searchbox from '../components/searchbox.vue'
 import axios from 'axios'
 
 export default {
