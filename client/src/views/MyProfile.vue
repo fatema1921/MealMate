@@ -1,61 +1,60 @@
 <template>
   <div class="user-profile">
     <div v-if="editMode" class="edit-profile">
-      <h1>Edit profile</h1>
+      <h1>Edit Profile</h1>
       
       <form @submit.prevent="saveChanges">
         <div class="form-group">
           <label for="name">Name:</label>
-          <input type="text" v-model="user.name" />
+          <input type="text" class="form-control" v-model="user.name" />
         </div>
 
         <div class="form-group">
           <label for="username">Username:</label>
-          <input type="text" v-model="user.username" />
+          <input type="text" class="form-control" v-model="user.username" />
         </div>
 
         <div class="form-group">
           <label for="meal_category">Meal Category:</label>
-          <input type="text" v-model="user.meal_category" />
+          <input type="text" class="form-control" v-model="user.meal_category" />
         </div>
 
         <div class="form-group">
           <label for="preferences">Preferences:</label>
-          <textarea v-model="user.preferences"></textarea>
+          <textarea class="form-control" v-model="user.preferences"></textarea>
         </div>
 
         <div class="form-group">
           <label for="password">Password:</label>
-          <input type="password" v-model="user.password" />
+          <input type="password" class="form-control" v-model="user.password" />
         </div>
 
-        <button type="submit">Save Profile</button>
-        <button type="button" @click="cancelEdit">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save Profile</button>
+        <button type="button" class="btn btn-secondary" @click="cancelEdit">Cancel</button>
       </form>
     </div>
 
     <div v-else>
-    <div class="profile-header">
-      <img src= https://static.thenounproject.com/png/5034901-200.png alt="User Avatar" class="avatar" />
-      <h1>{{ user.name }}</h1>
-    </div>
+      <div class="profile-header">
+        <img src="https://static.thenounproject.com/png/5034901-200.png" alt="User Avatar" class="avatar" />
+        <h1>{{ user.name }}</h1>
+      </div>
 
-    <div class="profile-info">
-      <h2>Profile Information</h2>
-      <p><strong>Username:</strong> {{ user.username }}</p>
-      <p><strong>Meal Category:</strong> {{ user.meal_category }}</p>
-      <p><strong>Preferences:</strong> {{ user.preferences }}</p>
-    </div>
+      <div class="profile-info">
+        <h2>Profile Information</h2>
+        <p><strong>Username:</strong> {{ user.username }}</p>
+        <p><strong>Meal Category:</strong> {{ user.meal_category }}</p>
+        <p><strong>Preferences:</strong> {{ user.preferences }}</p>
+      </div>
 
-    <div class="profile-actions">
-      <button @click="editProfile">Edit Profile</button>
-      <button @click="deleteProfile" class="delete-button">Delete Profile</button>
-      <button @click="logOut">Log Out</button>
-    </div>
+      <div class="profile-actions">
+        <button class="btn btn-warning" @click="editProfile">Edit Profile</button>
+        <button class="btn btn-danger" @click="deleteProfile">Delete Profile</button>
+      </div>
 
-    <div v-if="message" class="message">{{ message }}</div>
+      <div v-if="message" class="message">{{ message }}</div>
+    </div>
   </div>
-</div>
 </template>
 
 <script>
@@ -73,7 +72,7 @@ export default {
       },
       message: '',
       editMode: false,
-      userID: "6706a78575a90700aa36e831" // hardcoded user, fix later using localstorage?
+      userID: "",
     };
   },
   methods: {
@@ -87,7 +86,7 @@ export default {
       }
     },
 
-    editProfile(){
+    editProfile() {
       this.editMode = true;
     },
 
@@ -96,8 +95,6 @@ export default {
       this.editMode = false;
       this.fetchUserProfile(); // Reset data to avoid unsaved changes
     },
-
-
 
     async saveChanges() {
       try {
@@ -130,15 +127,15 @@ export default {
         }
       }
     },
-
-    logOut() {
-      // Redirect to login page
-      this.$router.push('/login');
-    }
   },
   mounted() {
-    //this.username = this.$route.params.username;
-    this.fetchUserProfile();
+    this.userID = localStorage.getItem('userId'); 
+    console.log('Retrieved user ID:', this.userID); // Check what is retrieved
+    if (this.userID) {
+      this.fetchUserProfile(); 
+    } else {
+      console.log('No user ID found in local storage. Make sure to be logged in.');
+    }
   }
 };
 </script>
@@ -181,27 +178,6 @@ export default {
 
 .profile-actions {
   margin-top: 20px;
-}
-
-button {
-  padding: 10px 20px;
-  margin: 5px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #007bff;
-  color: #fff;
-}
-
-.delete-button {
-  background-color: red;
-}
-
-.delete-button:hover {
-  background-color: darkred;
 }
 
 .message {
