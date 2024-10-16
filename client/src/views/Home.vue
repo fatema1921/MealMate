@@ -128,9 +128,7 @@
               >
                 <b-col cols="1">
                   <b-form-checkbox
-                    v-model="ingredient.shoppingList"
                     @change="updateShoppingList(ingredient)"
-                    :class="{ 'checked': ingredient.shoppingList }"
                   ></b-form-checkbox>
                 </b-col>
                 <b-col>
@@ -272,9 +270,7 @@
               >
                 <b-col cols="1">
                   <b-form-checkbox
-                    v-model="ingredient.shoppingList"
                     @change="updateShoppingList(ingredient)"
-                    :class="{ 'checked': ingredient.shoppingList }"
                   ></b-form-checkbox>
                 </b-col>
                 <b-col>
@@ -428,11 +424,12 @@ export default {
       }
     },
     showRecipeDetails(recipe) {
-      // Initialize ingredients' shoppingList field to false if not defined
+      // Initialize ingredients' shoppingList field to false when opening the recipe
       recipe.ingredients = recipe.ingredients.map(ingredient => ({
         ...ingredient,
-        shoppingList: ingredient.shoppingList || false
+        shoppingList: false // Always set to false initially
       }))
+
       this.selectedRecipe = recipe
       this.showModal = true
     },
@@ -442,29 +439,41 @@ export default {
     },
     async updateShoppingList(ingredient) {
       try {
-        console.log(`Updating shoppingList for ${ingredient.name}. New value: ${ingredient.shoppingList}`)
+        console.log(`Initital Checkbox status: ${ingredient.shoppingList}`)
+        ingredient.shoppingList = !ingredient.shoppingList
+        console.log(`New Checkbox status: ${ingredient.shoppingList}`)
 
         // const userId = localStorage.getItem('userId')
         const userId = '66f18ee5dc8b72b161275216'
 
-        // Get the current shopping_list of the user
-        const response = await axios.patch(`http://localhost:3000/api/users/${userId}`)
+        // Fetch the current shopping list
+        const response = await axios.get(`http://localhost:3000/api/users/${userId}`)
         const currentShoppingList = response.data.shopping_list
-        const updatedShoppingList = currentShoppingList.push(ingredient)
 
-        // Add the ingredient to the shopping list of the user
-        try {
-          await axios.patch(`http://localhost:3000/api/users/${userId}`, {
-            shopping_list: updatedShoppingList
-          })
-        } catch (error) {
-          console.error('Error adding ingredient to shopping list:', error)
+        let updatedShoppingList
+        if (ingredient.shoppingList === true) {
+          // Add the ingredient if it doesn't exist in the shopping list
+          if (!currentShoppingList.some(item => item === ingredient._id)) {
+            updatedShoppingList = [...currentShoppingList, ingredient]
+            console.log(`Ingredient ${ingredient.name} added to shopping list.`)
+          } else {
+            console.log(`Ingredient ${ingredient.name} is already in the shopping list.`)
+            updatedShoppingList = currentShoppingList // Don't add duplicate
+          }
+        } else {
+          // Remove the ingredient if it's unchecked
+          updatedShoppingList = currentShoppingList.filter(item => item !== (ingredient._id))
+          console.log(`Ingredient ${ingredient.name} removed from shopping list.`)
         }
-        console.log(`Successfully updated shoppingList for ${ingredient.name} to: ${ingredient.shoppingList}`)
-        console.log(`${ingredient.name} shopping list status updated to: ${ingredient.shoppingList}`)
-        console.log('Response from server:', response.data)
+
+        // Update the user's shopping list
+        await axios.patch(`http://localhost:3000/api/users/${userId}`, {
+          shopping_list: updatedShoppingList
+        })
+
+        console.log(`Shopping list updated successfully for ${ingredient.name}.`)
       } catch (error) {
-        console.error('Error updating shopping list status:', error.response ? error.response.data : error.message)
+        console.error('Error updating shopping list:', error.response ? error.response.data : error.message)
       }
     }
   },
