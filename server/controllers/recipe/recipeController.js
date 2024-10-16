@@ -81,7 +81,9 @@ exports.createRecipe = async (req, res, next) => {
             name: req.body.name,
             description: req.body.description,
             meal_category: req.body.meal_category,
-            ingredients: req.body.ingredients 
+            ingredients: req.body.ingredients,
+            prepTime: req.body.prepTime || '0',
+            userMade: req.body.userMade || false
         });
 
         await newRecipe.save();
@@ -98,7 +100,9 @@ exports.updateRecipe = async (req, res, next) => {
             name: req.body.name,
             description: req.body.description,
             meal_category: req.body.meal_category,
-            ingredients: req.body.ingredients 
+            ingredients: req.body.ingredients,
+            prepTime: req.body.prepTime || '0',
+            userMade: req.body.userMade || false
         };
 
         const recipe = await Recipe.findByIdAndUpdate(req.params.id, updatedRecipe, { new: true }).populate('ingredients');
@@ -118,7 +122,7 @@ exports.deleteRecipe = async (req, res, next) => {
         if (!recipe) {
             return res.status(404).json({ message: "Recipe not found" });
         }
-        res.status(204).end();
+        res.status(204).json({message: "Recipe deleted."});
     } catch (error) {
         next(error);
     }

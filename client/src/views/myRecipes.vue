@@ -99,7 +99,7 @@
 
         <!-- Create Recipe Modal -->
         <b-modal v-model="showCreateRecipeModal" title="Create New Recipe" size="lg" hide-footer>
-          <b-form @submit.prevent="addRecipe">
+          <b-form>
             <b-form-group label="Recipe Name" label-for="recipe-name">
               <span v-if="!newRecipe.name" class="text-danger">* Required</span>
               <b-form-input id="recipe-name" v-model="newRecipe.name" required></b-form-input>
@@ -126,10 +126,34 @@
             <p> </p>
             <p> </p>
 
+            <!-- Ingredients Field with Dropdown and Checkboxes -->
             <b-form-group label="Ingredients">
-              <span v-if="!newRecipe.ingredients" class="text-danger">* Required</span>
-              <b-form-textarea v-model="newRecipe.ingredients" placeholder="List ingredients separated by commas" required></b-form-textarea>
+              <b-form-select
+                v-model="selectedIngredient"
+                :options="filteredIngredients"
+                @change="addIngredient"
+                :disabled="filteredIngredients.length === 0"
+                placeholder="Search ingredients..."
+              ></b-form-select>
             </b-form-group>
+
+            <!-- Selected Ingredients List -->
+            <div v-if="newRecipe.ingredients.length">
+              <p>Selected Ingredients:</p>
+              <b-list-group>
+                <b-list-group-item
+                  v-for="(ingredient, index) in newRecipe.ingredients"
+                  :key="ingredient._id"
+                >
+                  <b-form-checkbox
+                    v-model="ingredient.selected"
+                    @change="removeIngredient(ingredient)"
+                  >
+                    {{ ingredient.name }} - {{ ingredient.calories }} kcal
+                  </b-form-checkbox>
+                </b-list-group-item>
+              </b-list-group>
+            </div>
 
             <p> </p>
             <p> </p>
@@ -143,7 +167,7 @@
             <p> </p>
             <p> </p>
 
-            <b-button variant="primary" type="submit">Add the recipe</b-button>
+            <b-button variant="primary" @click="addNewRecipe">Add the recipe</b-button>
             <b-button variant="secondary" @click="showDiscardConfirmation = true">Discard changes</b-button>
           </b-form>
         </b-modal>
@@ -183,7 +207,7 @@ export default {
         prepTime: null,
         calories: null,
         description: '',
-        ingredients: ''
+        ingredients: []
       },
       mealCategories: [
         { value: '', text: 'None' },
@@ -191,7 +215,12 @@ export default {
         { value: 'Vegetarian', text: 'Vegetarian' },
         { value: 'Gluten-free', text: 'Gluten-free' },
         { value: 'High-protein', text: 'High-protein' }
-      ]
+      ],
+      ingredientsList: [], // List of all ingredients from the database
+      selectedIngredients: [], // The ingredients selected by the user
+      filteredIngredients: [],
+      selectedIngredient: null, // Used for dropdown selection
+      searchQuery: '' // User's search query for ingredients
     }
   },
   methods: {
@@ -216,25 +245,76 @@ export default {
         console.error('Error fetching user recipes:', error)
       }
     },
+    async fetchIngredients() {
+      try {
+        const response = await axios.get('http://localhost:3000/api/ingredients')
+        this.ingredientsList = response.data
+        // Populate the dropdown with available ingredients
+        this.filteredIngredients = this.ingredientsList.map((ingredient) => ({
+          value: ingredient._id,
+          text: `${ingredient.name} - ${ingredient.calories} kcal`
+        }))
+      } catch (error) {
+        console.error('Error fetching ingredients:', error)
+      }
+    },
+    // Add selected ingredient to the list
+    addIngredient() {
+      const selected = this.ingredientsList.find(
+        (ingredient) => ingredient._id === this.selectedIngredient
+      )
+
+      if (selected && !this.newRecipe.ingredients.some((ing) => ing._id === selected._id)) {
+        // Add the selected ingredient to the list, ensuring no duplicates
+        this.newRecipe.ingredients.push({
+          ...selected,
+          selected: true // Mark as selected
+        })
+        this.selectedIngredient = null // Reset dropdown
+      }
+    },
+
+    // Handle removing an ingredient
+    removeIngredient(ingredient) {
+      this.newRecipe.ingredients = this.newRecipe.ingredients.filter(
+        (ing) => ing._id !== ingredient._id
+      )
+    },
+
     // Add new recipe
-    async addRecipe() {
+    async addNewRecipe() {
       // const userId = localStorage.getItem('userId')
       const userId = '66f18ee5dc8b72b161275216'
-      if (!this.newRecipe.name || !this.newRecipe.ingredients || !this.newRecipe.meal_category) {
+
+      if (!this.newRecipe.name || !this.newRecipe.ingredients.length) {
         alert('Please fill in all required fields.')
         return
       }
+
+      console.log(`newRecipe is : ${this.newRecipe}`)
+
       try {
-        // Create the recipe
         const response = await axios.post('http://localhost:3000/api/recipes', {
           ...this.newRecipe,
           userMade: true // Set userMade to true for user-created recipes
         })
 
+        // Log the entire response object
+        console.log('Full response from API:', response)
+
+        const recipeId = response.data.newRecipe._id
+        console.log(`recipeId is: ${recipeId}`)
+
+        if (!recipeId) {
+          console.error('Failed to get recipeId from the response')
+          return
+        }
+
         // Add the created recipe ID to the user's list of recipes
-        const recipeId = response.data._id
+        const userRecipeResponse = await axios.get(`http://localhost:3000/api/users/${userId}`)
+        const userRecipeIds = userRecipeResponse.data.recipes
         await axios.patch(`http://localhost:3000/api/users/${userId}`, {
-          recipes: [...this.userRecipes.map(r => r._id), recipeId]
+          recipes: [...userRecipeIds, recipeId]
         })
 
         // Close the modal and clear the form
@@ -245,11 +325,8 @@ export default {
           prepTime: null,
           calories: null,
           description: '',
-          ingredients: ''
+          ingredients: [] // Clear the ingredients after submission
         }
-
-        // Fetch the updated list of user recipes
-        this.fetchUserRecipes()
       } catch (error) {
         console.error('Error adding recipe:', error)
       }
@@ -334,6 +411,7 @@ export default {
     if (this.isLoggedIn) {
       this.fetchUserRecipes()
     }
+    this.fetchIngredients()
   }
 }
 </script>
