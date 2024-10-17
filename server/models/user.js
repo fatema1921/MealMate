@@ -23,7 +23,9 @@ const userSchema = new Schema({
   },
   recipes: [{
     type: Schema.Types.ObjectId, ref: "Recipe"
-  }]
+  }],
+  calendar: {
+     type: Schema.Types.ObjectId, ref: "Calendar" }
 });
 
 module.exports = mongoose.model('User', userSchema);
