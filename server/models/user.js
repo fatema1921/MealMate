@@ -23,7 +23,7 @@ const userSchema = new Schema({
   },
   recipes: [{
     type: Schema.Types.ObjectId, ref: "Recipe"
-  }], 
+  }],
   shopping_list: [{
     type: Schema.Types.ObjectId, ref: "Ingredient"
   }]

@@ -2,65 +2,12 @@ const Recipe = require('../../models/recipe');
 const Ingredient = require('../../models/ingredient'); 
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
+const OAuth = require('oauth-1.0a');
+const crypto = require('crypto');
 
 // Import TheMealDB API 
 const express = require('express'); 
 const axios = require('axios');
-
-const apiKey = process.env.API_KEY
-
-// Fetch and save recipes from FatSecret API
-exports.fetchAndSaveRecipes = async (req, res, next) => {
-    try {
-        const query = req.query.search || 'chicken';  // Use a search term or default to "chicken"
-        const fatSecretApiKey = process.env.FATSECRET_API_KEY;
-        
-        // FatSecret API Endpoint for searching recipes
-        const fatSecretUrl = `https://platform.fatsecret.com/rest/server.api?method=recipe.search&search_expression=${query}&format=json&oauth_consumer_key=${fatSecretApiKey}`;
-
-        const response = await axios.get(fatSecretUrl);
-        const recipes = response.data.recipes.recipe;
-
-        if (!recipes || recipes.length === 0) {
-            return res.status(404).json({ message: "No recipes found" });
-        }
-
-        for (const recipeData of recipes) {
-            const recipeIngredients = [];
-
-            // Fetch ingredient details using FatSecret API
-            for (const ingredient of recipeData.ingredients) {
-                let savedIngredient = await Ingredient.findOne({ name: ingredient.food_name });
-                if (!savedIngredient) {
-                    savedIngredient = new Ingredient({
-                        name: ingredient.food_name,
-                        quantity: ingredient.food_description,
-                        calories: ingredient.food_calories || 0 // Save calories if available
-                    });
-                    await savedIngredient.save();
-                }
-                recipeIngredients.push(savedIngredient._id);
-            }
-
-            // Map FatSecret recipe to your schema
-            const newRecipe = new Recipe({
-                name: recipeData.recipe_name,
-                description: recipeData.recipe_description,
-                meal_category: recipeData.recipe_type || 'Other', // Choose an appropriate category if available
-                ingredients: recipeIngredients,
-                userMade: false  // External API recipes
-            });
-
-            await newRecipe.save();
-        }
-
-        res.status(200).json({ message: 'Recipes fetched and saved successfully' });
-    } catch (error) {
-        console.error('Error fetching data from FatSecret:', error);
-        res.status(500).json({ message: 'Error fetching recipes', error });
-    }
-};
-
 
 // Display all recipes with optional search and filtering
 exports.getAllRecipes = async (req, res, next) => {
@@ -75,7 +22,7 @@ exports.getAllRecipes = async (req, res, next) => {
 
         // Filter by meal category if provided
         if (category) {
-            query.meal_category = category; // Filter by category
+            query.meal_category = {$regex: category, $options: 'i' }; // Filter by category
         }
 
         // Fetch the recipes from the MongoDB
@@ -134,7 +81,9 @@ exports.createRecipe = async (req, res, next) => {
             name: req.body.name,
             description: req.body.description,
             meal_category: req.body.meal_category,
-            ingredients: req.body.ingredients 
+            ingredients: req.body.ingredients,
+            prepTime: req.body.prepTime || '0',
+            userMade: req.body.userMade || false
         });
 
         await newRecipe.save();
@@ -151,7 +100,9 @@ exports.updateRecipe = async (req, res, next) => {
             name: req.body.name,
             description: req.body.description,
             meal_category: req.body.meal_category,
-            ingredients: req.body.ingredients 
+            ingredients: req.body.ingredients,
+            prepTime: req.body.prepTime || '0',
+            userMade: req.body.userMade || false
         };
 
         const recipe = await Recipe.findByIdAndUpdate(req.params.id, updatedRecipe, { new: true }).populate('ingredients');
@@ -171,12 +122,13 @@ exports.deleteRecipe = async (req, res, next) => {
         if (!recipe) {
             return res.status(404).json({ message: "Recipe not found" });
         }
-        res.status(204).end();
+        res.status(204).json({message: "Recipe deleted."});
     } catch (error) {
         next(error);
     }
 };
 
+// Partial update of a recipe
 exports.patchRecipe = async (req, res, next) => {
     try {
         // Find the recipe by ID
@@ -225,11 +177,11 @@ exports.getIngredientById = async (req, res) => {
     }
 };
 
+// Add a specific ingredient to a specific recipe
 exports.addIngredientToRecipe = async (req, res) => {
-
-    const { recipeId, ingredientId } = req.params;
-
     try {
+        const { recipeId, ingredientId } = req.params;
+
         // Find the recipe by ID
         const recipe = await Recipe.findById(recipeId);
         if (!recipe) {
@@ -258,9 +210,9 @@ exports.addIngredientToRecipe = async (req, res) => {
 }
 
 exports.deleteIngredientById = async (req, res) => {
-    const { recipeId, ingredientId } = req.params;
-
     try {
+        const { recipeId, ingredientId } = req.params;
+        
         // Find the recipe by ID
         const recipe = await Recipe.findById(recipeId);
         if (!recipe) {
