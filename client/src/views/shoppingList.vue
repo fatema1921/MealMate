@@ -42,7 +42,7 @@ export default {
         this.shoppingList = ingredientsResponses.map(res => res.data);
       } catch (error) {
         console.error('Error fetching shopping list:', error);
-        this.message = 'Error fetching shopping list';
+        this.message = 'You must be logged in to access you shopping list';
       }
     },
     toggleChecked (ingredient){
