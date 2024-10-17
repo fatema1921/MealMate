@@ -472,12 +472,21 @@ export default {
       } catch (error) {
         console.error('Error updating shopping list:', error.response ? error.response.data : error.message)
       }
+    },
+    reloadComponent() {
+      this.$router.go() // Reloads the current route
     }
   },
   async created() {
     if (this.isLoggedIn) {
       await this.fetchSuggestedRecipes()
     }
+  },
+  mounted() {
+    window.addEventListener('authChange', this.reloadComponent)
+  },
+  beforeDestroy() {
+    window.removeEventListener('authChange', this.reloadComponent)
   },
   data() {
     return {
