@@ -191,7 +191,7 @@ import axios from 'axios'
 export default {
   data() {
     return {
-      isLoggedIn: true,
+      isLoggedIn: false,
       userRecipes: [],
       filteredRecipes: [],
       selectedFilter: 'all',

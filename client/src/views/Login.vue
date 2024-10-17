@@ -47,28 +47,28 @@ export default {
   },
   methods: {
     async login() {
-  try {
-    const response = await axios.post('http://localhost:3000/api/users/login', {
-      username: this.username,
-      password: this.password
-    });
+      try {
+        const response = await axios.post('http://localhost:3000/api/users/login', {
+          username: this.username,
+          password: this.password
+        });
 
-    if (response.status === 200) {
-      const user = response.data.user; // extracts the user object from the response data
-      localStorage.setItem('userId', user._id); // Store the userId in localstorage
-      alert('Login successful!');
-      window.dispatchEvent(new Event('authChange')); // Send event for button to switch on navbar
-      this.$router.push('/'); // Redirect to homepage
-    }
-  } catch (error) {
-    if (error.response && error.response.status === 401) {
-      this.unsuccessful = 'Invalid password';
-    } else if (error.response && error.response.status === 404) {
-      this.unsuccessful = 'User not found';
-    } else {
-      this.unsuccessful = 'An error occurred during login';
-    }
-  }
+        if (response.status === 200) {
+          const user = response.data.user; // extracts the user object from the response data
+          localStorage.setItem('userId', user._id); // Store the userId in localstorage
+          alert('Login successful!');
+          window.dispatchEvent(new Event('authChange')); // Send event for button to switch on navbar
+          this.$router.push('/'); // Redirect to homepage
+        }
+      } catch (error) {
+        if (error.response && error.response.status === 401) {
+          this.unsuccessful = 'Invalid password';
+        } else if (error.response && error.response.status === 404) {
+          this.unsuccessful = 'User not found';
+        } else {
+          this.unsuccessful = 'An error occurred during login';
+        }
+      }
     }
   }
 }
@@ -85,7 +85,7 @@ export default {
 
 .center {
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
