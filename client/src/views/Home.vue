@@ -490,7 +490,7 @@ export default {
         { value: 'Gluten-free', text: 'Gluten-free' },
         { value: 'High-protein', text: 'High-protein' }
       ],
-      isLoggedIn: true,
+      isLoggedIn: false,
       recipes: [],
       suggestedRecipes: [],
       showModal: false,
