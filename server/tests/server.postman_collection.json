@@ -407,11 +407,9 @@
 				"header": [],
 				"url": {
 					"raw": "{{host}}/api/recipes/{{recipe_id}}/ingredients/{{ingredient_id}}",
-					"protocol": "http",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "3001",
 					"path": [
 						"api",
 						"recipes",
@@ -444,11 +442,9 @@
 				"header": [],
 				"url": {
 					"raw": "{{host}}/api/recipes/ingredients/{{ingredient_id}}",
-					"protocol": "http",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "3001",
 					"path": [
 						"api",
 						"recipes",
@@ -490,11 +486,9 @@
 				"header": [],
 				"url": {
 					"raw": "{{host}}/api/recipes/{{recipe_id}}/ingredients/{{ingredient_id}}",
-					"protocol": "http",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "3001",
 					"path": [
 						"api",
 						"recipes",
