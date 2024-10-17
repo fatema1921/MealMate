@@ -406,7 +406,7 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3001/api/recipes/{{recipe_id}}/ingredients/{{ingredient_id}}",
+					"raw": "{{host}}/api/recipes/{{recipe_id}}/ingredients/{{ingredient_id}}",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -443,7 +443,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3001/api/recipes/ingredients/{{ingredient_id}}",
+					"raw": "{{host}}/api/recipes/ingredients/{{ingredient_id}}",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -489,7 +489,7 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3001/api/recipes/{{recipe_id}}/ingredients/{{ingredient_id}}",
+					"raw": "{{host}}/api/recipes/{{recipe_id}}/ingredients/{{ingredient_id}}",
 					"protocol": "http",
 					"host": [
 						"localhost"
