@@ -34,7 +34,8 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from 'axios'
+import { inject } from 'vue'
 
 export default {
   name: 'Login',
@@ -44,6 +45,10 @@ export default {
       password: '',
       unsuccessful: ''
     }
+  },
+  setup() {
+    const globalState = inject('globalState')
+    return { globalState }
   },
   methods: {
     async login() {
@@ -58,9 +63,11 @@ export default {
           localStorage.setItem('userId', user._id); // Store the userId in localstorage
           // alert('Login successful!');
           window.dispatchEvent(new Event('authChange')); // Send event for button to switch on navbar
+          this.globalState.isLoggedIn = true
           this.$router.push('/'); // Redirect to homepage
         }
       } catch (error) {
+        console.log(error.response ? error.response.data : error.message)
         if (error.response && error.response.status === 401) {
           this.unsuccessful = 'Invalid password';
         } else if (error.response && error.response.status === 404) {
