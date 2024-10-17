@@ -316,14 +316,11 @@ export default {
     async saveRecipe(recipeId) {
       try {
         // Get user ID from localStorage
-        // const userId = localStorage.getItem('userId')
-        /*
+        const userId = localStorage.getItem('userId')
         if (!userId) {
           console.error('User ID not found in localStorage.')
           return
         }
-        */
-        const userId = '66f18ee5dc8b72b161275216'
         // First, get the user's existing saved recipes
         const userResponse = await axios.get(`http://localhost:3000/api/users/${userId}`)
         const user = userResponse.data
@@ -365,8 +362,8 @@ export default {
     },
     async fetchSuggestedRecipes() {
       try {
-        // const userId = localStorage.getItem('userId')
-        const userId = '66f18ee5dc8b72b161275216'
+        const userId = localStorage.getItem('userId')
+        // const userId = '66f18ee5dc8b72b161275216'
         if (!userId) {
           console.error('User ID not found in localStorage.')
           return
@@ -443,8 +440,8 @@ export default {
         ingredient.shoppingList = !ingredient.shoppingList
         console.log(`New Checkbox status: ${ingredient.shoppingList}`)
 
-        // const userId = localStorage.getItem('userId')
-        const userId = '66f18ee5dc8b72b161275216'
+        const userId = localStorage.getItem('userId')
+        // const userId = '66f18ee5dc8b72b161275216'
 
         // Fetch the current shopping list
         const response = await axios.get(`http://localhost:3000/api/users/${userId}`)

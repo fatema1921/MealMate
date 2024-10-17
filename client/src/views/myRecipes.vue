@@ -226,8 +226,8 @@ export default {
   methods: {
     // Fetch all recipes associated with the user
     async fetchUserRecipes() {
-      // const userId = localStorage.getItem('userId')
-      const userId = '66f18ee5dc8b72b161275216'
+      const userId = localStorage.getItem('userId')
+      // const userId = '66f18ee5dc8b72b161275216'
       try {
         const response = await axios.get(`http://localhost:3000/api/users/${userId}`)
         const recipeIds = response.data.recipes
@@ -283,8 +283,8 @@ export default {
 
     // Add new recipe
     async addNewRecipe() {
-      // const userId = localStorage.getItem('userId')
-      const userId = '66f18ee5dc8b72b161275216'
+      const userId = localStorage.getItem('userId')
+      // const userId = '66f18ee5dc8b72b161275216'
 
       if (!this.newRecipe.name || !this.newRecipe.ingredients.length) {
         alert('Please fill in all required fields.')
@@ -368,8 +368,8 @@ export default {
         ingredient.shoppingList = !ingredient.shoppingList
         console.log(`New Checkbox status: ${ingredient.shoppingList}`)
 
-        // const userId = localStorage.getItem('userId')
-        const userId = '66f18ee5dc8b72b161275216'
+        const userId = localStorage.getItem('userId')
+        // const userId = '66f18ee5dc8b72b161275216'
 
         // Fetch the current shopping list
         const response = await axios.get(`http://localhost:3000/api/users/${userId}`)
