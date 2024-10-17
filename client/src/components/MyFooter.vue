@@ -10,11 +10,15 @@
         <a href="mailto:contact@mealmate.com" target="_blank" class="footer-icon">
           <i class="fas fa-envelope"></i> Email
         </a>
-      </b-col>
+      </b-col> <!-- This closing tag was missing -->
+    </b-row>
+    <b-row class="justify-content-center">
       <b-col cols="auto">
         <a href="https://github.com/yourrepo" target="_blank" class="footer-icon">
           <i class="fab fa-github"></i> GitHub
         </a>
+      </b-col>
+      <b-col cols="auto">
         <a href="https://instagram.com/yourpage" target="_blank" class="footer-icon">
           <i class="fab fa-instagram"></i> Instagram
         </a>
@@ -22,6 +26,7 @@
     </b-row>
   </b-container>
 </template>
+
 
 <script>
 export default {

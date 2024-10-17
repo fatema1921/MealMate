@@ -16,7 +16,7 @@ exports.getAllUsers = async (req, res, next) => {
 exports.getUser = async (req, res, next) => {
     try{
         const userID = req.params.id;
-        const user = await User.findById(userID); // är detta rätt, kollar vi upp geno id 
+        const user = await User.findById(userID); 
         if(!user){
             return res.status (404).json({"message": "User not found"});
         } 
@@ -75,6 +75,8 @@ exports.updateUser = async (req , res, next) => {
             password: req.body.password, 
             meal_category: req.body.meal_category, 
             preferences: req.body.preferences,
+            recipes: req.body.recipes,
+            shopping_list: req.body.shopping_list
         }; 
 
         const updatedUser = await User.findByIdAndUpdate(req.params.id, updateUser);
@@ -91,7 +93,7 @@ exports.updateUser = async (req , res, next) => {
 // Delete a user
 exports.deleteUser = async (req, res, next) => {
     try{
-        const user = await User.findByIdAndDelete(req.params.id); // Delete user by ID
+        const user = await User.findByIdAndDelete(req.params.id); // Delete user by userID
         if (!user) {
           return res.status(404).json({message: 'User not found' });
         }
@@ -100,8 +102,9 @@ exports.deleteUser = async (req, res, next) => {
         next(error);
     }
    
-  };
+};
 
+// Partial Update
 exports.patchUser = async (req, res, next) => {
     try {
         // Find user by ID

@@ -16,7 +16,7 @@ const userSchema = new Schema({
   },
 	meal_category: {
   	type: String,
-    enums: ["Vegan", "Vegetarian", "Gluten-free", "High-protein"],
+    enum: ["Vegan", "Vegetarian", "Gluten-free", "High-protein"],
   },
   preferences: {
   	type: String,
@@ -25,7 +25,10 @@ const userSchema = new Schema({
     type: Schema.Types.ObjectId, ref: "Recipe"
   }],
   calendar: {
-     type: Schema.Types.ObjectId, ref: "Calendar" }
+     type: Schema.Types.ObjectId, ref: "Calendar" },
+  shopping_list: [{
+    type: Schema.Types.ObjectId, ref: "Ingredient"
+  }]
 });
 
 module.exports = mongoose.model('User', userSchema);

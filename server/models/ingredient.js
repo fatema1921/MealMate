@@ -9,7 +9,7 @@ const ingredientSchema = new Schema({
     },
     calories: {
         type: Number,
-    },
+    }, 
     shopping_list: {
         type: Boolean
     }
