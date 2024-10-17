@@ -1,5 +1,5 @@
 <template>
-  <div class="shopping-list">
+  <div class="container shopping-list">
     <h2>Your Shopping List</h2>
     <ul>
       <li 
@@ -61,7 +61,7 @@ export default {
 <style scoped>
 
 .shopping-list {
-  max-width: 1000px;
+  max-width: 800px;
   margin: 50px auto;
   padding: 20px;
   background-color: #f8f9fa;
