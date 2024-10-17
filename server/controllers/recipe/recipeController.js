@@ -179,10 +179,9 @@ exports.getIngredientById = async (req, res) => {
 
 // Add a specific ingredient to a specific recipe
 exports.addIngredientToRecipe = async (req, res) => {
-
-    const { recipeId, ingredientId } = req.params;
-
     try {
+        const { recipeId, ingredientId } = req.params;
+
         // Find the recipe by ID
         const recipe = await Recipe.findById(recipeId);
         if (!recipe) {
@@ -211,9 +210,9 @@ exports.addIngredientToRecipe = async (req, res) => {
 }
 
 exports.deleteIngredientById = async (req, res) => {
-    const { recipeId, ingredientId } = req.params;
-
     try {
+        const { recipeId, ingredientId } = req.params;
+        
         // Find the recipe by ID
         const recipe = await Recipe.findById(recipeId);
         if (!recipe) {
