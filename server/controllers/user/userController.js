@@ -74,6 +74,8 @@ exports.updateUser = async (req , res, next) => {
             password: req.body.password, 
             meal_category: req.body.meal_category, 
             preferences: req.body.preferences,
+            recipes: req.body.recipes,
+            shopping_list: req.body.shopping_list
         }; 
 
         const updatedUser = await User.findByIdAndUpdate(req.params.id, updateUser);
@@ -99,8 +101,9 @@ exports.deleteUser = async (req, res, next) => {
         next(error);
     }
    
-  };
+};
 
+// Partial Update
 exports.patchUser = async (req, res, next) => {
     try {
         // Find user by ID

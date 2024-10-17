@@ -406,12 +406,10 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3001/api/recipes/{{recipe_id}}/ingredients/{{ingredient_id}}",
-					"protocol": "http",
+					"raw": "{{host}}/api/recipes/{{recipe_id}}/ingredients/{{ingredient_id}}",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "3001",
 					"path": [
 						"api",
 						"recipes",
@@ -443,12 +441,10 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3001/api/recipes/ingredients/{{ingredient_id}}",
-					"protocol": "http",
+					"raw": "{{host}}/api/recipes/ingredients/{{ingredient_id}}",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "3001",
 					"path": [
 						"api",
 						"recipes",
@@ -489,12 +485,10 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3001/api/recipes/{{recipe_id}}/ingredients/{{ingredient_id}}",
-					"protocol": "http",
+					"raw": "{{host}}/api/recipes/{{recipe_id}}/ingredients/{{ingredient_id}}",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "3001",
 					"path": [
 						"api",
 						"recipes",

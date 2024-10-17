@@ -2,7 +2,9 @@
   <div id="app" class="d-flex flex-column min-vh-100">
     <!-- Navbar -->
     <b-navbar toggleable="lg" class="navbar-custom justify-content-end">
-      <b-navbar-brand to="/" exact>MealMate</b-navbar-brand>      
+      <RouterLink to ="/">
+        <b-navbar-brand href="#">MealMate</b-navbar-brand>
+      </RouterLink>
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav class="ml-auto">
