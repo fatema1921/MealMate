@@ -2,10 +2,16 @@
   <div class="shopping-list">
     <h2>Your Shopping List</h2>
     <ul>
-      <li v-for="ingredient in shoppingList" :key="ingredient._id">
-        {{ ingredient.name }}
+      <li 
+      v-for="ingredient in shoppingList" 
+      :key="ingredient._id"
+      :class=" {checked: ingredient.checked}"
+      @click="toggleChecked(ingredient)">
+
+          {{ ingredient.name }}
       </li>
     </ul>
+
     <div v-if="message" class="message">{{ message }}</div>
   </div>
 </template>
@@ -38,11 +44,62 @@ export default {
         console.error('Error fetching shopping list:', error);
         this.message = 'Error fetching shopping list';
       }
-    }
+    },
+    toggleChecked (ingredient){
+    ingredient.checked = !ingredient.checked;
+  }
   },
+ 
 
   mounted (){
       this.fetchShoppingList();
     }
 };
 </script>
+
+
+<style scoped>
+
+.shopping-list {
+  max-width: 1000px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  font-family: 'Arial', sans-serif;
+}
+
+.shopping-list h2 {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 10px;
+}
+
+ul{
+  list-style-type: none; 
+  padding: 0; 
+  margin: 0; 
+}
+
+li {
+  cursor: pointer; 
+  padding: 12px 8px 12px 40px; 
+  background: #eee; 
+  font-size: 18px; 
+  transition: 0.2s; /* Transition effect */
+}
+
+li:hover{
+  background: #ddd; 
+}
+li.checked {
+  background: #888;
+  color: #fff; 
+  text-decoration: line-through; 
+
+}
+
+</style>
