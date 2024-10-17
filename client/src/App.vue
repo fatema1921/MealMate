@@ -33,7 +33,8 @@
 </template>
 
 <script>
-import MyFooter from './components/MyFooter.vue';
+import MyFooter from './components/MyFooter.vue'
+import { inject } from 'vue'
 
 export default {
   name: 'App',
@@ -43,9 +44,12 @@ export default {
   data() {
     return {
       loggedIn: false // Initialize from localStorage
-    };
+    }
   },
-  // Console logging for debugging
+  setup() {
+    const globalState = inject('globalState')
+    return { globalState }
+  },
   methods: {
     isLoggedIn() {
       const loggedIn = !!localStorage.getItem('userId'); // Converts the value into a boolean
@@ -56,7 +60,7 @@ export default {
       if (this.isLoggedIn()) {
         console.log('Signing out');
         localStorage.removeItem('userId'); // removes the localStorage key & value
-        alert('You have been signed out!');
+        // alert('You have been signed out!');
         this.loggedIn = false; // Update loggedIn status
         this.$router.push('/');
       } else {
@@ -73,7 +77,7 @@ export default {
     this.loggedIn = this.isLoggedIn(); // Set initial login state
     window.addEventListener('authChange', this.updateLoggedInState);
   },
-  beforeDestroy() {
+  beforeUnmount() {
     window.removeEventListener('authChange', this.updateLoggedInState);
   }
 }

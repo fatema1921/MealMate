@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="isLoggedIn">
+    <div v-if="globalState.isLoggedIn">
       <!-- If the user is logged in, show personalized home page -->
       <b-container fluid>
         <h1 class="display-5 fw-bold">Welcome Back!</h1>
@@ -309,6 +309,7 @@
 <script>
 import Searchbox from '../components/Searchbox.vue'
 import axios from 'axios'
+import { inject } from 'vue'
 
 export default {
   name: 'home',
@@ -472,12 +473,23 @@ export default {
       } catch (error) {
         console.error('Error updating shopping list:', error.response ? error.response.data : error.message)
       }
+    },
+    checkLoginStatus() {
+      this.$router.go() // Reload the component to reflect the new state
     }
   },
   async created() {
-    if (this.isLoggedIn) {
-      await this.fetchSuggestedRecipes()
-    }
+    await this.fetchSuggestedRecipes()
+  },
+  mounted() {
+    window.addEventListener('authChange', this.checkLoginStatus)
+  },
+  beforeUnmount() {
+    window.removeEventListener('authChange', this.checkLoginStatus)
+  },
+  setup() {
+    const globalState = inject('globalState')
+    return { globalState }
   },
   data() {
     return {
@@ -490,7 +502,7 @@ export default {
         { value: 'Gluten-free', text: 'Gluten-free' },
         { value: 'High-protein', text: 'High-protein' }
       ],
-      isLoggedIn: false,
+      // isLoggedIn: this.$isLoggedIn,
       recipes: [],
       suggestedRecipes: [],
       showModal: false,
