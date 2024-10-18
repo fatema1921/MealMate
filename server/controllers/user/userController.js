@@ -1,4 +1,5 @@
 const User = require('../../models/user');
+const Calendar = require('../../models/calendar');
 
 // Display all users 
 exports.getAllUsers = async (req, res, next) => {

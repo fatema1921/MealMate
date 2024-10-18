@@ -35,6 +35,7 @@
           <button id="buttonRegister" @click="register" class="btn btn-warning btn-lg">Register</button>
           <router-link to="/login" class="btn btn-secondary btn-lg" style="margin-left: 10px;">Back to Login</router-link>
         </div>
+        <p v-if="registrationError" class="text-danger">{{ registrationError }}</p>
       </div>
     </div>
   </div>
@@ -64,16 +65,34 @@ export default {
       }
 
       try {
-        const response = await axios.post('http://localhost:3000/api/users', {
+        // first API call to create user
+        const userResponse = await axios.post('http://localhost:3000/api/users', {
           name: this.name,
           username: this.username,
           password: this.password,
           meal_category: this.meal_category,
           preferences: this.preferences
         });
-        console.log('Registration successful:', response);
-        alert('Registration successful! You can now log in.');
-        this.$router.push('/login');
+
+        console.log('User created:', userResponse.data); // For debugging
+        const userId = userResponse.data.newUser._id;
+        localStorage.setItem('userId', userId); // Store the user ID in local storage
+
+        // scond API call to create calendar for the user
+        const calendarResponse = await axios.post('http://localhost:3000/api/calendars', {
+          name: 'My Calendar',
+          user: userId,
+          meals: []
+        });
+
+        const calendarId = calendarResponse.data.calendar._id;
+        // update the user with the calendarId
+        await axios.patch(`http://localhost:3000/api/users/${userId}`, {
+          calendar: calendarId,
+        });
+        localStorage.setItem('calendarId', calendarId); // Store the calendarId in localstorage
+        console.log('Registration successful:', userResponse);
+        this.$router.push('/login'); // Redirect to login after successful registration
       } catch (error) {
         console.error('Registration error:', error);
         this.registrationError = "Registration failed. Try again.";

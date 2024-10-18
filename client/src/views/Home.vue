@@ -307,7 +307,7 @@
 </template>
 
 <script>
-import Searchbox from '../components/Searchbox.vue'
+import Searchbox from '../components/searchbox.vue'
 import axios from 'axios'
 import { inject } from 'vue'
 
