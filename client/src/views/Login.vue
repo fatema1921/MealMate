@@ -34,7 +34,8 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from 'axios'
+import { inject } from 'vue'
 
 export default {
   name: 'Login',
@@ -44,6 +45,10 @@ export default {
       password: '',
       unsuccessful: ''
     }
+  },
+  setup() {
+    const globalState = inject('globalState')
+    return { globalState }
   },
   methods: {
   async login() {
