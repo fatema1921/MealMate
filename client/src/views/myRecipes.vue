@@ -81,7 +81,7 @@
             <!-- Ingredients Section -->
             <h5>Ingredients</h5>
             <div class="ingredients-list">
-              <b-row v-for="(ingredient, index) in selectedRecipe.ingredients" :key="ingredient._id" class="align-items-center mb-2">
+              <b-row v-for="(ingredient) in selectedRecipe.ingredients" :key="ingredient._id" class="align-items-center mb-2">
                 <b-col cols="1">
                   <b-form-checkbox
                     @change="updateShoppingList(ingredient)"
@@ -142,7 +142,7 @@
               <p>Selected Ingredients:</p>
               <b-list-group>
                 <b-list-group-item
-                  v-for="(ingredient, index) in newRecipe.ingredients"
+                  v-for="(ingredient) in newRecipe.ingredients"
                   :key="ingredient._id"
                 >
                   <b-form-checkbox
