@@ -7,10 +7,13 @@
       <h1>Meal Planner</h1>
       <p>Plan your meals here.</p>
       
-      <!-- "Create a Meal" Button -->
+      <!-- Create a Meal -->
       <b-button variant="primary" @click="showModal = true">Create a Meal</b-button>
 
-      <!-- Calendar View -->
+      <!-- Show My Meals -->
+      <b-button variant="secondary" @click="getMeals">Show My Meals</b-button>
+
+      <!-- Calendar -->
       <v-calendar
         v-model="selectedDate"
         :attributes="calendarEvents"
@@ -36,7 +39,7 @@
           <b-form-group label="Select Recipe" label-for="recipe-select">
             <b-form-select
               id="recipe-select"
-              v-model="mealForm.recipe"
+              v-model="mealForm.recipeId"
               :options="recipes"
               required
             ></b-form-select>
@@ -66,11 +69,12 @@ export default {
       showModal: false, // Controls modal visibility
       mealForm: {
         name: '',
-        recipe: '',
+        recipeId: '',
         date: '',
       },
       recipes: [], // Array to hold the user's recipes with recipe names
-      next7Days: [] // Array to hold the upcoming 7 days for the date picker
+      next7Days: [], // Array to hold the upcoming 7 days for the date picker
+      meals: [], // Array to store fetched meals
     };
   },
   methods: {
@@ -79,29 +83,44 @@ export default {
         try {
           const userResponse = await axios.get(`http://localhost:3000/api/users/${this.userId}`);
           const calendarId = userResponse.data.calendar;
+
           const calendarResponse = await axios.get(`http://localhost:3000/api/calendars/${calendarId}`);
-          this.calendarEvents = calendarResponse.data.meals;
+          console.log('Full Calendar Response:', calendarResponse.data);
+
+          if (calendarResponse.data.calendar && Array.isArray(calendarResponse.data.calendar.meals)) {
+            const mealIds = calendarResponse.data.calendar.meals;
+
+            const mealRequests = mealIds.map(mealId => axios.get(`http://localhost:3000/api/meals/${mealId}`));
+            const mealResponses = await Promise.all(mealRequests);
+            
+            console.log('Meal Responses:', mealResponses);
+
+            this.calendarEvents = mealResponses.map(response => ({
+              start: response.data.date, // Ensure this is a valid date format
+              title: response.data.name || "Unnamed Meal", // Use meal name or fallback
+            }));
+          } else {
+            console.log('No meals found for this calendar.');
+            this.calendarEvents = [];
+          }
         } catch (error) {
-          console.error('Error fetching calendar:', error);
+          console.error('Error getting calendar:', error);
         }
       }
     },
-    async fetchUserRecipes() {
+    async getUserRecipes() {
       try {
-        // Step 1: Get the user's recipe IDs from the User model
         const userResponse = await axios.get(`http://localhost:3000/api/users/${this.userId}`);
         const recipeIds = userResponse.data.recipes;
 
-        // Step 2: For each recipeId, make a GET request to retrieve the recipe details
         const recipePromises = recipeIds.map(async (recipeId) => {
           const recipeResponse = await axios.get(`http://localhost:3000/api/recipes/${recipeId}`);
           return { value: recipeId, text: recipeResponse.data.name };
         });
 
-        // Step 3: Wait for all recipe requests to complete and set the recipes array
         this.recipes = await Promise.all(recipePromises);
       } catch (error) {
-        console.error('Error fetching recipes:', error);
+        console.error('Error getting recipes:', error);
       }
     },
     getNext7Days() {
@@ -118,35 +137,40 @@ export default {
       this.next7Days = days;
     },
     async submitMealForm() {
-      const { name, recipe, date } = this.mealForm;
+      const { name, recipeId, date } = this.mealForm;
 
       try {
-        // Step 1: Create the meal
-        const createMealResponse = await axios.post("http://localhost:3000/api/meals", {
-          name,
-          recipe,
-        });
-        const mealId = createMealResponse.data._id;
+        console.log('Creating meal with data:', { name, recipeId, date });
 
-        // Step 2: Add the meal to the user's calendar for the selected date
-        const calendarId = localStorage.getItem("calendarId"); // Assuming calendar ID is stored
+        const mealData = { name, recipeId, date };
+        const createMealResponse = await axios.post('http://localhost:3000/api/meals', mealData);
+
+        console.log('Meal creation response:', createMealResponse.data);
+        const mealId = createMealResponse.data.meal._id;
+
+        const calendarId = localStorage.getItem("calendarId");
+        console.log('Calendar ID:', calendarId);
+
         await axios.post(`http://localhost:3000/api/calendars/${calendarId}/meals/${mealId}`, { date });
 
         this.$bvToast.toast("Meal added to your calendar!", { variant: "success" });
         this.showModal = false;
-        this.getCalendar(); // Refresh calendar events after adding the meal
+
+        // Refresh calendar events
+        await this.getCalendar();
       } catch (error) {
+        console.error('Error details:', error.response ? error.response.data : error.message);
         this.$bvToast.toast("Error adding meal to calendar.", { variant: "danger" });
       }
-    }
+    },
   },
   mounted() {
     if (this.isLoggedIn) {
-      this.getCalendar(); // Fetch calendar events if the user is logged in
-      this.fetchUserRecipes(); // Fetch user's recipes
+      this.getCalendar(); // get calendar events if the user is logged in
+      this.getUserRecipes(); // get user's recipes
       this.getNext7Days(); // Generate the next 7 days for date picker
     }
-  }
+  },
 };
 </script>
 
