@@ -3,9 +3,9 @@
     <h1>My Recipes</h1>
 
     <!-- If user is not logged in, show login message -->
-    <!-- <div v-if="!isLoggedIn">
+    <div v-if="!(globalState.isLoggedIn)">
       <p class="text-center">Please log in to see your recipes.</p>
-    </div> -->
+    </div>
 
     <!-- If user is logged in, show the recipes interface -->
     <div>
@@ -187,11 +187,12 @@
 
 <script>
 import axios from 'axios'
+import { inject } from 'vue'
 
 export default {
   data() {
     return {
-      isLoggedIn: false,
+      // isLoggedIn: this.$isLoggedIn,
       userRecipes: [],
       filteredRecipes: [],
       selectedFilter: 'all',
@@ -400,6 +401,9 @@ export default {
       } catch (error) {
         console.error('Error updating shopping list:', error.response ? error.response.data : error.message)
       }
+    },
+    checkLoginStatus() {
+      this.$router.go() // Reload the component to reflect the new state
     }
   },
   watch: {
@@ -408,10 +412,18 @@ export default {
     }
   },
   created() {
-    if (this.isLoggedIn) {
-      this.fetchUserRecipes()
-    }
+    this.fetchUserRecipes()
     this.fetchIngredients()
+  },
+  mounted() {
+    window.addEventListener('authChange', this.checkLoginStatus)
+  },
+  beforeUnmount() {
+    window.removeEventListener('authChange', this.checkLoginStatus)
+  },
+  setup() {
+    const globalState = inject('globalState')
+    return { globalState }
   }
 }
 </script>
