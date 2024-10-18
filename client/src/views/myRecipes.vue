@@ -3,12 +3,12 @@
     <h1>My Recipes</h1>
 
     <!-- If user is not logged in, show login message -->
-    <div v-if="!isLoggedIn">
+    <!-- <div v-if="!isLoggedIn">
       <p class="text-center">Please log in to see your recipes.</p>
-    </div>
+    </div> -->
 
     <!-- If user is logged in, show the recipes interface -->
-    <div v-else>
+    <div>
       <!-- Create a New Recipe Button -->
       <b-container fluid>
         <b-button variant="primary" @click="showCreateRecipeModal = true">

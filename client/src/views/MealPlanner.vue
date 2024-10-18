@@ -6,7 +6,7 @@
     <b-container>
       <h1>Meal Planner</h1>
       <p>Plan your meals here.</p>
-      
+
       <!-- Create a Meal -->
       <b-button variant="primary" @click="showModal = true">Create a Meal</b-button>
 
@@ -16,10 +16,9 @@
       <!-- Calendar -->
       <v-calendar
         v-model="selectedDate"
-        :attributes="calendarEvents"
+        :events="calendarEvents"
         view="weekly"
         :first-day-of-week="1"
-        :events="calendarEvents"
       />
 
       <!-- Modal for Creating a Meal -->
@@ -52,6 +51,19 @@
           </b-form-group>
         </b-form>
       </b-modal>
+
+      <!-- Display Meals -->
+      <div v-if="meals.length">
+        <h3>My Meals</h3>
+        <ul>
+          <li v-for="meal in meals" :key="meal._id">
+            {{ meal.name }} - {{ new Date(meal.date).toLocaleDateString() }}
+          </li>
+        </ul>
+      </div>
+      <div v-else>
+        <p>No meals found.</p>
+      </div>
     </b-container>
   </div>
 </template>
@@ -78,6 +90,28 @@ export default {
     };
   },
   methods: {
+    async getMeals() {
+  try {
+    // Get user data to get the calendar ID
+    const userResponse = await axios.get(`http://localhost:3000/api/users/${this.userId}`);
+    const calendarId = userResponse.data.calendar;
+
+    // Get meals associated with that calendar
+    const response = await axios.get(`http://localhost:3000/api/calendars/${calendarId}`);
+    const mealIds = response.data.calendar.meals;
+
+    // Get each meal's details
+    const mealRequests = mealIds.map(mealId => axios.get(`http://localhost:3000/api/meals/${mealId}`));
+    const mealResponses = await Promise.all(mealRequests);
+
+    // Extract meal data
+    this.meals = mealResponses.map(res => res.data.meal);
+    
+    console.log('Fetched Meals:', this.meals); // Log the fetched meals
+  } catch (error) {
+    console.error('Error fetching meals:', error);
+  }
+},
     async getCalendar() {
       if (this.userId) {
         try {
@@ -92,13 +126,20 @@ export default {
 
             const mealRequests = mealIds.map(mealId => axios.get(`http://localhost:3000/api/meals/${mealId}`));
             const mealResponses = await Promise.all(mealRequests);
-            
+
             console.log('Meal Responses:', mealResponses);
 
-            this.calendarEvents = mealResponses.map(response => ({
-              start: response.data.date, // Ensure this is a valid date format
-              title: response.data.name || "Unnamed Meal", // Use meal name or fallback
-            }));
+            this.calendarEvents = mealResponses.map(response => {
+              const meal = response.data.meal; // Ensure you're accessing `meal` from the response
+              const mealDate = meal.date ? new Date(meal.date) : null; // Handle null dates
+
+              return {
+                start: mealDate && !isNaN(mealDate.getTime()) ? mealDate : 'Invalid Date',
+                title: meal.name || "Unnamed Meal",
+              };
+            });
+
+            console.log('Calendar Events:', this.calendarEvents); // Debug calendar events
           } else {
             console.log('No meals found for this calendar.');
             this.calendarEvents = [];

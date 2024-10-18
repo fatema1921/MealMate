@@ -10,6 +10,9 @@ const mealSchema = new Schema({
     recipe: {
         type: Schema.Types.ObjectId, ref: "Recipe",
         required: true
+    },
+    date: {
+        type: Date
     }
 });
 
