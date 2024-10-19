@@ -34,7 +34,10 @@ exports.createUser = async (req , res, next) => {
             username: req.body.username, 
             password : req.body.password, 
             meal_category: req.body.meal_category, 
-            preferences: req.body.preferences
+            preferences: req.body.preferences,
+            recipes: req.body.recipes, 
+            calendar: req.body.calendar, 
+            shopping_list: req.body.shopping_list
         }); 
     
         await newUser.save(); 
