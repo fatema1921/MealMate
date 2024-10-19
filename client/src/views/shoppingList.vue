@@ -47,6 +47,26 @@ export default {
     },
     toggleChecked(ingredient) {
       ingredient.checked = !ingredient.checked
+      if(ingredient.checked){
+        this.removeFromList(ingredient)
+      }
+      }, 
+
+      async removeFromList (ingredient) {
+        const userId = localStorage.getItem('userId')
+
+        try {
+          this.shoppingList = this.shoppingList.filter(item => item._id !== ingredient._id)
+
+          const updatedIngredientIds = this.shoppingList.map(item => item._id)
+          await axios.patch(`http://localhost:3000/api/users/${userId}`, {
+          shopping_list: updatedIngredientIds
+          })
+
+        } catch (error) {
+        console.error('Error removing ingredient from shopping list:', error)
+        this.message = 'Error occurred while trying to remove the ingredient.'
+      }
     }
   },
 
