@@ -62,6 +62,7 @@ export default {
         localStorage.removeItem('userId') // removes the localStorage key & value
         localStorage.removeItem('calendarId') // removes the localStorage key & value
         this.loggedIn = false // Update loggedIn status
+        this.globalState.isLoggedIn = false
         this.$router.push('/')
       } else {
         console.log('Redirecting to login')
