@@ -483,7 +483,7 @@ b-container {
 }
 
 .b-card:hover {
-  background-color: var(--footer-bg-color); /* Example: change the background color on hover */
+  background-color: var(--button-color); /* Example: change the background color on hover */
   transition: background-color 0.3s ease; /* Smooth transition */
   cursor: pointer;
 }

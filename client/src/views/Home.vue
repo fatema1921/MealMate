@@ -32,7 +32,21 @@
       <!-- Suggested Recipes for User -->
       <b-container fluid class="mt-4" v-if="suggestedRecipes.length && !recipes.length && !searchQuery && !errorMessage">
         <h3>Suggested recipes for you:</h3>
-
+        <!-- Toggle between Grid and List view -->
+        <b-row class="d-flex justify-content-center mb-3">
+          <b-col md="4">
+            <b-button-group class="view-toggle" block>
+              <b-button
+                :class="['toggle-btn', { active: viewMode === 'grid' }]"
+                @click="viewMode = 'grid'"
+              >Grid</b-button>
+              <b-button
+                :class="['toggle-btn', { active: viewMode === 'list' }]"
+                @click="viewMode = 'list'"
+              >List</b-button>
+            </b-button-group>
+          </b-col>
+        </b-row>
         <!-- Display Suggested Recipes -->
         <div v-if="viewMode === 'grid'">
           <b-row>
@@ -54,10 +68,74 @@
             </b-list-group-item>
           </b-list-group>
         </div>
+
+        <!-- Recipe Details Modal -->
+        <b-modal
+          v-model="showModal"
+          title="Recipe Details"
+          hide-footer
+          @hide="closeModal"
+          size="lg"
+        >
+          <div v-if="selectedRecipe">
+            <h4>{{ selectedRecipe.name }}</h4>
+
+            <!-- Note for User -->
+            <p class="text-muted mb-3">
+              Note: Checking the box next to each ingredient adds it to your shopping list.
+            </p>
+
+            <!-- Ingredients Section -->
+            <h5>Ingredients</h5>
+            <div class="ingredients-list">
+              <b-row
+                v-for="(ingredient) in selectedRecipe.ingredients"
+                :key="ingredient._id"
+                class="align-items-center mb-2"
+              >
+                <b-col cols="1">
+                  <b-form-checkbox
+                    @change="updateShoppingList(ingredient)"
+                  ></b-form-checkbox>
+                </b-col>
+                <b-col>
+                  {{ ingredient.name }} - {{ ingredient.calories }} kcal
+                </b-col>
+              </b-row>
+            </div>
+
+            <!-- Description Section -->
+            <h5 class="mt-4">Description</h5>
+            <p>{{ selectedRecipe.description }}</p>
+            <b-button variant="primary" @click="saveRecipe(selectedRecipe._id)">
+              Save Recipe
+            </b-button>
+            <!-- Success Alert -->
+            <b-alert
+              v-model="showSuccessAlert"
+              variant="success"
+              dismissible
+              fade
+              class="mt-3"
+            >
+              {{ successMessage }}
+            </b-alert>
+            <!-- Already Saved Alert -->
+            <b-alert
+              v-model="showAlreadySavedAlert"
+              variant="warning"
+              dismissible
+              fade
+              class="mt-3"
+            >
+              {{ alreadySavedMessage }}
+            </b-alert>
+          </div>
+        </b-modal>
       </b-container>
 
       <!-- Recipe Results -->
-      <b-container fluid class="mt-4" v-if="recipes.length && !errorMessage">
+      <b-container fluid class="mt-4" v-if="(recipes.length && !errorMessage)">
         <h3>Search Results:</h3>
 
         <!-- Toggle between Grid and List view -->
@@ -586,7 +664,7 @@ body {
 }
 
 .b-card:hover {
-  background-color: var(--footer-bg-color); /* Example: change the background color on hover */
+  background-color: var(--button-color); /* Example: change the background color on hover */
   transition: background-color 0.3s ease; /* Smooth transition */
   cursor: pointer;
 }
