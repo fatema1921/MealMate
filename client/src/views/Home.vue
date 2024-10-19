@@ -37,7 +37,7 @@
         <div v-if="viewMode === 'grid'">
           <b-row>
             <b-col v-for="recipe in suggestedRecipes" :key="recipe._id" md="4" class="mb-3">
-              <b-card :title="recipe.name" class="text-center" @click="showRecipeDetails(recipe)">
+              <b-card :title="recipe.name" class="text-center b-card" @click="showRecipeDetails(recipe)">
               </b-card>
             </b-col>
           </b-row>
@@ -47,7 +47,7 @@
             <b-list-group-item
               v-for="recipe in suggestedRecipes"
               :key="recipe._id"
-              class="d-flex justify-content-between align-items-center"
+              class="d-flex justify-content-between align-items-center b-card"
               @click="showRecipeDetails(recipe)"
             >
               <h5 class="mb-0">{{ recipe.name }}</h5>
@@ -82,7 +82,7 @@
             <b-col v-for="recipe in recipes" :key="recipe._id" md="4" class="mb-3">
               <b-card
                 :title="recipe.name"
-                class="text-center"
+                class="text-center b-card"
                 @click="showRecipeDetails(recipe)"
               >
               </b-card>
@@ -94,7 +94,7 @@
             <b-list-group-item
               v-for="recipe in recipes"
               :key="recipe._id"
-              class="d-flex justify-content-between align-items-center"
+              class="d-flex justify-content-between align-items-center b-card"
               @click="showRecipeDetails(recipe)"
             >
               <h5 class="mb-0">{{ recipe.name }}</h5>
@@ -583,5 +583,11 @@ body {
   background-color: var(--button-color);
   border-color: var(--button-color);
   color: #161515;
+}
+
+.b-card:hover {
+  background-color: var(--footer-bg-color); /* Example: change the background color on hover */
+  transition: background-color 0.3s ease; /* Smooth transition */
+  cursor: pointer;
 }
 </style>
