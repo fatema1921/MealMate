@@ -122,7 +122,7 @@
             <h5>Ingredients</h5>
             <div class="ingredients-list">
               <b-row
-                v-for="(ingredient, index) in selectedRecipe.ingredients"
+                v-for="(ingredient) in selectedRecipe.ingredients"
                 :key="ingredient._id"
                 class="align-items-center mb-2"
               >
@@ -264,7 +264,7 @@
             <h5>Ingredients</h5>
             <div class="ingredients-list">
               <b-row
-                v-for="(ingredient, index) in selectedRecipe.ingredients"
+                v-for="(ingredient) in selectedRecipe.ingredients"
                 :key="ingredient._id"
                 class="align-items-center mb-2"
               >
