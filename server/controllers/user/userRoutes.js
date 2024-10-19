@@ -4,6 +4,7 @@ const userController = require('./userController'); // Import the user controlle
 
 // Define user routes
 router.get('/', userController.getAllUsers); // Get all users
+router.delete('/', userController.deleteAllUser); // Delete all users in the database 
 router.get('/:id', userController.getUser); // Get a single user by ID
 router.post('/', userController.createUser); // Create a new user
 router.post('/login', userController.loginUser); // Login user

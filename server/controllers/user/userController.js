@@ -129,4 +129,15 @@ exports.patchUser = async (req, res, next) => {
 };
 
 
+// Delete all user
+exports.deleteAllUser = async (req, res, next) => {
+    try{
+        const deleteUsers = await User.deleteMany();
+        res.status(200).json ({message: 'All users deleted'})
+    } catch (error){
+        next(error);
+    }
+};
+
+
 
