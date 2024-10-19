@@ -4,8 +4,8 @@ import App from './App.vue'
 import router from './router'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue-next/dist/bootstrap-vue-next.css'
-import VCalendar from 'v-calendar';
-import 'v-calendar/style.css';
+import VCalendar from 'v-calendar'
+import 'v-calendar/style.css'
 
 const app = createApp(App)
 const globalState = reactive({

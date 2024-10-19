@@ -51,44 +51,44 @@ export default {
     return { globalState }
   },
   methods: {
-  async login() {
-    try {
-      const response = await axios.post('http://localhost:3000/api/users/login', {
-        username: this.username,
-        password: this.password
-      });
+    async login() {
+      try {
+        const response = await axios.post('http://localhost:3000/api/users/login', {
+          username: this.username,
+          password: this.password
+        })
 
-      if (response.status === 200) {
-        const user = response.data.user; // Extract the user object
-        localStorage.setItem('userId', user._id); // Store the userId in local storage
+        if (response.status === 200) {
+          const user = response.data.user // Extract the user object
+          localStorage.setItem('userId', user._id) // Store the userId in local storage
 
-        // get user to store the calendar id
-        const userDetailsResponse = await axios.get(`http://localhost:3000/api/users/${user._id}`, {
-          headers: {
-            'Cache-Control': 'no-cache',  // Got 304 errors so tried this and it solved it. Worked also to manually clear cache
-            'Pragma': 'no-cache',
-            'Expires': '0'
+          // get user to store the calendar id
+          const userDetailsResponse = await axios.get(`http://localhost:3000/api/users/${user._id}`, {
+            headers: {
+              'Cache-Control': 'no-cache', // Got 304 errors so tried this and it solved it. Worked also to manually clear cache
+              Pragma: 'no-cache',
+              Expires: '0'
+            }
+          })
+
+          // store the calendarId
+          const calendarId = userDetailsResponse.data.calendar // access the calendarId
+          if (calendarId) {
+            localStorage.setItem('calendarId', calendarId) // Store the calendarId in local storage
           }
-        });
 
-        // store the calendarId
-        const calendarId = userDetailsResponse.data.calendar; // access the calendarId
-        if (calendarId) {
-          localStorage.setItem('calendarId', calendarId); // Store the calendarId in local storage
+          window.dispatchEvent(new Event('authChange')) // Send event for button to switch on navbar
+          this.$router.push('/') // Redirect to homepage
         }
+      } catch (error) {
+        console.error('Login error:', error) // Log the full error for debugging
 
-        window.dispatchEvent(new Event('authChange')); // Send event for button to switch on navbar
-        this.$router.push('/'); // Redirect to homepage
-      }
-    } catch (error) {
-      console.error('Login error:', error); // Log the full error for debugging
-
-      if (error.response && error.response.status === 401) {
-        this.unsuccessful = 'Invalid password';
-      } else if (error.response && error.response.status === 404) {
-        this.unsuccessful = 'User not found';
-      } else {
-        this.unsuccessful = error.message || 'An error occurred during login';
+        if (error.response && error.response.status === 401) {
+          this.unsuccessful = 'Invalid password'
+        } else if (error.response && error.response.status === 404) {
+          this.unsuccessful = 'User not found'
+        } else {
+          this.unsuccessful = error.message || 'An error occurred during login'
         }
       }
     }
@@ -107,7 +107,7 @@ export default {
 
 .center {
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }

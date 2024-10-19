@@ -2,8 +2,8 @@
   <div class="container shopping-list">
     <h2>Your Shopping List</h2>
     <ul>
-      <li 
-      v-for="ingredient in shoppingList" 
+      <li
+      v-for="ingredient in shoppingList"
       :key="ingredient._id"
       :class=" {checked: ingredient.checked}"
       @click="toggleChecked(ingredient)">
@@ -17,46 +17,44 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from 'axios'
 
 export default {
-  data(){
+  data() {
     return {
-      shoppingList: [ ], 
-      message: '', 
+      shoppingList: [],
+      message: ''
     }
   },
   methods: {
-    async fetchShoppingList (){
-      const userId = localStorage.getItem('userId'); 
+    async fetchShoppingList() {
+      const userId = localStorage.getItem('userId')
 
-      try{
-        const user = await axios.get(`http://localhost:3000/api/users/${userId}`);
-        const ingredientIds = user.data.shopping_list; 
+      try {
+        const user = await axios.get(`http://localhost:3000/api/users/${userId}`)
+        const ingredientIds = user.data.shopping_list
 
-        console.log (ingredientIds); 
+        console.log(ingredientIds)
+        // iterates thrugh each id in ingredientsId and applies the get function to each id
+        const ingredientPromises = ingredientIds.map(id => axios.get(`http://localhost:3000/api/ingredients/${id}`))
+        const ingredientsResponses = await Promise.all(ingredientPromises)
 
-        const ingredientPromises = ingredientIds.map(id => axios.get(`http://localhost:3000/api/ingredients/${id}`)); // iterates thrugh each id in ingredientsId and applies the get function to each id.  
-        const ingredientsResponses = await Promise.all(ingredientPromises);
-        
-        this.shoppingList = ingredientsResponses.map(res => res.data);
+        this.shoppingList = ingredientsResponses.map(res => res.data)
       } catch (error) {
-        console.error('Error fetching shopping list:', error);
-        this.message = 'You must be logged in to access you shopping list';
+        console.error('Error fetching shopping list:', error)
+        this.message = 'You must be logged in to access you shopping list'
       }
     },
-    toggleChecked (ingredient){
-    ingredient.checked = !ingredient.checked;
-  }
-  },
- 
-
-  mounted (){
-      this.fetchShoppingList();
+    toggleChecked(ingredient) {
+      ingredient.checked = !ingredient.checked
     }
-};
-</script>
+  },
 
+  mounted() {
+    this.fetchShoppingList()
+  }
+}
+</script>
 
 <style scoped>
 
@@ -79,28 +77,27 @@ export default {
 }
 
 ul{
-  list-style-type: none; 
-  padding: 0; 
-  margin: 0; 
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
 }
 
 li {
-  cursor: pointer; 
-  padding: 12px 8px 12px 40px; 
-  background: #eee; 
-  font-size: 18px; 
+  cursor: pointer;
+  padding: 12px 8px 12px 40px;
+  background: #eee;
+  font-size: 18px;
   transition: 0.2s; /* Transition effect */
 }
 
 li:hover{
-  background: #ddd; 
+  background: #ddd;
 }
 li.checked {
   background: #888;
-  color: #fff; 
-  text-decoration: line-through; 
+  color: #fff;
+  text-decoration: line-through;
 
 }
 
 </style>
-
