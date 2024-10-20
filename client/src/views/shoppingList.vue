@@ -10,7 +10,7 @@
 
           {{ ingredient.name }}
  
-          <!-- "X" button to remove the ingredient from the list -->
+          <!-- "x" button to remove the ingredient from the list -->
           <span class = "remove" @click="removeFromList(ingredient)"> x </span>
       </li>
     </ul>
@@ -43,6 +43,12 @@ export default {
         const ingredientsResponses = await Promise.all(ingredientPromises)
 
         this.shoppingList = ingredientsResponses.map(res => res.data)
+         // If the shopping list is empty
+         if (this.shoppingList.length === 0) {
+          this.message = 'Your shopping list is empty.'
+        } else {
+          this.message = ''
+        }
       } catch (error) {
         console.error('Error fetching shopping list:', error)
         this.message = 'You must be logged in to access you shopping list'

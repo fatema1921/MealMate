@@ -1,5 +1,6 @@
 <template>
   <div class="user-profile">
+    <div v-if="message" class="message">{{ message }}</div>
     <div v-if="editMode" class="edit-profile">
       <h1>Edit Profile</h1>
       
@@ -52,7 +53,6 @@
         <button class="btn btn-danger" @click="deleteProfile">Delete Profile</button>
       </div>
 
-      <div v-if="message" class="message">{{ message }}</div>
     </div>
   </div>
 </template>
@@ -99,11 +99,13 @@ export default {
     async saveChanges() {
       try {
         if (!this.user.password) {
+          // Send a PATCH request to update only the changed fields (partial update)
           await axios.patch(`http://localhost:3000/api/users/${this.userID}`, this.user)
-          this.message = 'Profile updated successfully (PATCH)!'
+          console.log('Profile updated successfully (PATCH)!')
         } else {
+          // If the user changes their password, send a PUT request to update all user data (including password)
           await axios.put(`http://localhost:3000/api/users/${this.userID}`, this.user)
-          this.message = 'Profile updated successfully (PUT)!'
+          console.log ('Profile updated successfully (PUT)!')
         }
 
         this.editMode = false
@@ -119,7 +121,7 @@ export default {
       if (confirm('Are you sure you want to delete your profile? This action cannot be undone.')) {
         try {
           await axios.delete(`http://localhost:3000/api/users/${this.userID}`)
-          this.message = 'Profile deleted successfully'
+          console.log ('Profile deleted successfully')
           // Redirect to a login after deletion
           this.$router.push('/login')
         } catch (error) {
@@ -129,12 +131,13 @@ export default {
     },
   },
   mounted() {
-    this.userID = localStorage.getItem('userId')
+    this.userID = localStorage.getItem('userId') // Get user id from localstorage
     console.log('Retrieved user ID:', this.userID) // Check what is retrieved
     if (this.userID) {
       this.fetchUserProfile()
     } else {
-      console.log('No user ID found in local storage. Make sure to be logged in.')
+      console.log('No user ID found in local storage. ')
+      this.message = 'Log in to see your user profile.'
     }
   }
 }
