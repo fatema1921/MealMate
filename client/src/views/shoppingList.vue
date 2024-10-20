@@ -1,14 +1,15 @@
 <template>
   <div class="container shopping-list">
     <h2>Your Shopping List</h2>
-    <ul>
-      <li
+    <ul id = "shopping-list-item">
+      <li 
       v-for="ingredient in shoppingList"
       :key="ingredient._id"
       :class=" {checked: ingredient.checked}"
       @click="toggleChecked(ingredient)">
 
           {{ ingredient.name }}
+          <span class = "remove" @click="removeFromList(ingredient)"> X </span>
       </li>
     </ul>
 
@@ -47,9 +48,6 @@ export default {
     },
     toggleChecked(ingredient) {
       ingredient.checked = !ingredient.checked
-      if(ingredient.checked){
-        this.removeFromList(ingredient)
-      }
       }, 
 
       async removeFromList (ingredient) {
@@ -96,7 +94,7 @@ export default {
   padding-bottom: 10px;
 }
 
-ul{
+#shopping-list-item {
   list-style-type: none;
   padding: 0;
   margin: 0;
@@ -108,6 +106,7 @@ li {
   background: #eee;
   font-size: 18px;
   transition: 0.2s; /* Transition effect */
+  position: relative;
 }
 
 li:hover{
@@ -118,6 +117,19 @@ li.checked {
   color: #fff;
   text-decoration: line-through;
 
+}
+
+.remove {
+  left: 10px;
+  top: 50%;
+  font-size: 24px;
+  color: #888;
+  cursor: pointer;
+  padding: 12px;
+}
+
+.remove:hover{
+  color: #f44336;
 }
 
 </style>
