@@ -2,9 +2,7 @@
   <div id="app" class="d-flex flex-column min-vh-100">
     <!-- Navbar -->
     <b-navbar toggleable="lg" class="navbar-custom justify-content-end">
-      <RouterLink to ="/">
-        <b-navbar-brand href="#">MealMate</b-navbar-brand>
-      </RouterLink>
+      <b-navbar-brand to="/" href="#">MealMate</b-navbar-brand>
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav class="ml-auto">
@@ -62,6 +60,7 @@ export default {
         localStorage.removeItem('userId') // removes the localStorage key & value
         localStorage.removeItem('calendarId') // removes the localStorage key & value
         this.loggedIn = false // Update loggedIn status
+        this.globalState.isLoggedIn = false
         this.$router.push('/')
       } else {
         console.log('Redirecting to login')

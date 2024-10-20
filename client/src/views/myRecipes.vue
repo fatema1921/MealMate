@@ -56,7 +56,7 @@
         <div v-if="viewMode === 'grid' && filteredRecipes.length">
           <b-row>
             <b-col v-for="recipe in filteredRecipes" :key="recipe._id" md="4" class="mb-3">
-              <b-card :title="recipe.name" class="text-center" @click="showRecipeDetails(recipe)">
+              <b-card :title="recipe.name" class="text-center b-card" @click="showRecipeDetails(recipe)">
               </b-card>
             </b-col>
           </b-row>
@@ -480,5 +480,11 @@ b-container {
 .btn-primary:hover {
   background-color: var(--button-hover-color);
   border-color: var(--button-hover-color);
+}
+
+.b-card:hover {
+  background-color: var(--button-color); /* Example: change the background color on hover */
+  transition: background-color 0.3s ease; /* Smooth transition */
+  cursor: pointer;
 }
 </style>
