@@ -3,12 +3,12 @@
     <h1>My Recipes</h1>
 
     <!-- If user is not logged in, show login message -->
-    <div v-if="!(globalState.isLoggedIn)">
+    <div v-if="!isLoggedIn">
       <p class="text-center">Please log in to see your recipes.</p>
     </div>
 
     <!-- If user is logged in, show the recipes interface -->
-    <div>
+    <div v-else>
       <!-- Create a New Recipe Button -->
       <b-container fluid>
         <b-button variant="primary" @click="showCreateRecipeModal = true">
@@ -192,7 +192,7 @@ import { inject } from 'vue'
 export default {
   data() {
     return {
-      // isLoggedIn: this.$isLoggedIn,
+      isLoggedIn: !!localStorage.getItem('userId'), // Check login status
       userRecipes: [],
       filteredRecipes: [],
       selectedFilter: 'all',
