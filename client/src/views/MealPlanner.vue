@@ -84,7 +84,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from 'axios'
 
 export default {
   data() {
@@ -97,30 +97,30 @@ export default {
       mealForm: {
         name: '', // name of the meal
         recipeId: '', // selected recipe ID
-        date: '', // selected meal date
+        date: '' // selected meal date
       },
       recipes: [], // Array to hold the user's recipes with recipe names
       next7Days: [], // Array to hold the upcoming 7 days for the date picker
-      meals: [], // Array to store fetched meals
-    };
+      meals: [] // Array to store fetched meals
+    }
   },
   methods: {
     // fetches meals associated with the logged-in user's calendar
     async getMeals() {
       try {
         // Get user data to get the associated calendar ID
-        const userResponse = await axios.get(`http://localhost:3000/api/users/${this.userId}`);
-        const calendarId = userResponse.data.calendar;
+        const userResponse = await axios.get(`http://localhost:3000/api/users/${this.userId}`)
+        const calendarId = userResponse.data.calendar
 
         // Get the calendar to get the meal IDs
-        const response = await axios.get(`http://localhost:3000/api/calendars/${calendarId}`);
-        const mealIds = response.data.calendar.meals;
+        const response = await axios.get(`http://localhost:3000/api/calendars/${calendarId}`)
+        const mealIds = response.data.calendar.meals
 
         // check if there are no meals
         if (!mealIds || mealIds.length === 0) {
-          console.warn(`No meals found for calendar ID ${calendarId}.`);
-          this.meals = []; // set meals to an empty array
-          return;
+          console.warn(`No meals found for calendar ID ${calendarId}.`)
+          this.meals = [] // set meals to an empty array
+          return
         }
 
         // fetch meals using Promise.all for the meal IDs
@@ -128,138 +128,138 @@ export default {
           axios.get(`http://localhost:3000/api/meals/${mealId}`)
             .then(response => response.data.meal) // extract meal data
             .catch(error => {
-              console.warn(`Error fetching meal with ID ${mealId}: ${error.message}`);
-              return null; // return null for any failed requests
+              console.warn(`Error fetching meal with ID ${mealId}: ${error.message}`)
+              return null // return null for any failed requests
             })
-        );
+        )
 
-        const mealResponses = await Promise.all(mealRequests);
+        const mealResponses = await Promise.all(mealRequests)
 
         // filter out null responses and assign to meals
-        this.meals = mealResponses.filter(res => res !== null); // only keep valid meal objects
+        this.meals = mealResponses.filter(res => res !== null) // only keep valid meal objects
 
         // log the fetched meals
         if (this.meals.length === 0) {
-          console.warn(`No valid meals found for calendar ID ${calendarId}.`);
+          console.warn(`No valid meals found for calendar ID ${calendarId}.`)
         } else {
-          console.log('Fetched Meals:', this.meals);
+          console.log('Fetched Meals:', this.meals)
         }
       } catch (error) {
-        console.error('Error fetching meals:', error); // log any errors
+        console.error('Error fetching meals:', error) // log any errors
       }
     },
 
     // fetches the user's recipes from the server
     async getUserRecipes() {
       try {
-        const userResponse = await axios.get(`http://localhost:3000/api/users/${this.userId}`);
-        const recipeIds = userResponse.data.recipes;
+        const userResponse = await axios.get(`http://localhost:3000/api/users/${this.userId}`)
+        const recipeIds = userResponse.data.recipes
 
         // fetch each recipe's data and format it for the dropdown
         const recipePromises = recipeIds.map(async (recipeId) => {
-          const recipeResponse = await axios.get(`http://localhost:3000/api/recipes/${recipeId}`);
-          return { value: recipeId, text: recipeResponse.data.name };
-        });
+          const recipeResponse = await axios.get(`http://localhost:3000/api/recipes/${recipeId}`)
+          return { value: recipeId, text: recipeResponse.data.name }
+        })
 
         // store all fetched recipes
-        this.recipes = await Promise.all(recipePromises);
+        this.recipes = await Promise.all(recipePromises)
       } catch (error) {
-        console.error('Error getting recipes:', error); // log any errors
+        console.error('Error getting recipes:', error) // log any errors
       }
     },
 
     // generates the next 7 days for the date picker
     getNext7Days() {
-      const days = [];
-      const today = new Date();
+      const days = []
+      const today = new Date()
       for (let i = 0; i < 7; i++) {
-        const date = new Date(today);
-        date.setDate(today.getDate() + i); // increment date by i days
+        const date = new Date(today)
+        date.setDate(today.getDate() + i) // increment date by i days
         days.push({
-          value: date.toISOString().split("T")[0], // format as YYYY-MM-DD
-          text: date.toDateString(), // human readable date
-        });
+          value: date.toISOString().split('T')[0], // format as YYYY-MM-DD
+          text: date.toDateString() // human readable date
+        })
       }
-      this.next7Days = days; // store the generated dates
+      this.next7Days = days // store the generated dates
     },
 
     // deletes the selected meal from the database and updates the calendar
     async deleteMeal() {
       if (this.selectedMeal) {
         try {
-          const mealId = this.selectedMeal._id; // get the ID of the selected meal
+          const mealId = this.selectedMeal._id // get the ID of the selected meal
 
           // delete the meal from the meals collection
-          await axios.delete(`http://localhost:3000/api/meals/${mealId}`);
-          console.log(`Deleted meal with ID: ${mealId}`);
+          await axios.delete(`http://localhost:3000/api/meals/${mealId}`)
+          console.log(`Deleted meal with ID: ${mealId}`)
 
           // get the current calendar to remove the meal ID
-          const calendarId = localStorage.getItem("calendarId");
-          const calendarResponse = await axios.get(`http://localhost:3000/api/calendars/${calendarId}`);
+          const calendarId = localStorage.getItem('calendarId')
+          const calendarResponse = await axios.get(`http://localhost:3000/api/calendars/${calendarId}`)
 
-          const calendar = calendarResponse.data.calendar; // access the calendar object
+          const calendar = calendarResponse.data.calendar // access the calendar object
 
           // check if meals exists before filtering
           if (calendar.meals && Array.isArray(calendar.meals)) {
             // remove the meal ID from the calendar's meals array
-            calendar.meals = calendar.meals.filter(id => id !== mealId);
-            console.log(`Updated meals array after deletion:`, calendar.meals);
+            calendar.meals = calendar.meals.filter(id => id !== mealId)
+            console.log('Updated meals array after deletion:', calendar.meals)
 
             // PATCH to update the calendar with the new meals array
-            const patchResponse = await axios.patch(`http://localhost:3000/api/calendars/${calendarId}`, { meals: calendar.meals });
-            console.log(`Patch response:`, patchResponse.data); // log the response of the patch request
+            const patchResponse = await axios.patch(`http://localhost:3000/api/calendars/${calendarId}`, { meals: calendar.meals })
+            console.log('Patch response:', patchResponse.data) // log the response of the patch request
 
             // refresh meals after deletion
-            await this.getMeals();
-            this.selectedMeal = null; // clear the selected meal variable after deletion
+            await this.getMeals()
+            this.selectedMeal = null // clear the selected meal variable after deletion
           } else {
-            console.error('Meals array is undefined or not an array.');
+            console.error('Meals array is undefined or not an array.')
           }
         } catch (error) {
-          console.error('Error deleting meal:', error); // log errors
+          console.error('Error deleting meal:', error) // log errors
         }
       } else {
-        console.error('Something went wrong'); // log
+        console.error('Something went wrong') // log
       }
     },
 
     // create a meal
     async submitMealForm() {
-      const { name, recipeId, date } = this.mealForm;
+      const { name, recipeId, date } = this.mealForm
 
       try {
-        console.log('Creating meal with data:', { name, recipeId, date });
+        console.log('Creating meal with data:', { name, recipeId, date })
 
-        const mealData = { name, recipeId, date }; // prepare for post
-        const createMealResponse = await axios.post('http://localhost:3000/api/meals', mealData);
+        const mealData = { name, recipeId, date } // prepare for post
+        const createMealResponse = await axios.post('http://localhost:3000/api/meals', mealData)
 
-        console.log('Meal creation response:', createMealResponse.data);
-        const mealId = createMealResponse.data.meal._id; // get the ID of the created meal
+        console.log('Meal creation response:', createMealResponse.data)
+        const mealId = createMealResponse.data.meal._id // get the ID of the created meal
 
-        const calendarId = localStorage.getItem("calendarId");
-        console.log('Calendar ID:', calendarId);
+        const calendarId = localStorage.getItem('calendarId')
+        console.log('Calendar ID:', calendarId)
 
         // add the new meal to the user's calendar
-        await axios.post(`http://localhost:3000/api/calendars/${calendarId}/meals/${mealId}`, { date });
+        await axios.post(`http://localhost:3000/api/calendars/${calendarId}/meals/${mealId}`, { date })
 
-        this.showModal = false; // close the modal after submission
+        this.showModal = false // close the modal after submission
 
         // refresh meals
-        await this.getMeals();
+        await this.getMeals()
       } catch (error) {
-        console.error('Error details:', error.response ? error.response.data : error.message); // logging
+        console.error('Error details:', error.response ? error.response.data : error.message) // logging
       }
-    },
+    }
   },
   mounted() {
     // get user data only if the user is logged in
     if (this.isLoggedIn) {
-      this.getUserRecipes(); // get user's recipes
-      this.getNext7Days(); // generate the next 7 days for the date picker
-      this.getMeals(); // get initial meals
+      this.getUserRecipes() // get user's recipes
+      this.getNext7Days() // generate the next 7 days for the date picker
+      this.getMeals() // get initial meals
     }
-  },
-};
+  }
+}
 </script>
 
 <style scoped>
