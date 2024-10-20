@@ -34,7 +34,10 @@ exports.createUser = async (req , res, next) => {
             username: req.body.username, 
             password : req.body.password, 
             meal_category: req.body.meal_category, 
-            preferences: req.body.preferences
+            preferences: req.body.preferences,
+            recipes: req.body.recipes, 
+            calendar: req.body.calendar, 
+            shopping_list: req.body.shopping_list
         }); 
     
         await newUser.save(); 
@@ -124,6 +127,17 @@ exports.patchUser = async (req, res, next) => {
 
     } catch (error) {
         console.error('Error updating this user:', error);
+        next(error);
+    }
+};
+
+
+// Delete all user
+exports.deleteAllUser = async (req, res, next) => {
+    try{
+        const deleteUsers = await User.deleteMany();
+        res.status(200).json ({message: 'All users deleted'})
+    } catch (error){
         next(error);
     }
 };

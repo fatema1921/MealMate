@@ -2,9 +2,7 @@
   <div id="app" class="d-flex flex-column min-vh-100">
     <!-- Navbar -->
     <b-navbar toggleable="lg" class="navbar-custom justify-content-end">
-      <RouterLink to ="/">
-        <b-navbar-brand href="#">MealMate</b-navbar-brand>
-      </RouterLink>
+      <b-navbar-brand to="/" href="#">MealMate</b-navbar-brand>
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav class="ml-auto">
@@ -52,33 +50,34 @@ export default {
   },
   methods: {
     isLoggedIn() {
-      const loggedIn = !!localStorage.getItem('userId'); // Converts the value into a boolean
-      console.log('Is user logged in? ', loggedIn);
-      return loggedIn;
+      const loggedIn = !!localStorage.getItem('userId') // Converts the value into a boolean
+      console.log('Is user logged in? ', loggedIn)
+      return loggedIn
     },
     handleAuthAction() {
       if (this.isLoggedIn()) {
-        console.log('Signing out');
-        localStorage.removeItem('userId'); // removes the localStorage key & value
-        localStorage.removeItem('calendarId'); // removes the localStorage key & value
-        this.loggedIn = false; // Update loggedIn status
-        this.$router.push('/');
+        console.log('Signing out')
+        localStorage.removeItem('userId') // removes the localStorage key & value
+        localStorage.removeItem('calendarId') // removes the localStorage key & value
+        this.loggedIn = false // Update loggedIn status
+        this.globalState.isLoggedIn = false
+        this.$router.push('/')
       } else {
-        console.log('Redirecting to login');
-        this.$router.push('/login');
+        console.log('Redirecting to login')
+        this.$router.push('/login')
       }
     },
     updateLoggedInState() {
-      this.loggedIn = this.isLoggedIn(); // Update loggedIn state when auth changes
-      console.log('Updated login state: ', this.loggedIn);
+      this.loggedIn = this.isLoggedIn() // Update loggedIn state when auth changes
+      console.log('Updated login state: ', this.loggedIn)
     }
   },
   mounted() {
-    this.loggedIn = this.isLoggedIn(); // Set initial login state
-    window.addEventListener('authChange', this.updateLoggedInState);
+    this.loggedIn = this.isLoggedIn() // Set initial login state
+    window.addEventListener('authChange', this.updateLoggedInState)
   },
   beforeUnmount() {
-    window.removeEventListener('authChange', this.updateLoggedInState);
+    window.removeEventListener('authChange', this.updateLoggedInState)
   }
 }
 </script>

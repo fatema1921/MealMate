@@ -56,7 +56,7 @@
         <div v-if="viewMode === 'grid' && filteredRecipes.length">
           <b-row>
             <b-col v-for="recipe in filteredRecipes" :key="recipe._id" md="4" class="mb-3">
-              <b-card :title="recipe.name" class="text-center" @click="showRecipeDetails(recipe)">
+              <b-card :title="recipe.name" class="text-center b-card" @click="showRecipeDetails(recipe)">
               </b-card>
             </b-col>
           </b-row>
@@ -81,7 +81,7 @@
             <!-- Ingredients Section -->
             <h5>Ingredients</h5>
             <div class="ingredients-list">
-              <b-row v-for="(ingredient, index) in selectedRecipe.ingredients" :key="ingredient._id" class="align-items-center mb-2">
+              <b-row v-for="(ingredient) in selectedRecipe.ingredients" :key="ingredient._id" class="align-items-center mb-2">
                 <b-col cols="1">
                   <b-form-checkbox
                     @change="updateShoppingList(ingredient)"
@@ -142,7 +142,7 @@
               <p>Selected Ingredients:</p>
               <b-list-group>
                 <b-list-group-item
-                  v-for="(ingredient, index) in newRecipe.ingredients"
+                  v-for="(ingredient) in newRecipe.ingredients"
                   :key="ingredient._id"
                 >
                   <b-form-checkbox
@@ -480,5 +480,11 @@ b-container {
 .btn-primary:hover {
   background-color: var(--button-hover-color);
   border-color: var(--button-hover-color);
+}
+
+.b-card:hover {
+  background-color: var(--button-color); /* Example: change the background color on hover */
+  transition: background-color 0.3s ease; /* Smooth transition */
+  cursor: pointer;
 }
 </style>

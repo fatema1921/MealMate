@@ -3,8 +3,8 @@
 		"_postman_id": "f79f5b39-ea42-4be5-86f3-00b1f878bb7b",
 		"name": "server",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "23101038",
-		"_collection_link": "https://www.postman.com/winter-meteor-564285/workspace/group09/collection/23101038-f79f5b39-ea42-4be5-86f3-00b1f878bb7b?action=share&source=collection_link&creator=23101038"
+		"_exporter_id": "38096179",
+		"_collection_link": "https://www.postman.com/winter-meteor-564285/workspace/group09/collection/23101038-f79f5b39-ea42-4be5-86f3-00b1f878bb7b?action=share&source=collection_link&creator=38096179"
 	},
 	"item": [
 		{
@@ -1524,28 +1524,6 @@
 						"api",
 						"recipes",
 						"{{recipe_id}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Fetch and save",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:3001/api/recipes/fetch-and-save/",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3001",
-					"path": [
-						"api",
-						"recipes",
-						"fetch-and-save",
-						""
 					]
 				}
 			},
