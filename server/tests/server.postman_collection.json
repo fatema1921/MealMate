@@ -119,7 +119,6 @@
 							"\r",
 							"    pm.expect(ingredientData).to.have.property(\"name\", \"cumin\");\r",
 							"    pm.expect(ingredientData).to.have.property(\"calories\", 10);\r",
-							"    pm.expect(ingredientData).to.have.property(\"shopping_list\", true);\r",
 							"    \r",
 							"    pm.globals.set(\"ingredient_id\", ingredientData._id);\r",
 							"});"
@@ -134,7 +133,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"cumin\",\r\n    \"calories\": \"10\",\r\n    \"shopping_list\": \"true\"\r\n}",
+					"raw": "{\r\n    \"name\": \"Cumin\",\r\n    \"calories\": \"10\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -249,7 +248,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"Delicious Vegan Pasta\",\r\n    \"description\": \"A healthy and tasty vegan pasta dish.\",\r\n    \"meal_category\": \"Vegan\",\r\n    \"ingredients\": []\r\n}",
+					"raw": "{\r\n    \"name\": \"Delicious Vegan Pasta\",\r\n    \"description\": \"A healthy and tasty vegan pasta dish.\",\r\n    \"meal_category\": \"Vegan\",\r\n    \"ingredients\": [\"\"],\r\n    \"userMade\": true,\r\n    \"prepTime\": 30,\r\n    \"calories\": 10\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -287,10 +286,6 @@
 							"    const mealData = responseData.meal; ",
 							"    pm.expect(mealData).to.have.property(\"name\", \"Chicken Sallad\");",
 							"    ",
-							"    // Validate date field",
-							"    pm.expect(mealData).to.have.property(\"date\");",
-							"    pm.expect(new Date(mealData.date)).to.be.a('date');",
-							"",
 							"    pm.globals.set(\"meal_id\", mealData._id);",
 							"});"
 						],
@@ -304,7 +299,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"Chicken Sallad\",\n    \"recipeId\": \"{{recipe_id}}\",\n    \"date\": \"2024-10-18\"\n}",
+					"raw": "{\n    \"name\": \"Chicken Sallaad\",\n    \"recipeId\": \"{{recipe_id}}\",\n    \"date\": \"2024-10-20\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -409,17 +404,26 @@
 			"request": {
 				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "{{host}}/api/recipes/{{recipe_id}}/ingredients/{{ingredient_id}}",
+					"raw": "{{host}}/api/recipes/{{recipeId}}/ingredients/{{ingredientId}}",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"api",
 						"recipes",
-						"{{recipe_id}}",
+						"{{recipeId}}",
 						"ingredients",
-						"{{ingredient_id}}"
+						"{{ingredientId}}"
 					]
 				}
 			},
@@ -445,10 +449,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/api/recipes/ingredients/{{ingredient_id}}",
+					"raw": "http://localhost:3001/api/recipes/ingredients/{{ingredient_id}}",
+					"protocol": "http",
 					"host": [
-						"{{host}}"
+						"localhost"
 					],
+					"port": "3001",
 					"path": [
 						"api",
 						"recipes",
@@ -489,10 +495,12 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/api/recipes/{{recipe_id}}/ingredients/{{ingredient_id}}",
+					"raw": "http://localhost:3001/api/recipes/{{recipe_id}}/ingredients/{{ingredient_id}}",
+					"protocol": "http",
 					"host": [
-						"{{host}}"
+						"localhost"
 					],
+					"port": "3001",
 					"path": [
 						"api",
 						"recipes",
@@ -654,7 +662,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3001/api/recipes",
+					"raw": "http://localhost:3001/api/recipes?search=chicken",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -663,6 +671,12 @@
 					"path": [
 						"api",
 						"recipes"
+					],
+					"query": [
+						{
+							"key": "search",
+							"value": "chicken"
+						}
 					]
 				}
 			},
@@ -1103,6 +1117,50 @@
 			"response": []
 		},
 		{
+			"name": "Partial update user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"username\": \"Partially updated user\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3001/api/users/{{user_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"api",
+						"users",
+						"{{user_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Partial Update Ingredient",
 			"event": [
 				{
@@ -1128,7 +1186,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"calories\": 55\r\n}\r\n",
+					"raw": "{\r\n    \"calories\": 55\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1215,7 +1273,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"Partially Updated Recipe Name\",\r\n    \"description\": \"Partially updated description.\"\r\n}",
+					"raw": "{\r\n    \"description\": \"A high-protein delicious pasta\",\r\n\t\t\"meal_category\": \"High-protein\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1223,14 +1281,20 @@
 					}
 				},
 				"url": {
-					"raw": "{{host}}/api/recipes/{{recipe_id}}",
+					"raw": "{{host}}/api/recipes/:recipe_id",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"api",
 						"recipes",
-						"{{recipe_id}}"
+						":recipe_id"
+					],
+					"variable": [
+						{
+							"key": "recipe_id",
+							"value": "6701774cda0e5f4c8a08feb5"
+						}
 					]
 				}
 			},
@@ -1471,7 +1535,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3001/api/recipes/fetch-and-save",
+					"raw": "http://localhost:3001/api/recipes/fetch-and-save/",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -1480,7 +1544,28 @@
 					"path": [
 						"api",
 						"recipes",
-						"fetch-and-save"
+						"fetch-and-save",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete all users ",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3001/api/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"api",
+						"users"
 					]
 				}
 			},

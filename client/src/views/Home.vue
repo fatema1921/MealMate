@@ -173,7 +173,7 @@
         <h1 class="display-5 fw-bold">Meal Mate</h1>
         <p class="fs-4">Welcome to your personalized meal planning assistant!</p>
         <RouterLink to="/login">
-          <b-button variant="primary" @click="login">Login</b-button>
+          <b-button variant="primary">Login</b-button>
         </RouterLink>
       </b-container>
 

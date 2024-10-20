@@ -41,9 +41,9 @@ export default {
   name: 'Login',
   data() {
     return {
-      username: '',
-      password: '',
-      unsuccessful: ''
+      username: '', // user input for username
+      password: '', // user input for password
+      unsuccessful: '' // error message for failed login
     }
   },
   setup() {
@@ -51,6 +51,7 @@ export default {
     return { globalState }
   },
   methods: {
+    // Handle login
   async login() {
     try {
       const response = await axios.post('http://localhost:3000/api/users/login', {
@@ -63,15 +64,9 @@ export default {
         localStorage.setItem('userId', user._id); // Store the userId in local storage
 
         // get user to store the calendar id
-        const userDetailsResponse = await axios.get(`http://localhost:3000/api/users/${user._id}`, {
-          headers: {
-            'Cache-Control': 'no-cache',  // Got 304 errors so tried this and it solved it. Worked also to manually clear cache
-            'Pragma': 'no-cache',
-            'Expires': '0'
-          }
-        });
-
-        // store the calendarId
+        const userDetailsResponse = await axios.get(`http://localhost:3000/api/users/${user._id}`);
+         
+        // store the calendarId if it exists
         const calendarId = userDetailsResponse.data.calendar; // access the calendarId
         if (calendarId) {
           localStorage.setItem('calendarId', calendarId); // Store the calendarId in local storage
