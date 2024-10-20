@@ -397,7 +397,7 @@ export default {
         // Get user ID from localStorage
         const userId = localStorage.getItem('userId')
         if (!userId) {
-          console.error('User ID not found in localStorage.')
+          console.warn('User ID not found in localStorage.')
           return
         }
         // First, get the user's existing saved recipes
@@ -444,7 +444,7 @@ export default {
         const userId = localStorage.getItem('userId')
         // const userId = '66f18ee5dc8b72b161275216'
         if (!userId) {
-          console.error('User ID not found in localStorage.')
+          console.warn('User ID not found in localStorage.')
           return
         }
 
@@ -557,7 +557,9 @@ export default {
     }
   },
   async created() {
-    await this.fetchSuggestedRecipes()
+    if (this.globalState.isLoggedIn) {
+      await this.fetchSuggestedRecipes()
+    }
   },
   mounted() {
     window.addEventListener('authChange', this.checkLoginStatus)

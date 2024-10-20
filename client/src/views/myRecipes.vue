@@ -412,8 +412,10 @@ export default {
     }
   },
   created() {
-    this.fetchUserRecipes()
-    this.fetchIngredients()
+    if (this.globalState.isLoggedIn) {
+      this.fetchUserRecipes()
+      this.fetchIngredients()
+    }
   },
   mounted() {
     window.addEventListener('authChange', this.checkLoginStatus)
