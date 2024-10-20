@@ -328,6 +328,7 @@ export default {
           description: '',
           ingredients: [] // Clear the ingredients after submission
         }
+        this.$router.go()
       } catch (error) {
         console.error('Error adding recipe:', error)
       }
