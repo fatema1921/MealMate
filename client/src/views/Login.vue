@@ -27,120 +27,119 @@
         <!-- Display error message if login fails -->
         <div v-if="unsuccessful" class="error-message">{{ unsuccessful }}</div>
       </div>
-  
+
       <!-- Right image -->
       <img class="side-image" src="https://media.architecturaldigest.com/photos/63fe6ed58e4acf42248cafd3/16:9/w_1920,c_limit/GettyImages-1170856565.jpg" alt="Right image">
     </div>
-  </template>
-  
-  <script>
-  import axios from 'axios'
-  import { inject } from 'vue'
-  
-  export default {
-    name: 'Login',
-    data() {
-      return {
-        username: '', // user input for username
-        password: '', // user input for password
-        unsuccessful: '' // error message for failed login
-      }
-    },
-    setup() {
-      const globalState = inject('globalState')
-      return { globalState }
-    },
-    methods: {
-      // Handle login
+</template>
+
+<script>
+import axios from 'axios'
+import { inject } from 'vue'
+
+export default {
+  name: 'Login',
+  data() {
+    return {
+      username: '', // user input for username
+      password: '', // user input for password
+      unsuccessful: '' // error message for failed login
+    }
+  },
+  setup() {
+    const globalState = inject('globalState')
+    return { globalState }
+  },
+  methods: {
+    // Handle login
     async login() {
       try {
         const response = await axios.post('http://localhost:3000/api/users/login', {
           username: this.username,
           password: this.password
-        });
-  
+        })
+
         if (response.status === 200) {
-          const user = response.data.user; // Extract the user object
-          localStorage.setItem('userId', user._id); // Store the userId in local storage
-  
+          const user = response.data.user // Extract the user object
+          localStorage.setItem('userId', user._id) // Store the userId in local storage
+
           // get user to store the calendar id
-          const userDetailsResponse = await axios.get(`http://localhost:3000/api/users/${user._id}`);
-           
+          const userDetailsResponse = await axios.get(`http://localhost:3000/api/users/${user._id}`)
+
           // store the calendarId if it exists
-          const calendarId = userDetailsResponse.data.calendar; // access the calendarId
+          const calendarId = userDetailsResponse.data.calendar // access the calendarId
           if (calendarId) {
-            localStorage.setItem('calendarId', calendarId); // Store the calendarId in local storage
+            localStorage.setItem('calendarId', calendarId) // Store the calendarId in local storage
           }
-  
-          window.dispatchEvent(new Event('authChange')); // Send event for button to switch on navbar
-          this.$router.push('/'); // Redirect to homepage
+
+          window.dispatchEvent(new Event('authChange')) // Send event for button to switch on navbar
+          this.$router.push('/') // Redirect to homepage
         }
       } catch (error) {
-        console.error('Login error:', error); // Log the full error for debugging
-  
+        console.error('Login error:', error) // Log the full error for debugging
+
         if (error.response && error.response.status === 401) {
-          this.unsuccessful = 'Invalid password';
+          this.unsuccessful = 'Invalid password'
         } else if (error.response && error.response.status === 404) {
-          this.unsuccessful = 'User not found';
+          this.unsuccessful = 'User not found'
         } else {
-          this.unsuccessful = error.message || 'An error occurred during login';
-          }
+          this.unsuccessful = error.message || 'An error occurred during login'
         }
       }
     }
   }
-  </script>
-  
-  <style scoped>
+}
+</script>
+
+<style scoped>
+.image-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100vh;
+  padding: 0 20px;
+}
+
+.center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.welcome-message {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.welcome-description {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+}
+
+.side-image {
+  width: 30%;
+  height: auto;
+  object-fit: cover; /* Ensures the image fills the space. cropping if necessary */
+}
+
+.card {
+  max-width: 400px; /* Make sure the card doesn't get too wide */
+  width: 100%; /* Full width of its container */
+}
+
+@media (max-width: 768px) {
   .image-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 100vh;
-    padding: 0 20px;
+    flex-direction: column; /* Stack vertically if screen gets smaller */
+    padding: 0;
   }
-  
-  .center {
-    display: flex;
-    flex-direction: column; 
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .welcome-message {
-    font-size: 2rem;
-    font-weight: bold;
-    margin-bottom: 10px;
-    text-align: center;
-  }
-  
-  .welcome-description {
-    font-size: 1.2rem;
-    margin-bottom: 20px;
-  }
-  
+
   .side-image {
-    width: 30%;
+    width: 50%; /* Make images fill the screen on small devices */
     height: auto;
-    object-fit: cover; /* Ensures the image fills the space. cropping if necessary */
+    margin-bottom: 20px; /* Add spacing between the images and card */
   }
-  
-  .card {
-    max-width: 400px; /* Make sure the card doesn't get too wide */
-    width: 100%; /* Full width of its container */
-  }
-  
-  @media (max-width: 768px) {
-    .image-container {
-      flex-direction: column; /* Stack vertically if screen gets smaller */
-      padding: 0;
-    }
-  
-    .side-image {
-      width: 50%; /* Make images fill the screen on small devices */
-      height: auto;
-      margin-bottom: 20px; /* Add spacing between the images and card */
-    }
-  }
-  </style>
-  
+}
+</style>
