@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from 'axios'
 
 export default {
   name: 'Register',
@@ -55,13 +55,13 @@ export default {
       meal_category: '',
       preferences: '',
       registrationError: ''
-    };
+    }
   },
   methods: {
     async register() {
       if (this.password !== this.confirmPassword) {
-        this.registrationError = "Passwords do not match!";
-        return;
+        this.registrationError = 'Passwords do not match!'
+        return
       }
 
       try {
@@ -72,34 +72,34 @@ export default {
           password: this.password,
           meal_category: this.meal_category,
           preferences: this.preferences
-        });
+        })
 
-        console.log('User created:', userResponse.data); // For debugging
-        const userId = userResponse.data.newUser._id;
-        localStorage.setItem('userId', userId); // Store the user ID in local storage
+        console.log('User created:', userResponse.data) // For debugging
+        const userId = userResponse.data.newUser._id
+        localStorage.setItem('userId', userId) // Store the user ID in local storage
 
         // scond API call to create calendar for the user
         const calendarResponse = await axios.post('http://localhost:3000/api/calendars', {
           name: 'My Calendar',
           user: userId,
           meals: []
-        });
+        })
 
-        const calendarId = calendarResponse.data.calendar._id;
+        const calendarId = calendarResponse.data.calendar._id
         // update the user with the calendarId
         await axios.patch(`http://localhost:3000/api/users/${userId}`, {
-          calendar: calendarId,
-        });
-        localStorage.setItem('calendarId', calendarId); // Store the calendarId in localstorage
-        console.log('Registration successful:', userResponse);
-        this.$router.push('/login'); // Redirect to login after successful registration
+          calendar: calendarId
+        })
+        localStorage.setItem('calendarId', calendarId) // Store the calendarId in localstorage
+        console.log('Registration successful:', userResponse)
+        this.$router.push('/login') // Redirect to login after successful registration
       } catch (error) {
-        console.error('Registration error:', error);
-        this.registrationError = "Registration failed. Try again.";
+        console.error('Registration error:', error)
+        this.registrationError = 'Registration failed. Try again.'
       }
     }
   }
-};
+}
 </script>
 
 <style scoped>
