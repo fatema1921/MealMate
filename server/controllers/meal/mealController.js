@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 // Create a new meal (POST /meals)
 exports.createMeal = async (req, res) => {
     try {
-        const { name, recipeId } = req.body;
+        const { name, recipeId, date } = req.body;
 
         // Verify if recipe exists
         const recipe = await Recipe.findById(recipeId);
@@ -13,7 +13,14 @@ exports.createMeal = async (req, res) => {
             return res.status(404).json({ message: 'Recipe not found' });
         }
 
-        const newMeal = new Meal({ name, recipe: recipeId });
+        // Create a new meal
+        const newMeal = new Meal({ 
+            name, 
+            recipe: recipeId,
+            date: new Date(date)
+        });
+
+        // Save the meal to the database
         await newMeal.save();
         res.status(201).json({ message: 'Meal created successfully', meal: newMeal });
     } catch (err) {

@@ -8,7 +8,7 @@
     </div>
 
     <!-- If user is logged in, show the recipes interface -->
-    <div v-else>
+    <div>
       <!-- Create a New Recipe Button -->
       <b-container fluid>
         <b-button variant="primary" @click="showCreateRecipeModal = true">

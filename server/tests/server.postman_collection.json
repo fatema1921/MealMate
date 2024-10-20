@@ -285,7 +285,7 @@
 							"    pm.expect(responseData).to.have.property(\"message\", \"Meal created successfully\");",
 							"    ",
 							"    const mealData = responseData.meal; ",
-							"    pm.expect(mealData).to.have.property(\"name\", \"Chicken Sallad\");",
+							"    pm.expect(mealData).to.have.property(\"name\", \"Chicken Sallad\");", 
 							"    ",
 							"    pm.globals.set(\"meal_id\", mealData._id);",
 							"});"
@@ -300,7 +300,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"Chicken Sallad\",\n    \"recipeId\": \"{{recipe_id}}\"\n}",
+					"raw": "{\n    \"name\": \"Chicken Sallad\",\n    \"recipeId\": \"{{recipe_id}}\",\n    \"date\": \"2024-10-18\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
