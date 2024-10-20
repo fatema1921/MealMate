@@ -3,7 +3,7 @@
     <div v-if="editMode" class="edit-profile">
       <h1>Edit Profile</h1>
       
-      <form @submit.prevent="saveChanges">
+      <form id = "edit-profile-form" @submit.prevent="saveChanges">
         <div class="form-group">
           <label for="name">Name:</label>
           <input type="text" class="form-control" v-model="user.name" />
@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from 'axios'
 
 export default {
   name: 'UserProfile',
@@ -73,44 +73,44 @@ export default {
       message: '',
       editMode: false,
       userID: "",
-    };
+    }
   },
   methods: {
     // Fetch user profile information
     async fetchUserProfile() {
       try {
-        const response = await axios.get(`http://localhost:3000/api/users/${this.userID}`);
-        this.user = response.data;
+        const response = await axios.get(`http://localhost:3000/api/users/${this.userID}`)
+        this.user = response.data
       } catch (error) {
-        this.message = 'Error fetching profile';
+        this.message = 'Error fetching profile'
       }
     },
 
     editProfile() {
-      this.editMode = true;
+      this.editMode = true
     },
 
     // Cancel editing
     cancelEdit() {
-      this.editMode = false;
-      this.fetchUserProfile(); // Reset data to avoid unsaved changes
+      this.editMode = false
+      this.fetchUserProfile() // Reset data to avoid unsaved changes
     },
 
     async saveChanges() {
       try {
         if (!this.user.password) {
-          await axios.patch(`http://localhost:3000/api/users/${this.userID}`, this.user);
-          this.message = 'Profile updated successfully (PATCH)!';
+          await axios.patch(`http://localhost:3000/api/users/${this.userID}`, this.user)
+          this.message = 'Profile updated successfully (PATCH)!'
         } else {
-          await axios.put(`http://localhost:3000/api/users/${this.userID}`, this.user);
-          this.message = 'Profile updated successfully (PUT)!';
+          await axios.put(`http://localhost:3000/api/users/${this.userID}`, this.user)
+          this.message = 'Profile updated successfully (PUT)!'
         }
 
-        this.editMode = false;
-        this.fetchUserProfile();
+        this.editMode = false
+        this.fetchUserProfile()
       
       } catch (error) {
-        this.message = `Error updating profile: ${error.message}`;
+        this.message = `Error updating profile: ${error.message}`
       }
     },
 
@@ -118,26 +118,26 @@ export default {
     async deleteProfile() {
       if (confirm('Are you sure you want to delete your profile? This action cannot be undone.')) {
         try {
-          await axios.delete(`http://localhost:3000/api/users/${this.userID}`);
-          this.message = 'Profile deleted successfully';
+          await axios.delete(`http://localhost:3000/api/users/${this.userID}`)
+          this.message = 'Profile deleted successfully'
           // Redirect to a login after deletion
-          this.$router.push('/login');
+          this.$router.push('/login')
         } catch (error) {
-          this.message = `Error deleting profile: ${error.message}`;
+          this.message = `Error deleting profile: ${error.message}`
         }
       }
     },
   },
   mounted() {
-    this.userID = localStorage.getItem('userId'); 
-    console.log('Retrieved user ID:', this.userID); // Check what is retrieved
+    this.userID = localStorage.getItem('userId')
+    console.log('Retrieved user ID:', this.userID) // Check what is retrieved
     if (this.userID) {
-      this.fetchUserProfile(); 
+      this.fetchUserProfile()
     } else {
-      console.log('No user ID found in local storage. Make sure to be logged in.');
+      console.log('No user ID found in local storage. Make sure to be logged in.')
     }
   }
-};
+}
 </script>
 
 <style scoped>
@@ -183,5 +183,12 @@ export default {
 .message {
   margin-top: 20px;
   color: green;
+}
+
+#edit-profile-form {
+  background-color: #eef;
+  padding: 20px; 
+  border: 2px solid #ccc; 
+  border-radius: 5px; 
 }
 </style>

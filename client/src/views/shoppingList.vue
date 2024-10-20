@@ -9,7 +9,9 @@
       @click="toggleChecked(ingredient)">
 
           {{ ingredient.name }}
-          <span class = "remove" @click="removeFromList(ingredient)"> X </span>
+ 
+          <!-- "X" button to remove the ingredient from the list -->
+          <span class = "remove" @click="removeFromList(ingredient)"> x </span>
       </li>
     </ul>
 
@@ -32,8 +34,8 @@ export default {
       const userId = localStorage.getItem('userId')
 
       try {
-        const user = await axios.get(`http://localhost:3000/api/users/${userId}`)
-        const ingredientIds = user.data.shopping_list
+        const user = await axios.get(`http://localhost:3000/api/users/${userId}`) // Get the userId from local storage
+        const ingredientIds = user.data.shopping_list // Get the ingredient IDs from the user data 
 
         console.log(ingredientIds)
         // iterates thrugh each id in ingredientsId and applies the get function to each id
@@ -54,7 +56,7 @@ export default {
         const userId = localStorage.getItem('userId')
 
         try {
-          this.shoppingList = this.shoppingList.filter(item => item._id !== ingredient._id)
+          this.shoppingList = this.shoppingList.filter(item => item._id !== ingredient._id) // Update the shopping-list by filtering out the removed ingredient
 
           const updatedIngredientIds = this.shoppingList.map(item => item._id)
           await axios.patch(`http://localhost:3000/api/users/${userId}`, {
