@@ -71,7 +71,7 @@ export default {
           if (calendarId) {
             localStorage.setItem('calendarId', calendarId) // Store the calendarId in local storage
           }
-
+          this.globalState.isLoggedIn = true
           window.dispatchEvent(new Event('authChange')) // Send event for button to switch on navbar
           this.$router.push('/') // Redirect to homepage
         }
