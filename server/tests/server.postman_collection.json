@@ -1473,28 +1473,6 @@
 			"response": []
 		},
 		{
-			"name": "Fetch and save",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:3001/api/recipes/fetch-and-save",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3001",
-					"path": [
-						"api",
-						"recipes",
-						"fetch-and-save",
-						""
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "Delete all users ",
 			"request": {
 				"method": "DELETE",
