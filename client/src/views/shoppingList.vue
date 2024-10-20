@@ -1,14 +1,17 @@
 <template>
   <div class="container shopping-list">
     <h2>Your Shopping List</h2>
-    <ul>
-      <li
+    <ul id = "shopping-list-item">
+      <li 
       v-for="ingredient in shoppingList"
       :key="ingredient._id"
       :class=" {checked: ingredient.checked}"
       @click="toggleChecked(ingredient)">
 
           {{ ingredient.name }}
+ 
+          <!-- "x" button to remove the ingredient from the list -->
+          <span class = "remove" @click="removeFromList(ingredient)"> x </span>
       </li>
     </ul>
 
@@ -31,8 +34,8 @@ export default {
       const userId = localStorage.getItem('userId')
 
       try {
-        const user = await axios.get(`http://localhost:3000/api/users/${userId}`)
-        const ingredientIds = user.data.shopping_list
+        const user = await axios.get(`http://localhost:3000/api/users/${userId}`) // Get the userId from local storage
+        const ingredientIds = user.data.shopping_list // Get the ingredient IDs from the user data 
 
         console.log(ingredientIds)
         // iterates thrugh each id in ingredientsId and applies the get function to each id
@@ -40,6 +43,12 @@ export default {
         const ingredientsResponses = await Promise.all(ingredientPromises)
 
         this.shoppingList = ingredientsResponses.map(res => res.data)
+         // If the shopping list is empty
+         if (this.shoppingList.length === 0) {
+          this.message = 'Your shopping list is empty.'
+        } else {
+          this.message = ''
+        }
       } catch (error) {
         console.error('Error fetching shopping list:', error)
         this.message = 'You must be logged in to access you shopping list'
@@ -47,6 +56,23 @@ export default {
     },
     toggleChecked(ingredient) {
       ingredient.checked = !ingredient.checked
+      }, 
+
+      async removeFromList (ingredient) {
+        const userId = localStorage.getItem('userId')
+
+        try {
+          this.shoppingList = this.shoppingList.filter(item => item._id !== ingredient._id) // Update the shopping-list by filtering out the removed ingredient
+
+          const updatedIngredientIds = this.shoppingList.map(item => item._id)
+          await axios.patch(`http://localhost:3000/api/users/${userId}`, {
+          shopping_list: updatedIngredientIds
+          })
+
+        } catch (error) {
+        console.error('Error removing ingredient from shopping list:', error)
+        this.message = 'Error occurred while trying to remove the ingredient.'
+      }
     }
   },
 
@@ -76,7 +102,7 @@ export default {
   padding-bottom: 10px;
 }
 
-ul{
+#shopping-list-item {
   list-style-type: none;
   padding: 0;
   margin: 0;
@@ -88,6 +114,7 @@ li {
   background: #eee;
   font-size: 18px;
   transition: 0.2s; /* Transition effect */
+  position: relative;
 }
 
 li:hover{
@@ -98,6 +125,19 @@ li.checked {
   color: #fff;
   text-decoration: line-through;
 
+}
+
+.remove {
+  left: 10px;
+  top: 50%;
+  font-size: 24px;
+  color: #888;
+  cursor: pointer;
+  padding: 12px;
+}
+
+.remove:hover{
+  color: #f44336;
 }
 
 </style>
