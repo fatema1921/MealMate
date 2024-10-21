@@ -95,7 +95,7 @@ A page for the user to read more about meal mate and some of the features we off
 
 ### Entity-Relationship (ER) Diagram
 
-![ER Diagram](./images/Entity-Relationship-Milestone0.drawio.png)
+![ER Diagram](./images/image.png)
 
 ## Teaser (MS3)
 
