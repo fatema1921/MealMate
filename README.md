@@ -99,6 +99,6 @@ A page for the user to read more about meal mate and some of the features we off
 
 ![ER Diagram](./images/image.png)
 
-## Teaser (MS3)
+## Teaser (Final Release)
 
 ![Teaser](./images/teaser.png)
