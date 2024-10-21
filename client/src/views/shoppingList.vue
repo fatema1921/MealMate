@@ -35,6 +35,7 @@ export default {
 
       if (!userId) {
         this.message = 'You must be logged in to access your shopping list.';
+        console.log ('User not logged in')
         return;
   }
 
@@ -56,7 +57,6 @@ export default {
         }
       } catch (error) {
         console.error('Error fetching shopping list:', error)
-        this.message = 'User not logged in'
       }
     },
     toggleChecked(ingredient) {
