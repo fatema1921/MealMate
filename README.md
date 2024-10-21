@@ -66,27 +66,29 @@ The system is a meal-planning application that shows users recipes based on thei
 
 ### Pages
 
-5 tabs on top of the page - Home, Shopping List, My Recipes, Planner, My Profile
+**6 tabs** on top of the page plus a login/signout button.
+
+**Tabs:** Home, My Recipes, Shopping List,  Meal Planner, My Profile, About
 
 - **Home**:
 
-The default page. Here the user has access to a bar with different functions such as Login, Shopping list, Recipes, and Planner. Users can still browse recipes, apply filters, and so on but they cannot save the recipes. If the user has logged in, they will see recipes based on their chosen meal_category.
-
-- **My profile**
-
-Can change personal information, preferences, meal_category
-
-- **Shopping list**:
-
-The ingredients from recipes that the user has chosen to add to the shopping list will appear here.
+The default page. If the user is not logged in, they see a login button and they can search for recipes with keywords and/or meal category filters but they cannot save the recipes. If the user has logged in, they will see suggested recipes based on their chosen meal category when they land on home page or refresh it. And they can of course search and save recipes.
 
 - **My recipes**:
 
-A page for showing recipes that you have created or saved.
+A page for showing recipes that user has created or saved. There is also a button for creating new recipes.
+
+- **Shopping list**:
+
+The ingredients from recipes that the user has chosen to add to the shopping list will appear here. The user can check the items off the list and they will disappear.
 
 - **Meal Planner**:
 
-The Planner page is customized for every user. The Planner will display a 7-day calendar (mon, tues, wed..).
+The Planner page is customized for every user. The Planner will display a 7-day calendar (mon, tues, wed..). The user can Add a meal and see their upcoming meals.
+
+- **My profile**
+
+User can see their accout info and change them or delete their account.
 
 - **About**: 
 
@@ -97,6 +99,6 @@ A page for the user to read more about meal mate and some of the features we off
 
 ![ER Diagram](./images/image.png)
 
-## Teaser (MS3)
+## Teaser (Final Release)
 
 ![Teaser](./images/teaser.png)
