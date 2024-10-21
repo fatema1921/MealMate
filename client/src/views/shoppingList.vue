@@ -33,11 +33,16 @@ export default {
     async fetchShoppingList() {
       const userId = localStorage.getItem('userId')
 
+      if (!userId) {
+        this.message = 'You must be logged in to access your shopping list.';
+        return;
+  }
+
       try {
         const user = await axios.get(`http://localhost:3000/api/users/${userId}`) // Get the userId from local storage
-        const ingredientIds = user.data.shopping_list // Get the ingredient IDs from the user data 
-
-        console.log(ingredientIds)
+        const ingredientIds = user.data.shopping_list // Get the ingredient IDs from the user data         
+        console.log('Ingridient ids', ingredientIds)
+        
         // iterates thrugh each id in ingredientsId and applies the get function to each id
         const ingredientPromises = ingredientIds.map(id => axios.get(`http://localhost:3000/api/ingredients/${id}`))
         const ingredientsResponses = await Promise.all(ingredientPromises)
@@ -51,7 +56,7 @@ export default {
         }
       } catch (error) {
         console.error('Error fetching shopping list:', error)
-        this.message = 'You must be logged in to access you shopping list'
+        this.message = 'User not logged in'
       }
     },
     toggleChecked(ingredient) {
